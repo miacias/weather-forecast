@@ -1,0 +1,2 @@
+# Open Weather API
+API key: c6923045c685289a8524ccba359c3265
