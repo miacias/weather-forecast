@@ -1,6 +1,6 @@
-// const apiKey = c6923045c685289a8524ccba359c3265;
-// const city; // store user input in this var as a query. state and country need to be specified as well
-// const queryUrl = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey;
+const apiKey = c6923045c685289a8524ccba359c3265;
+const city; // store user input in this var as a query. state and country need to be specified as well
+const queryUrl = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey;
 
 /*
 - set localStorage to save my-home key with city name and attach to home icon
@@ -11,4 +11,4 @@
 - calling more than once per 10 min on free plan will auto-suspend key (code 429: blocked account)
 */
 
-// fetch(queryUrl);
+fetch(queryUrl);
