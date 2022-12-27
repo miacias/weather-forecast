@@ -24,26 +24,33 @@
             </form>
         </div>
     </nav>
-    <main class="fetch-responses col-9">main test
-        <section class="weather-card">
-            <div class="main-weather card">
-                <img src="" class="card-img" alt="">
-                <div class="card-img-overlay">
-                    <h2 id="weekday" class="card-title"></h2>
-                    <p id="month-date" class="card-text"></p>
-                    <p id="city-name" class="card-text"></p>
-                    <p id="temp" class="card-text"></p>
-                    <p id="weather-event" class="card-text"></p>
-                </div> 
+    <main class="fetch-responses">main test
+        <section class="weather-card mb-3" style="max-width: 540px;">
+            <div class="main-weather-card row g-0">
+                <div class="col-md-4">
+                    <img 
+                        src="./assets/images/jonathan-bowers-BqKdvJ8a5TI-unsplash.jpg" 
+                        class="card-img img-fluid rounded-start" 
+                        alt="lightning over a field">
+                    <div class="card-img-overlay">
+                        <h2 id="weekday" class="card-title">weekday test</h2>
+                        <p id="month-date" class="card-text">month date test</p>
+                        <p id="city-name" class="card-text">city test</p>
+                        <p id="temp" class="card-text">temp test</p>
+                        <p id="weather-event" class="card-text">weather test</p>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="detailed-weather card-body">
+                        <p id="humidity">humidity</p>
+                        <p id="wind">wind</p>
+                        <p id="air-pressure">air pressure</p>
+                        <p id="high-temp">high</p>
+                        <p id="low-temp">low</p>
+                    </div>
+                </div>
             </div>
-            <div class="detailed-weather">
-                <p id="humidity"></p>
-                <p id="wind"></p>
-                <p id="air-pressure"></p>
-                <p id="high-temp"></p>
-                <p id="low-temp"></p>
-            </div>
-            <div class="five-day-weather">
+            <div class="five-day-weather text-muted">
                 <div id="day-1">
                     <i id="icon-1"></i>
                     <p id="day-1-temp"></p>
@@ -72,9 +79,10 @@
         <p>Weather data provided by OpenWeather</p>
         <a href="https://openweathermap.org/">
             <img 
-            src="./assets/images/OpenWeather-Master-Logo RGB2.png" 
-            alt="2-D vector art logo of orange sun above open water with a blank white background and Open Weather company name"
-            width="300" height="170">
+                src="./assets/images/OpenWeather-Master-Logo RGB2.png" 
+                alt="2-D vector art logo of orange sun above open water with a blank white background and Open Weather company name"
+                width="300" height="170"
+                class="rounded">
         </a>
     </footer>
     <!-- bootstrap JS link -->
