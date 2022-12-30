@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 <body class="bg-dark text-light">
-    <header>Weather Forecast</header>
+    
     <!-- bootstrap navbar -->
     <nav class="navbar sticky-top bg-secondary">
         <div class="container-fluid">
@@ -24,9 +24,14 @@
             </form>
         </div>
     </nav>
-    <main class="fetch-responses">main test
+
+    <header>
+        <h1>Weather Forecast</h1>
+    </header>
+
+    <main class="fetch-responses">
         <!-- returned data displayed here -->
-        <section class="weather-card mb-3" style="max-width: 540px;">
+        <section class="weather-card mb-3 bg-secondary rounded" style="max-width: 540px;">
             <div class="main-weather-card row g-0">
                 <!-- left-side image with date, city, temp, description -->
                 <div class="col-md-4">
@@ -77,8 +82,8 @@
                 </div>                
             </div>
         </section>
-
     </main>
+
     <footer>
         <p>Weather data provided by OpenWeather</p>
         <a href="https://openweathermap.org/">
@@ -89,6 +94,7 @@
                 class="rounded">
         </a>
     </footer>
+    
     <!-- bootstrap JS link -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- local JS link -->
