@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 <body class="bg-dark text-light">
-    <header>Weather Forecast</header>
+
     <!-- bootstrap navbar -->
     <nav class="navbar sticky-top bg-secondary">
         <div class="container-fluid">
@@ -24,22 +24,31 @@
             </form>
         </div>
     </nav>
-    <main class="fetch-responses">main test
-        <section class="weather-card mb-3" style="max-width: 540px;">
+
+    <header>
+        <h1>Weather Forecast</h1>
+    </header>
+
+    <main class="fetch-responses">
+        <section class="weather-card mb-3 bg-secondary rounded" style="max-width: 540px;">
             <div class="main-weather-card row g-0">
+                <!-- bootstrap card with overlay text -->
                 <div class="col-md-4">
-                    <img 
+                    <div class="card text-bg-dark">
+                        <img 
                         src="./assets/images/jonathan-bowers-BqKdvJ8a5TI-unsplash.jpg" 
                         class="card-img img-fluid rounded-start" 
                         alt="lightning over a field">
-                    <div class="card-img-overlay">
-                        <h2 id="weekday" class="card-title">weekday test</h2>
-                        <p id="month-date" class="card-text">month date test</p>
-                        <p id="city-name" class="card-text">city test</p>
-                        <p id="temp" class="card-text">temp test</p>
-                        <p id="weather-event" class="card-text">weather test</p>
+                        <div class="card-img-overlay">
+                            <h4 id="weekday" class="card-title">weekday test</h4>
+                            <p id="month-date" class="card-text">month date test</p>
+                            <p id="city-name" class="card-text">city test</p>
+                            <p id="temp" class="card-text">temp test</p>
+                            <p id="weather-event" class="card-text">weather test</p>
+                        </div>
                     </div>
                 </div>
+                <!-- bootstrap card with image left, text right -->
                 <div class="col-md-8">
                     <div class="detailed-weather card-body">
                         <p id="humidity">humidity</p>
@@ -50,26 +59,28 @@
                     </div>
                 </div>
             </div>
-            <div class="five-day-weather text-muted">
+
+            <!-- tiny 5-day forecast. work on this later -->
+            <div class="five-day-weather">
                 <div id="day-1">
                     <i id="icon-1"></i>
-                    <p id="day-1-temp"></p>
+                    <p id="day-1-temp">temp 1</p>
                 </div>
                 <div id="day-2">
                     <i id="icon-2"></i>
-                    <p id="day-2-temp"></p>
+                    <p id="day-2-temp">temp 2</p>
                 </div>
                 <div id="day-3">
                     <i id="icon-3"></i>
-                    <p id="day-3-temp"></p>
+                    <p id="day-3-temp">temp 3</p>
                 </div>
                 <div id="day-4">
                     <i id="icon-4"></i>
-                    <p id="day-4-temp"></p>
+                    <p id="day-4-temp">temp 4</p>
                 </div>
                 <div id="day-5">
                     <i id="icon-5"></i>
-                    <p id="day-5-temp"></p>
+                    <p id="day-5-temp">temp 5</p>
                 </div>                
             </div>
         </section>
