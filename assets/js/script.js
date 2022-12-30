@@ -27,4 +27,21 @@ fetch(queryUrl) // user input and API key complete URL
     })
     .then(function (data) { // uses JSON data
         console.log(data)
+        // linking JS to DOM
+        $("#");
+        // left-side image with date, city, temp, description
+        var weekday = $("#weekday"); // need DayJS?
+        var monthDate = $("#month-date");
+        var city = $("#city-name");
+        var temperature = $("#temp")
+        var description = $("#weather-event");
+        // upper-right-side text with humidity, wind, air pressure, high, low
+        var humidity = $("#humidity");
+        var wind = $("#wind");
+        var airPressure = $("#air-pressure");
+        var tempHigh = $("#high-temp");
+        var tempLow = $("#low-temp");
+
+        // for loop that sets text to HTML elements
+
     })
