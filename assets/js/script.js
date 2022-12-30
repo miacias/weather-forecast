@@ -1,6 +1,8 @@
-// const apiKey = c6923045c685289a8524ccba359c3265;
-// const city; // store user input in this var as a query. state and country need to be specified as well
-// const queryUrl = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey;
+const apiKey = c6923045c685289a8524ccba359c3265;
+const cityName = "?q=Name,AbbreviatedCountry"; // store user input in this var as a query. state and country need to be specified as well
+const cityId = "?id=numbers";
+const geoLocation = "?lat=numbers&lon=numbers";
+const queryUrl = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey;
 
 // /*
 // - set localStorage to save my-home key with city name and attach to home icon
@@ -17,4 +19,12 @@
 // - 500, 502, 503, 504 - CONTACT OpenWeather via email with example of api request that failed
 // */
 
-// fetch(queryUrl);
+fetch(queryUrl) // user input and API key complete URL
+    // async promise function initiates AFTER fetch
+    .then(function (reponse) {
+        // returns JSON data
+        return response.json();
+    })
+    .then(function (data) { // uses JSON data
+        console.log(data)
+    })
