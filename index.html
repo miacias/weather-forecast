@@ -29,7 +29,7 @@
         <h1>Weather Forecast</h1>
     </header>
 
-    <main class="fetch-responses">
+    <main class="weather-output">
         <!-- returned data displayed here -->
         <section class="weather-card mb-3 bg-secondary rounded" style="max-width: 540px;">
             <div class="main-weather-card row g-0">
@@ -61,6 +61,8 @@
                         </div>
                     </div>
                     <!-- lower-right-side days, icons, and temps -->
+                    <!-- card-group sticks cards together without space between -->
+                    <!-- card-deck is supposed to put space between, but ROW is needed in container and COL-2 is needed to size the cards -->
                     <div class="five-day-weather text-muted card-group">
                         <div id="day-1" class="card rounded">
                             <i id="icon-1"></i>
