@@ -1,8 +1,8 @@
-const apiKey = c6923045c685289a8524ccba359c3265;
-const cityName = "?q=Name,AbbreviatedCountry"; // store user input in this var as a query. state and country need to be specified as well
+const apiKey = "c6923045c685289a8524ccba359c3265";
+const cityName = "London,UK"; // store user input in this var as a query. state and country need to be specified as well
 const cityId = "?id=numbers";
 const geoLocation = "?lat=numbers&lon=numbers";
-const queryUrl = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey;
+const queryUrl = "http://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + apiKey;
 
 // /*
 // - set localStorage to save my-home key with city name and attach to home icon
@@ -21,14 +21,13 @@ const queryUrl = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&
 
 fetch(queryUrl) // user input and API key complete URL
     // async promise function initiates AFTER fetch
-    .then(function (reponse) {
+    .then(function (response) {
         // returns JSON data
         return response.json();
     })
     .then(function (data) { // uses JSON data
         console.log(data)
         // linking JS to DOM
-        $("#");
         // left-side image with date, city, temp, description
         var weekday = $("#weekday"); // need DayJS?
         var monthDate = $("#month-date");
@@ -41,7 +40,11 @@ fetch(queryUrl) // user input and API key complete URL
         var airPressure = $("#air-pressure");
         var tempHigh = $("#high-temp");
         var tempLow = $("#low-temp");
+        // lower-right-side text with 5-day forecast icon, temperature
 
         // for loop that sets text to HTML elements
-
+        for (var i = 0; i < data.length; i++) {
+            // weekday.text = dayjs().format("dddd");
+            // monthDate.text = dayjs().format("MMM Do");
+        }
     })
