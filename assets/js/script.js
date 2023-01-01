@@ -12,12 +12,14 @@
 // - 429 - surpassing limit of free subscription
 // - 500, 502, 503, 504 - CONTACT OpenWeather via email with example of api request that failed
 // */
+
 const runCitySearch = $(".city-search");
-const cityName = "London,UK"; // store user input in this var as a query. state and country need to be specified as well
+var cityName = ""; // store user input in this var as a query. state and country need to be specified as well
 const cityId = "?id=numbers";
 const geoLocation = "?lat=numbers&lon=numbers";
 
-// function findWeatherByName(cityName) {
+
+function findWeatherByName(cityName) {
     // variables used to fetch
     const apiKey = "c6923045c685289a8524ccba359c3265";
     const queryUrl = "http://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + apiKey;
@@ -34,7 +36,18 @@ const geoLocation = "?lat=numbers&lon=numbers";
     .then(function (data) { // uses JSON data
         console.log(data)
         // linking JS to DOM
-
+        // left-side image with date, city, temp, description
+        var weekday = $("#weekday");
+        var monthDate = $("#month-date");
+        var city = $("#city-name");
+        var temperature = $("#temp")
+        var description = $("#weather-event");
+        // sets HTML in left-side
+        weekday.text(dayjs().format("dddd"));
+        monthDate.text(dayjs().format("MMM Do"));
+        // city.text();
+        // temperature.text();
+        // description.text();
         // upper-right-side text with humidity, wind, air pressure, high, low
         var humidity = $("#humidity");
         var wind = $("#wind");
@@ -53,22 +66,12 @@ const geoLocation = "?lat=numbers&lon=numbers";
 
         }
     })
-// }
-
+}
 
 runCitySearch.submit(function(event) {
     event.preventDefault();
-    // findWeatherByName(cityName);
+    cityName = $("#form-text").val();
+    findWeatherByName(cityName);
     console.log("button was clicked");
-    console.log(cityName); // broken
+    console.log(cityName); // need to display value of search box
 })
-
-// left-side image with date, city, temp, description
-var weekday = $("#weekday");
-var monthDate = $("#month-date");
-var city = $("#city-name");
-var temperature = $("#temp")
-var description = $("#weather-event");
-// sets HTML in left-side
-weekday.text(dayjs().format("dddd"));
-monthDate.text(dayjs().format("MMM Do"));
