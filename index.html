@@ -16,8 +16,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bakbak+One&family=Poppins:wght@200&display=swap" rel="stylesheet">
-    <!-- RequireJS plugin
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"> -->
     <!-- CSS links -->
     <link rel="reset" href="./assets/css/reset.css">
     <link rel="stylesheet" href="./assets/css/style.css">
@@ -60,8 +58,8 @@
                             class="card-img img-fluid rounded-start align-center"
                             alt="lightning over a field">
                         <div class="card-img-overlay">
-                            <h2 id="weekday" class="card-title">weekday</h2>
-                            <p id="month-date" class="card-text">month date</p>
+                            <h2 id="weekday" class="card-title"></h2>
+                            <p id="month-date" class="card-text"></p>
                             <p id="city-name" class="card-text">city</p>
                             <p id="temp" class="card-text">temp</p>
                             <p id="weather-event" class="card-text">weather</p>
@@ -135,10 +133,7 @@
       integrity="sha256-iu/zLUB+QgISXBLCW/mcDi/rnf4m4uEDO0wauy76x7U="
       crossorigin="anonymous"
     ></script>
-    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.7/plugin/advancedFormat.js" 
-      integrity="sha256-b5ymCcSvYPKgMDPnLexXFPT457JAOBk0BA9UegKCRj8=" 
-      crossorigin="anonymous"
-    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.3/plugin/advancedFormat.js"></script>
     <!-- Load plugin as window.dayjs_plugin_NAME -->
     <script>
       dayjs.extend(window.dayjs_plugin_advancedFormat)

@@ -63,14 +63,12 @@ runCitySearch.submit(function(event) {
     console.log(cityName); // broken
 })
 
-        // left-side image with date, city, temp, description
-        var weekday = $("#weekday");
-        var monthDate = $("#month-date");
-        var city = $("#city-name");
-        var temperature = $("#temp")
-        var description = $("#weather-event");
-        // sets HTML in left-side
-        // var advancedFormat = require('dayjs/plugin/advancedFormat')
-        dayjs.extend(advancedFormat);
-        weekday.text(dayjs().format("dddd"));
-        monthDate.text(dayjs().format("MMM Do"));
+// left-side image with date, city, temp, description
+var weekday = $("#weekday");
+var monthDate = $("#month-date");
+var city = $("#city-name");
+var temperature = $("#temp")
+var description = $("#weather-event");
+// sets HTML in left-side
+weekday.text(dayjs().format("dddd"));
+monthDate.text(dayjs().format("MMM Do"));
