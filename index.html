@@ -16,8 +16,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bakbak+One&family=Poppins:wght@200&display=swap" rel="stylesheet">
-    <!-- RequireJS plugin
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"> -->
     <!-- CSS links -->
     <link rel="reset" href="./assets/css/reset.css">
     <link rel="stylesheet" href="./assets/css/style.css">
@@ -60,11 +58,11 @@
                             class="card-img img-fluid rounded-start align-center"
                             alt="lightning over a field">
                         <div class="card-img-overlay">
-                            <h2 id="weekday" class="card-title">weekday</h2>
-                            <p id="month-date" class="card-text">month date</p>
-                            <p id="city-name" class="card-text">city</p>
-                            <p id="temp" class="card-text">temp</p>
-                            <p id="weather-event" class="card-text">weather</p>
+                            <h2 id="weekday" class="card-title"></h2>
+                            <p id="month-date" class="card-text"></p>
+                            <p id="city-name" class="card-text"></p>
+                            <p id="temp" class="card-text"></p>
+                            <p id="weather-event" class="card-text"></p>
                         </div>
                     </div>
                 </div>
@@ -112,63 +110,6 @@
                     </div>
                 </div>
             </div>
-
-    <main class="fetch-responses">
-        <section class="weather-card mb-3 bg-secondary rounded" style="max-width: 540px;">
-            <div class="main-weather-card row g-0">
-                <!-- bootstrap card with overlay text -->
-                <div class="col-md-4">
-                    <div class="card text-bg-dark">
-                        <img 
-                        src="./assets/images/jonathan-bowers-BqKdvJ8a5TI-unsplash.jpg" 
-                        class="card-img img-fluid rounded-start" 
-                        alt="lightning over a field">
-                        <div class="card-img-overlay">
-                            <h4 id="weekday" class="card-title">weekday test</h4>
-                            <p id="month-date" class="card-text">month date test</p>
-                            <p id="city-name" class="card-text">city test</p>
-                            <p id="temp" class="card-text">temp test</p>
-                            <p id="weather-event" class="card-text">weather test</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- bootstrap card with image left, text right -->
-                <div class="col-md-8">
-                    <div class="detailed-weather card-body">
-                        <p id="humidity">humidity</p>
-                        <p id="wind">wind</p>
-                        <p id="air-pressure">air pressure</p>
-                        <p id="high-temp">high</p>
-                        <p id="low-temp">low</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- tiny 5-day forecast. work on this later -->
-            <div class="five-day-weather">
-                <div id="day-1">
-                    <i id="icon-1"></i>
-                    <p id="day-1-temp">temp 1</p>
-                </div>
-                <div id="day-2">
-                    <i id="icon-2"></i>
-                    <p id="day-2-temp">temp 2</p>
-                </div>
-                <div id="day-3">
-                    <i id="icon-3"></i>
-                    <p id="day-3-temp">temp 3</p>
-                </div>
-                <div id="day-4">
-                    <i id="icon-4"></i>
-                    <p id="day-4-temp">temp 4</p>
-                </div>
-                <div id="day-5">
-                    <i id="icon-5"></i>
-                    <p id="day-5-temp">temp 5</p>
-                </div>                
-            </div>
-        </section>
-
         </section>
     </main>
 
@@ -183,10 +124,20 @@
         </a>
     </footer>
     
-    <!-- RequireJS plugin
-    <script data-main="js/app" src="js/lib/require.js"></script> -->
+
     <!-- jQuery link -->
     <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+    <!-- Link the DayJS library -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/dayjs@1.11.3/dayjs.min.js"
+      integrity="sha256-iu/zLUB+QgISXBLCW/mcDi/rnf4m4uEDO0wauy76x7U="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.3/plugin/advancedFormat.js"></script>
+    <!-- Load plugin as window.dayjs_plugin_NAME -->
+    <script>
+      dayjs.extend(window.dayjs_plugin_advancedFormat)
+    </script>
     <!-- bootstrap JS link -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- local JS link -->
