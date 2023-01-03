@@ -143,9 +143,8 @@ $(".reset").on("click", function() {
     $("#detailed-weather").children().each(function() {
         // console.log(($(this).text())) // 5 strings
         // console.log($(this).text().split(" ")) // 5 arrays separated by word, example: humidity-92%
-        // slice off unit of measure and number from array (last two items)
-        console.log($(this).text().split(" ").splice(-1))
-        // console.log($(this).text().split("")) // 5 arrays separated by letter, example: h-u-m-i-d-i-t-y
+        console.log($(this).text().split(" ").slice(-2)) // array of number and unit (want to remove them!!!)
+        console.log($(this).text().split(" ").splice(-2, -1)) // trying to remove specific elements from end (not correct)
         // console.log(
         //     $(this).text(
         //         ($(this).text().split(" "))[0]))
