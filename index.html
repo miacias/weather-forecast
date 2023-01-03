@@ -70,9 +70,12 @@
                             <h2 id="weekday" class="card-title"></h2>
                             <p id="month-date" class="card-text"></p>
                             <p id="city-name" class="card-text"></p>
-                            <i id="today-icon">
-                                <link rel="weather-icon" type="img/png" href="">
+                            <i id="today-icon" class="owm-weather-icon">
+                                <link rel="weather-icon" type="img/png" href=""/>
                             </i>
+                            <!-- <link rel="icon"
+                                type="img/png"
+                                href="" /> -->
                             <p id="temp" class="card-text"></p>
                             <p id="weather-event" class="card-text"></p>
                         </div>
@@ -82,7 +85,7 @@
                 <div class="holds-right-side-data col p-1">
                     <!-- upper-right-side text with humidity, wind, air pressure, high, low -->
                     <div class="col-md-8 px-1">
-                        <div class="detailed-weather card-body">
+                        <div class="detailed-weather card-body" id="detailed-weather">
                             <p id="humidity">Humidity: </p>
                             <p id="wind">Wind speed: </p>
                             <p id="air-pressure">Air pressure: </p>
@@ -136,6 +139,7 @@
                 width="150" height="85"
                 class="rounded">
         </a>
+        <button class="reset">reset</button>
     </footer>
     
 

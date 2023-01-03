@@ -36,12 +36,14 @@ function units() {
     var imperialUnits = {
         temp: " \u00B0" + "F",
         speed: " mph",
-        pressure: " mb"
+        pressure: " mb",
+        humidPercent: "%"
     };
     var metricUnits = {
         temp: " \u00B0" + "C",
         speed: " m/s",
-        pressure: " hPa"
+        pressure: " hPa",
+        humidPercent: "%"
     };
     if ($(".switch").prop("checked")) {
         return imperialUnits;
@@ -104,7 +106,7 @@ function findWeatherByName(cityName) {
         var airPressure = $("#air-pressure");
         var tempHigh = $("#high-temp");
         var tempLow = $("#low-temp");
-        humidity.append(document.createTextNode(Math.floor(data.list[0].main.humidity) + "%"));
+        humidity.append(document.createTextNode(Math.floor(data.list[0].main.humidity) + " " + units().humidPercent));
         wind.append(document.createTextNode(Math.floor(data.list[0].wind.speed) + units().speed)); // create conversion function for wind
         airPressure.append(document.createTextNode(Math.floor(data.list[0].main.pressure) + units().pressure)); // conversion?
         tempHigh.append(document.createTextNode(Math.floor(data.list[0].main.temp_max) + units().temp));
@@ -128,3 +130,33 @@ runCitySearch.submit(function(event) {
     cityName = $("#form-text").val();
     findWeatherByName(cityName);
 })
+
+// failed: each() is not a function?
+// $(".reset").on("click", function() {
+//     $("#detailed-weather").children().text().each(function() {
+//         $(this).text(($(this).split(" "))[0]);
+//     })
+// }) 
+
+
+$(".reset").on("click", function() {
+    $("#detailed-weather").children().each(function() {
+        // console.log(($(this).text())) // 5 strings
+        // console.log($(this).text().split(" ")) // 5 arrays separated by word, example: humidity-92%
+        // slice off unit of measure and number from array (last two items)
+        console.log($(this).text().split(" ").splice(-1))
+        // console.log($(this).text().split("")) // 5 arrays separated by letter, example: h-u-m-i-d-i-t-y
+        // console.log(
+        //     $(this).text(
+        //         ($(this).text().split(" "))[0]))
+        // $(this).text(($(this).split(" "))[0]);
+    })
+}) 
+
+// failed: setting HTML inner text to a var to try to get .each() to work
+// var weatherDetails = $("#detailed-weather").children().text()
+// $(".reset").on("click", function() {
+//     weatherDetails.each(function() {
+//         $(this).text(($(this).split(" "))[0]);
+//     })
+// }) 
