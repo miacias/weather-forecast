@@ -106,11 +106,11 @@ function findWeatherByName(cityName) {
         var airPressure = $("#air-pressure");
         var tempHigh = $("#high-temp");
         var tempLow = $("#low-temp");
-        humidity.append(document.createTextNode(Math.floor(data.list[0].main.humidity) + " " + units().humidPercent));
-        wind.append(document.createTextNode(Math.floor(data.list[0].wind.speed) + units().speed)); // create conversion function for wind
-        airPressure.append(document.createTextNode(Math.floor(data.list[0].main.pressure) + units().pressure)); // conversion?
-        tempHigh.append(document.createTextNode(Math.floor(data.list[0].main.temp_max) + units().temp));
-        tempLow.append(document.createTextNode(Math.floor(data.list[0].main.temp_min) + units().temp));
+        humidity.text("Humidity: " + (Math.floor(data.list[0].main.humidity) + " " + units().humidPercent));
+        wind.text("Wind speed: " + (Math.floor(data.list[0].wind.speed) + units().speed)); // create conversion function for wind?
+        airPressure.text("Air pressure: " + (Math.floor(data.list[0].main.pressure) + units().pressure));
+        tempHigh.text("High temp: " + (Math.floor(data.list[0].main.temp_max) + units().temp));
+        tempLow.text("Low temp: " + (Math.floor(data.list[0].main.temp_min) + units().temp));
         // lower-right-side text with 5-day forecast icon, temperature
         var fiveDay = $(".five-day");
         var day;
@@ -130,32 +130,3 @@ runCitySearch.submit(function(event) {
     cityName = $("#form-text").val();
     findWeatherByName(cityName);
 })
-
-// failed: each() is not a function?
-// $(".reset").on("click", function() {
-//     $("#detailed-weather").children().text().each(function() {
-//         $(this).text(($(this).split(" "))[0]);
-//     })
-// }) 
-
-
-$(".reset").on("click", function() {
-    $("#detailed-weather").children().each(function() {
-        // console.log(($(this).text())) // 5 strings
-        // console.log($(this).text().split(" ")) // 5 arrays separated by word, example: humidity-92%
-        console.log($(this).text().split(" ").slice(-2)) // array of number and unit (want to remove them!!!)
-        console.log($(this).text().split(" ").splice(-2, -1)) // trying to remove specific elements from end (not correct)
-        // console.log(
-        //     $(this).text(
-        //         ($(this).text().split(" "))[0]))
-        // $(this).text(($(this).split(" "))[0]);
-    })
-}) 
-
-// failed: setting HTML inner text to a var to try to get .each() to work
-// var weatherDetails = $("#detailed-weather").children().text()
-// $(".reset").on("click", function() {
-//     weatherDetails.each(function() {
-//         $(this).text(($(this).split(" "))[0]);
-//     })
-// }) 
