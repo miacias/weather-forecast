@@ -1,6 +1,5 @@
 // /*
 // - set localStorage to save my-home key with city name and attach to home icon
-// - set up user city input so that fetch will work
 // - set up what happens to returned data on page
 // - auto update interval: every 10 minutes
 // - recommended to represent weather with central point in territory instead of all 200,000+ cities
@@ -17,6 +16,7 @@ const runCitySearch = $(".city-search");
 const cityId = "?id=numbers";
 const geoLocation = "?lat=numbers&lon=numbers";
 var cityName = ""; // store user input in this var as a query. state and country need to be specified as well
+var count = 1;
 
 // function tempConversions(kelvin) {
 //     var celcius = Math.round(parseFloat(kelvin) - 273.15);
@@ -31,7 +31,7 @@ var cityName = ""; // store user input in this var as a query. state and country
 //     // }
 // }
 
-// makes set of units of measurement available based on measurement system
+// set of units of measurement based on measurement system
 function units() {
     var imperialUnits = {
         temp: " \u00B0" + "F",
@@ -50,6 +50,7 @@ function units() {
     }
 }
 
+// sets page to return data in Imperial or Metric
 function measurementSystem() {
     if ($(".switch").data("on") === "Imperial: °F, mph") {
         return "imperial";
@@ -89,13 +90,12 @@ function findWeatherByName(cityName) {
         weekday.text(dayjs().format("dddd"));
         monthDate.text(dayjs().format("MMMM Do"));
         city.text(data.city.name + ", " + data.city.country);
-        // description.text(data.weather[0].main);
         description.text(data.list[0].weather[0].description);
         var icon = data.list[0].weather[0].icon;
         var iconEl = $("#today-icon")
-        iconEl = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
+        iconEl.text("http://openweathermap.org/img/wn/" + icon + "@2x.png");
         var temperature = $("#temp");
-        temperature.text(data.list[0].main.temp + units().temp);
+        temperature.text(Math.floor(data.list[0].main.temp) + units().temp);
         // temperature.text(tempConversions(kelvin));
         // temperature.text
         // upper-right-side text with humidity, wind, air pressure, high, low
@@ -104,22 +104,31 @@ function findWeatherByName(cityName) {
         var airPressure = $("#air-pressure"); // convert from hPa to mb
         var tempHigh = $("#high-temp");
         var tempLow = $("#low-temp");
-        humidity.append(document.createTextNode(data.list[0].main.humidity + "%"));
-        wind.append(document.createTextNode(data.list[0].wind.speed + "m/s")); // create conversion function for wind
-        airPressure.append(document.createTextNode(data.list[0].main.pressure + "hPa")); // conversion?
-        // tempHigh.append(document.createTextNode(tempConversions(data.main.temp_max)));
-        // tempLow.append(document.createTextNode(tempConversions(data.main.temp_min)));
+        humidity.append(document.createTextNode(Math.floor(data.list[0].main.humidity) + "%"));
+        wind.append(document.createTextNode(Math.floor(data.list[0].wind.speed) + units().speed)); // create conversion function for wind
+        airPressure.append(document.createTextNode(Math.floor(data.list[0].main.pressure) + units().pressure)); // conversion?
+        tempHigh.append(document.createTextNode(Math.floor(data.list[0].main.temp_max) + units().temp));
+        tempLow.append(document.createTextNode(Math.floor(data.list[0].main.temp_min) + units().temp));
         // lower-right-side text with 5-day forecast icon, temperature
+        var fiveDay = $(".five-day");
+
+        // fiveDay.each(function(count) {
+        //     count++;
+        //     ($(this).next("h6")).text(data.list[count].dt);
+        //     ($(this).next("p")).text(data.list[count].main.temp + units().temp);
+        // })
+
         var day1 = $("#day-1");
         var day2 = $("#day-2");
         var day3 = $("#day-3");
         var day4 = $("#day-4");
         var day5 = $("#day-5");
-        
         // for loop that sets text to HTML elements
-        for (var i = 0; i < data.length; i++) {
-
+        for (var i = 0; i < fiveDay.length; i++) {
+            fiveDay.eq(i).find("h6").text(data.list[i+1].dt);
+            fiveDay.eq(i).find("p").text(Math.floor(data.list[i+1].main.temp) + units().temp);
         }
+
     })
 }
 
@@ -128,5 +137,3 @@ runCitySearch.submit(function(event) {
     cityName = $("#form-text").val();
     findWeatherByName(cityName);
 })
-
-// $('[data-toggle="switch"]').bootstrapSwitch();
