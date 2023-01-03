@@ -88,11 +88,14 @@ function findWeatherByName(cityName) {
         // sets HTML in left-side
         weekday.text(dayjs().format("dddd"));
         monthDate.text(dayjs().format("MMMM Do"));
+        // sample of how to print today's day name, example: Tue
+        // var todayData = Date((data.list[0].dt) * 1000).split(" ");
+        // var today = todayData[0];
         city.text(data.city.name + ", " + data.city.country);
         description.text(data.list[0].weather[0].description);
         var icon = data.list[0].weather[0].icon;
         var iconEl = $("#today-icon")
-        iconEl.text("http://openweathermap.org/img/wn/" + icon + "@2x.png");
+        iconEl.attr("href", "http://openweathermap.org/img/wn/" + icon + "@2x.png");
         var temperature = $("#temp");
         temperature.text(Math.floor(data.list[0].main.temp) + units().temp);
         // upper-right-side text with humidity, wind, air pressure, high, low
@@ -108,8 +111,6 @@ function findWeatherByName(cityName) {
         tempLow.append(document.createTextNode(Math.floor(data.list[0].main.temp_min) + units().temp));
         // lower-right-side text with 5-day forecast icon, temperature
         var fiveDay = $(".five-day");
-        // var todayData = Date((data.list[0].dt) * 1000).split(" ");
-        // var today = todayData[0];
         var day;
         for (var i = 0; i < fiveDay.length; i++) {
             // dt value changes correctly but .text keeps printing first day
