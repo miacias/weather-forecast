@@ -59,14 +59,13 @@ function findWeatherByName(cityName) {
         monthDate.text(dayjs().format("MMMM Do"));
         city.text(data.name);
         description.text(data.weather[0].main);
-        // current temperatures
         var kelvin = data.main.temp;
         var temperature = $("#temp");
         temperature.text(tempConversions(kelvin));
         // upper-right-side text with humidity, wind, air pressure, high, low
         var humidity = $("#humidity");
         var wind = $("#wind");
-        var airPressure = $("#air-pressure");
+        var airPressure = $("#air-pressure"); // convert from hPa to mb
         var tempHigh = $("#high-temp");
         var tempLow = $("#low-temp");
         humidity.append(document.createTextNode(data.main.humidity + "%"));
