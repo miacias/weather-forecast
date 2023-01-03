@@ -85,7 +85,6 @@ function findWeatherByName(cityName) {
         var monthDate = $("#month-date");
         var city = $("#city-name");
         var description = $("#weather-event");
-        // ${monthDate} (${new Date(dt*1000).toDateString()}); // date conversion of dt to full date
         // sets HTML in left-side
         weekday.text(dayjs().format("dddd"));
         monthDate.text(dayjs().format("MMMM Do"));
@@ -96,12 +95,10 @@ function findWeatherByName(cityName) {
         iconEl.text("http://openweathermap.org/img/wn/" + icon + "@2x.png");
         var temperature = $("#temp");
         temperature.text(Math.floor(data.list[0].main.temp) + units().temp);
-        // temperature.text(tempConversions(kelvin));
-        // temperature.text
         // upper-right-side text with humidity, wind, air pressure, high, low
         var humidity = $("#humidity");
         var wind = $("#wind");
-        var airPressure = $("#air-pressure"); // convert from hPa to mb
+        var airPressure = $("#air-pressure");
         var tempHigh = $("#high-temp");
         var tempLow = $("#low-temp");
         humidity.append(document.createTextNode(Math.floor(data.list[0].main.humidity) + "%"));
@@ -111,24 +108,17 @@ function findWeatherByName(cityName) {
         tempLow.append(document.createTextNode(Math.floor(data.list[0].main.temp_min) + units().temp));
         // lower-right-side text with 5-day forecast icon, temperature
         var fiveDay = $(".five-day");
-
-        // fiveDay.each(function(count) {
-        //     count++;
-        //     ($(this).next("h6")).text(data.list[count].dt);
-        //     ($(this).next("p")).text(data.list[count].main.temp + units().temp);
-        // })
-
-        var day1 = $("#day-1");
-        var day2 = $("#day-2");
-        var day3 = $("#day-3");
-        var day4 = $("#day-4");
-        var day5 = $("#day-5");
-        // for loop that sets text to HTML elements
+        // var todayData = Date((data.list[0].dt) * 1000).split(" ");
+        // var today = todayData[0];
+        var day;
         for (var i = 0; i < fiveDay.length; i++) {
-            fiveDay.eq(i).find("h6").text(data.list[i+1].dt);
-            fiveDay.eq(i).find("p").text(Math.floor(data.list[i+1].main.temp) + units().temp);
+            // dt value changes correctly but .text keeps printing first day
+            day = Date((data.list[i+1].dt) * 1000).split(" ")
+            fiveDay.eq(i).find("h6").text(day[0]); 
+            // ...text(day[0]) === name of search-day and no extra info. example: Tue
+            // ...text(day[0])[i] === day of search-day posted one letter at a time. example: T - u - e
+            fiveDay.eq(i).find("p").text(Math.floor(data.list[i+1].main.temp) + units().temp); // correct temps posting
         }
-
     })
 }
 
