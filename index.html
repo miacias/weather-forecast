@@ -36,21 +36,21 @@
         </div>
     </nav>
 
-    <header>
+    <header class="d-flex p-4 justify-content-between">
         <h1>Weather Forecast</h1>
-    </header>
-
-    <main class="weather-output">
         <!-- metric-imperial toggle -->
         <!-- https://www.youtube.com/watch?v=Atc0qPkDeKM -->
         <input 
             class="btn switch btn-primary" 
-            type="checkbox" 
+            type="checkbox"
+            id="switch"
             checked 
             data-toggle="toggle" 
             data-on="Imperial: °F, mph" 
             data-off="Metric: °C, m/s">
+    </header>
 
+    <main class="weather-output">
         <!-- request data page here -->
         <section class="search-for-location">
 
@@ -122,7 +122,7 @@
         </section>
     </main>
 
-    <footer>
+    <footer class="d-flex flex-column flex-wrap align-items-center">
         <p>Weather data provided by OpenWeather</p>
         <a href="https://openweathermap.org/">
             <img 
