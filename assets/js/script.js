@@ -30,11 +30,23 @@ var cityName = ""; // store user input in this var as a query. state and country
 //         // return celcius;
 //     // }
 // }
+
+// makes set of units of measurement available based on measurement system
 function units() {
+    var imperialUnits = {
+        temp: " \u00B0" + "F",
+        speed: " mph",
+        pressure: " mb"
+    };
+    var metricUnits = {
+        temp: " \u00B0" + "C",
+        speed: " m/s",
+        pressure: " hPa"
+    };
     if ($(".switch").data("on") === "Imperial: °F, mph") {
-        return "\u00B0" + "F";
+        return imperialUnits;
     } else if ($(".switch").data("off") === "Metric: °C, m/s") {
-        return "\u00B0" + "C";
+        return metricUnits;
     }
 }
 
@@ -49,10 +61,10 @@ function measurementSystem() {
 function findWeatherByName(cityName) {
     // variables used to fetch
     const apiKey = "c6923045c685289a8524ccba359c3265";
-    const queryUrl = `http://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}&units=${measurementSystem()}`;
+    const queryUrl = `http://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${apiKey}&units=${measurementSystem()}`;
     // prevents empty value from being submitted
     if (!cityName) {
-        return;
+        return alert("Please select a city to view.");
     }
     fetch(queryUrl) // user input and API key complete URL
     // async promise function initiates AFTER fetch
@@ -76,10 +88,14 @@ function findWeatherByName(cityName) {
         // sets HTML in left-side
         weekday.text(dayjs().format("dddd"));
         monthDate.text(dayjs().format("MMMM Do"));
-        city.text(data.name);
-        description.text(data.weather[0].main);
+        city.text(data.city.name + ", " + data.city.country);
+        // description.text(data.weather[0].main);
+        description.text(data.list[0].weather[0].description);
+        var icon = data.list[0].weather[0].icon;
+        var iconEl = $("#today-icon")
+        iconEl = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
         var temperature = $("#temp");
-        temperature.text(data.main.temp + units());
+        temperature.text(data.list[0].main.temp + units().temp);
         // temperature.text(tempConversions(kelvin));
         // temperature.text
         // upper-right-side text with humidity, wind, air pressure, high, low
@@ -88,9 +104,9 @@ function findWeatherByName(cityName) {
         var airPressure = $("#air-pressure"); // convert from hPa to mb
         var tempHigh = $("#high-temp");
         var tempLow = $("#low-temp");
-        humidity.append(document.createTextNode(data.main.humidity + "%"));
-        wind.append(document.createTextNode(data.wind.speed + "m/s")); // create conversion function for wind
-        airPressure.append(document.createTextNode(data.main.pressure + "hPa")); // conversion?
+        humidity.append(document.createTextNode(data.list[0].main.humidity + "%"));
+        wind.append(document.createTextNode(data.list[0].wind.speed + "m/s")); // create conversion function for wind
+        airPressure.append(document.createTextNode(data.list[0].main.pressure + "hPa")); // conversion?
         // tempHigh.append(document.createTextNode(tempConversions(data.main.temp_max)));
         // tempLow.append(document.createTextNode(tempConversions(data.main.temp_min)));
         // lower-right-side text with 5-day forecast icon, temperature
