@@ -43,18 +43,18 @@ function units() {
         speed: " m/s",
         pressure: " hPa"
     };
-    if ($(".switch").data("on") === "Imperial: °F, mph") {
+    if ($(".switch").prop("checked")) {
         return imperialUnits;
-    } else if ($(".switch").data("off") === "Metric: °C, m/s") {
+    } else {
         return metricUnits;
     }
 }
 
 // sets page to return data in Imperial or Metric
 function measurementSystem() {
-    if ($(".switch").data("on") === "Imperial: °F, mph") {
+    if ($(".switch").prop("checked")) {
         return "imperial";
-    } else if ($(".switch").data("off") === "Metric: °C, m/s") {
+    } else {
         return "metric";
     }
 }
