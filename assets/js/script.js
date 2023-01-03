@@ -18,24 +18,42 @@ const cityId = "?id=numbers";
 const geoLocation = "?lat=numbers&lon=numbers";
 var cityName = ""; // store user input in this var as a query. state and country need to be specified as well
 
-function tempConversions(kelvin) {
-    var celcius = Math.round(parseFloat(kelvin) - 273.15);
-	var fahrenheit = Math.round(((parseFloat(kelvin) - 273.15) * 1.8) + 32);
-    // var temperature = $("#temp");
-    // if (locale === usa) {
-        // temperature.text(fahrenheit + "\u00B0" + "F");
-        return fahrenheit + "\u00B0" + "F";
-    // } else {
-        // temperature.text(celcius + "\u00B0" + "C");
-        // return celcius;
-    // }
+// function tempConversions(kelvin) {
+//     var celcius = Math.round(parseFloat(kelvin) - 273.15);
+// 	var fahrenheit = Math.round(((parseFloat(kelvin) - 273.15) * 1.8) + 32);
+//     // var temperature = $("#temp");
+//     // if (locale === usa) {
+//         // temperature.text(fahrenheit + "\u00B0" + "F");
+//         return fahrenheit + "\u00B0" + "F";
+//     // } else {
+//         // temperature.text(celcius + "\u00B0" + "C");
+//         // return celcius;
+//     // }
+// }
+function units() {
+    if ($(".switch").data("on") === "Imperial: °F, mph") {
+        return "\u00B0" + "F";
+    } else if ($(".switch").data("off") === "Metric: °C, m/s") {
+        return "\u00B0" + "C";
+    }
+}
+
+function measurementSystem() {
+    if ($(".switch").data("on") === "Imperial: °F, mph") {
+        return "imperial";
+    } else if ($(".switch").data("off") === "Metric: °C, m/s") {
+        return "metric";
+    }
 }
 
 function findWeatherByName(cityName) {
     // variables used to fetch
     const apiKey = "c6923045c685289a8524ccba359c3265";
-    const queryUrl = `http://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`;
-
+    const queryUrl = `http://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}&units=${measurementSystem()}`;
+    // prevents empty value from being submitted
+    if (!cityName) {
+        return;
+    }
     fetch(queryUrl) // user input and API key complete URL
     // async promise function initiates AFTER fetch
     .then(function (response) {
@@ -54,14 +72,16 @@ function findWeatherByName(cityName) {
         var monthDate = $("#month-date");
         var city = $("#city-name");
         var description = $("#weather-event");
+        // ${monthDate} (${new Date(dt*1000).toDateString()}); // date conversion of dt to full date
         // sets HTML in left-side
         weekday.text(dayjs().format("dddd"));
         monthDate.text(dayjs().format("MMMM Do"));
         city.text(data.name);
         description.text(data.weather[0].main);
-        var kelvin = data.main.temp;
         var temperature = $("#temp");
-        temperature.text(tempConversions(kelvin));
+        temperature.text(data.main.temp + units());
+        // temperature.text(tempConversions(kelvin));
+        // temperature.text
         // upper-right-side text with humidity, wind, air pressure, high, low
         var humidity = $("#humidity");
         var wind = $("#wind");
@@ -71,8 +91,8 @@ function findWeatherByName(cityName) {
         humidity.append(document.createTextNode(data.main.humidity + "%"));
         wind.append(document.createTextNode(data.wind.speed + "m/s")); // create conversion function for wind
         airPressure.append(document.createTextNode(data.main.pressure + "hPa")); // conversion?
-        tempHigh.append(document.createTextNode(tempConversions(data.main.temp_max)));
-        tempLow.append(document.createTextNode(tempConversions(data.main.temp_min)));
+        // tempHigh.append(document.createTextNode(tempConversions(data.main.temp_max)));
+        // tempLow.append(document.createTextNode(tempConversions(data.main.temp_min)));
         // lower-right-side text with 5-day forecast icon, temperature
         var day1 = $("#day-1");
         var day2 = $("#day-2");
@@ -92,3 +112,5 @@ runCitySearch.submit(function(event) {
     cityName = $("#form-text").val();
     findWeatherByName(cityName);
 })
+
+// $('[data-toggle="switch"]').bootstrapSwitch();
