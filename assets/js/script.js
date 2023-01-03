@@ -114,14 +114,19 @@ function findWeatherByName(cityName) {
         // lower-right-side text with 5-day forecast icon, temperature
         var fiveDay = $(".five-day");
         var day;
-        for (var i = 0; i < fiveDay.length; i++) {
-            // dt value changes correctly but .text keeps printing first day
-            day = Date((data.list[i+1].dt) * 1000).split(" ")
-            fiveDay.eq(i).find("h6").text(day[0]); 
-            // ...text(day[0]) === name of search-day and no extra info. example: Tue
-            // ...text(day[0])[i] === day of search-day posted one letter at a time. example: T - u - e
-            fiveDay.eq(i).find("p").text(Math.floor(data.list[i+1].main.temp) + units().temp); // correct temps posting
-        }
+        // for (var i = 0; i < fiveDay.length; i++) {
+        //     // dt value changes correctly but .text keeps printing first day
+        //     day = Date((data.list[i+1].dt) * 1000).split(" ")
+        //     fiveDay.eq(i).find("h6").text(day[0]); 
+        //     // ...text(day[0]) === name of search-day and no extra info. example: Tue
+        //     // ...text(day[0])[i] === day of search-day posted one letter at a time. example: T - u - e
+        //     fiveDay.eq(i).find("p").text(Math.floor(data.list[i+1].main.temp) + units().temp); // correct temps posting
+        // }
+        var count = 1;
+        fiveDay.children().each(function() {
+            $(this).text(Date((data.list[count].dt) * 1000).split(" "));
+            count++;
+        })
     })
 }
 
