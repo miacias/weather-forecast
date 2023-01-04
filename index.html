@@ -29,31 +29,49 @@
     <nav class="navbar sticky-top bg-secondary">
         <div class="container-fluid">
             <a class="navbar-brand text-warning" href="#">Weather Just for You</a>
-            <form class="city-search d-flex" role="search" action="" method="post" name="city-search">
+            <!-- <form class="city-search d-flex" role="search" action="" method="post" name="city-search">
                 <input class="form-control me-2" id="form-text" type="search" placeholder="City Search" aria-label="City Search">
                 <button class="locate btn btn-outline-info" type="submit">Locate</button>
-            </form>
+            </form> -->
         </div>
     </nav>
 
     <header class="d-flex p-4 justify-content-between">
         <h1>Weather Forecast</h1>
-        <!-- metric-imperial toggle -->
-        <!-- https://www.youtube.com/watch?v=Atc0qPkDeKM -->
-        <input 
-            class="btn switch btn-primary" 
-            type="checkbox"
-            id="switch"
-            checked 
-            data-toggle="toggle" 
-            data-on="Imperial: °F, mph" 
-            data-off="Metric: °C, m/s">
     </header>
 
     <main class="weather-output">
         <!-- request data page here -->
-        <section class="search-for-location">
-
+        <section class="search-for-location m-4 p-4">
+            <div class="d-flex justify-content-center">
+                <form class="city-search" role="search" action="" method="post" name="city-search">
+                    <div class="form-row">
+                        <div class="col-7">
+                            <input type="text" class="form-control" id="city-text" placeholder="City">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" id="state-text" placeholder="State">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" id="zip-text" placeholder="Zip">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" id="country-text" placeholder="Country Abbreviation">
+                        </div>
+                    </div>
+                    <!-- metric-imperial toggle -->
+                    <!-- https://www.youtube.com/watch?v=Atc0qPkDeKM -->
+                    <input 
+                    class="btn switch btn-primary" 
+                    type="checkbox"
+                    id="switch"
+                    checked 
+                    data-toggle="toggle" 
+                    data-on="Imperial: °F, mph" 
+                    data-off="Metric: °C, m/s">
+                    <button class="locate btn btn-outline-info city-search" type="submit">Locate</button>
+                </form>
+            </div>
         </section>
 
         <!-- returned data displayed here -->
@@ -70,12 +88,7 @@
                             <h2 id="weekday" class="card-title"></h2>
                             <p id="month-date" class="card-text"></p>
                             <p id="city-name" class="card-text"></p>
-                            <i id="today-icon" class="owm-weather-icon">
-                                <link rel="weather-icon" type="img/png" href=""/>
-                            </i>
-                            <!-- <link rel="icon"
-                                type="img/png"
-                                href="" /> -->
+                            <img id="today-icon" class="owm-weather-icon" rel="weather-icon" type="img/png" src=""></img>
                             <p id="temp" class="card-text"></p>
                             <p id="weather-event" class="card-text"></p>
                         </div>

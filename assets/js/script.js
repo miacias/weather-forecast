@@ -27,10 +27,11 @@ ERRORS
 */
 
 const citySearchEl = $(".city-search");
-var cityName = "Phoenix"; // store user input in this var as a query. state and country need to be specified as well
-var zip = "85003";
-var state = "AZ";
-var country = "US";
+var cityName = "";
+var zip = "";
+var state = "";
+var country = "";
+var toggle;
 var latitude = "";
 var longitude = "";
 
@@ -45,6 +46,12 @@ var longitude = "";
 //         // temperature.text(celcius + "\u00B0" + "C");
 //         // return celcius;
 //     // }
+// }
+
+// function display() {
+//     if (???) {
+//         $(".search-for-location").addClass("d-none");
+//     }
 // }
 
 // sets units of measurement based on measurement system
@@ -94,7 +101,7 @@ function postWeather(data) {
     description.text(data.list[0].weather[0].description);
     var icon = data.list[0].weather[0].icon;
     var iconEl = $("#today-icon")
-    iconEl.children().attr("href", "http://openweathermap.org/img/wn/" + icon + "@2x.png");
+    iconEl.children().attr("src", "http://openweathermap.org/img/wn/" + icon + "@2x.png");
     var temperature = $("#temp");
     temperature.text(Math.floor(data.list[0].main.temp) + units().temp);
     // upper-right-side text with humidity, wind, air pressure, high, low
@@ -150,14 +157,14 @@ function postWeather(data) {
 function getGeocoordinates(cityName, state, country) {
     var limit = 1; // max number of cities with shared names. possible values: 1-5
     const apiKey = "c6923045c685289a8524ccba359c3265";
-    var geoCodeUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName},${state},${country}&limit=${limit}&appid=${apiKey}`
+    var geoCodeUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName},${state},${country}&limit=${limit}&appid=${apiKey}&units=${measurementSystem()}`
     // prevents submitting empty value OR renames URL if state is missing
     if (!cityName) {
         return alert("Please specify a city to continue.");
     } else if (!country) {
         return alert("Please specify a country to continue.");
     } else {
-        geoCodeUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName},${country}&limit=${limit}&appid=${apiKey}`
+        geoCodeUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName},${country}&limit=${limit}&appid=${apiKey}&units=${measurementSystem()}`
     }
     fetch(geoCodeUrl)
     .then(function (response) {
@@ -176,7 +183,6 @@ function getGeocoordinates(cityName, state, country) {
     })
     return [latitude, longitude];
 }
-getGeocoordinates(cityName, state, country);
 
 // fetch longitude and latitude
 function coordinatesWeather(latitude, longitude) {
@@ -199,8 +205,11 @@ function coordinatesWeather(latitude, longitude) {
 }
 
 // collects city name to put into query
-// citySearchEl.submit(function(event) {
-//     event.preventDefault();
-//     cityName = $("#form-text").val();
-//     findWeatherByName(cityName);
-// })
+citySearchEl.submit(function(event) {
+    event.preventDefault();
+    cityName = $("#city-text").val();
+    state = $("#state-text").val();
+    zip = $("#zip-text").val();
+    country = $("#country-text").val();
+    getGeocoordinates(cityName, state, country);
+})
