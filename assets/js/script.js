@@ -187,7 +187,7 @@ function getGeocoordinates(cityName, state, country) {
 // fetch longitude and latitude
 function coordinatesWeather(latitude, longitude) {
     const apiKey = "c6923045c685289a8524ccba359c3265";
-    const coordinateQueryUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}`;
+    const coordinateQueryUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=${measurementSystem()}`;
     fetch(coordinateQueryUrl)
     .then(function (response) {
         // add 100-500 error codes? and 200s?
