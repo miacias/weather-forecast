@@ -101,7 +101,7 @@ function postWeather(data) {
     description.text(data.list[0].weather[0].description);
     var icon = data.list[0].weather[0].icon;
     var iconEl = $("#today-icon")
-    iconEl.children().attr("src", "http://openweathermap.org/img/wn/" + icon + "@2x.png");
+    iconEl.attr("src", "http://openweathermap.org/img/wn/" + icon + "@2x.png");
     var temperature = $("#temp");
     temperature.text(Math.floor(data.list[0].main.temp) + units().temp);
     // upper-right-side text with humidity, wind, air pressure, high, low
@@ -125,33 +125,6 @@ function postWeather(data) {
         fiveDay.eq(i).find(".humidities").text(Math.floor(data.list[(i+1) * 7].main.humidity) + units().humidPercent); // humidity percentage
     }
 }
-
-// fetches all data from OpenWeather API
-// function findWeatherByName(cityName) {
-//     // variables used to fetch
-//     const apiKey = "c6923045c685289a8524ccba359c3265";
-//     const cityQueryUrl = `http://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${apiKey}&units=${measurementSystem()}`;
-//     // prevents empty value from being submitted
-//     // if (!cityName) { // don't need this b/c geocoordinates have IF EMPTY conditions
-//     //     return alert("Please select a city to view.");
-//     // }
-//     fetch(cityQueryUrl)
-//     // async promise function initiates AFTER fetch
-//     .then(function (response) {
-//         // returns JSON data
-//         // add 100-500 error codes? and 200s?
-//         return response.json();
-//     })
-//     .catch(function(error) {
-//         console.log("An error occurred.");
-//         console.log(error);
-//     })
-//     // linking JSON to DOM
-//     .then(function (data) {
-//         console.log(data);
-//         postWeather(data);
-//     })
-// }
 
 // converts user-proivded CITY NAME to longitude and latitude
 function getGeocoordinates(cityName, state, country) {
@@ -204,7 +177,7 @@ function coordinatesWeather(latitude, longitude) {
     })
 }
 
-// collects city name to put into query
+// collects city info to put into query
 citySearchEl.submit(function(event) {
     event.preventDefault();
     cityName = $("#city-text").val();
