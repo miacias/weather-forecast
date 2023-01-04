@@ -31,7 +31,7 @@ var count = 1;
 //     // }
 // }
 
-// set of units of measurement based on measurement system
+// sets units of measurement based on measurement system
 function units() {
     var imperialUnits = {
         temp: " \u00B0" + "F",
@@ -61,6 +61,48 @@ function measurementSystem() {
     }
 }
 
+// adds specific data to HTML
+function postWeather(data) {
+    // left-side image with date, city, temp, description
+    var weekday = $("#weekday");
+    var monthDate = $("#month-date");
+    var city = $("#city-name");
+    var description = $("#weather-event");
+    // sets HTML in left-side
+    weekday.text(dayjs().format("dddd"));
+    monthDate.text(dayjs().format("MMMM Do"));
+    // sample of how to print today's day name, example: Tue
+    // var todayData = Date((data.list[0].dt) * 1000).split(" ");
+    // var today = todayData[0];
+    city.text(data.city.name + ", " + data.city.country);
+    description.text(data.list[0].weather[0].description);
+    var icon = data.list[0].weather[0].icon;
+    var iconEl = $("#today-icon")
+    iconEl.children().attr("href", "http://openweathermap.org/img/wn/" + icon + "@2x.png");
+    var temperature = $("#temp");
+    temperature.text(Math.floor(data.list[0].main.temp) + units().temp);
+    // upper-right-side text with humidity, wind, air pressure, high, low
+    var humidity = $("#humidity");
+    var wind = $("#wind");
+    var airPressure = $("#air-pressure");
+    var tempHigh = $("#high-temp");
+    var tempLow = $("#low-temp");
+    humidity.text("Humidity: " + (Math.floor(data.list[0].main.humidity) + " " + units().humidPercent));
+    wind.text("Wind speed: " + (Math.floor(data.list[0].wind.speed) + units().speed)); // create conversion function for wind?
+    airPressure.text("Air pressure: " + (Math.floor(data.list[0].main.pressure) + units().pressure));
+    tempHigh.text("High temp: " + (Math.floor(data.list[0].main.temp_max) + units().temp));
+    tempLow.text("Low temp: " + (Math.floor(data.list[0].main.temp_min) + units().temp));
+    // lower-right-side text with 5-day forecast icon, temperature
+    var fiveDay = $(".five-day");
+    // i++ on h6 elements; *7 on list location (*8 would produce one day short)
+    for (var i = 0; i < data.list.length; i ++) { // each day has 8 datasets (3hr-increment updates = 40 datasets per 5 days)
+        // day = (new Date((data.list[(i+1) * 7].dt) * 1000)).toDateString().split(" ")[0];
+        fiveDay.eq(i).find("h6").text((new Date((data.list[(i+1) * 7].dt) * 1000)).toDateString().split(" ")[0])
+        fiveDay.eq(i).find("p").text(Math.floor(data.list[(i+1) * 7].main.temp) + units().temp);
+    }
+}
+
+// fetches all data from OpenWeather API
 function findWeatherByName(cityName) {
     // variables used to fetch
     const apiKey = "c6923045c685289a8524ccba359c3265";
@@ -69,70 +111,25 @@ function findWeatherByName(cityName) {
     if (!cityName) {
         return alert("Please select a city to view.");
     }
-    fetch(queryUrl) // user input and API key complete URL
+    fetch(queryUrl)
     // async promise function initiates AFTER fetch
     .then(function (response) {
         // returns JSON data
         // add 100-500 error codes? and 200s?
         return response.json();
     })
-    .catch(function() {
+    .catch(function(error) {
         console.log("An error occurred.");
+        console.log(error);
     })
     // linking JSON to DOM
     .then(function (data) {
-        console.log(data)
-        // left-side image with date, city, temp, description
-        var weekday = $("#weekday");
-        var monthDate = $("#month-date");
-        var city = $("#city-name");
-        var description = $("#weather-event");
-        // sets HTML in left-side
-        weekday.text(dayjs().format("dddd"));
-        monthDate.text(dayjs().format("MMMM Do"));
-        // sample of how to print today's day name, example: Tue
-        // var todayData = Date((data.list[0].dt) * 1000).split(" ");
-        // var today = todayData[0];
-        city.text(data.city.name + ", " + data.city.country);
-        description.text(data.list[0].weather[0].description);
-        var icon = data.list[0].weather[0].icon;
-        var iconEl = $("#today-icon")
-        iconEl.children().attr("href", "http://openweathermap.org/img/wn/" + icon + "@2x.png");
-        var temperature = $("#temp");
-        temperature.text(Math.floor(data.list[0].main.temp) + units().temp);
-        // upper-right-side text with humidity, wind, air pressure, high, low
-        var humidity = $("#humidity");
-        var wind = $("#wind");
-        var airPressure = $("#air-pressure");
-        var tempHigh = $("#high-temp");
-        var tempLow = $("#low-temp");
-        humidity.text("Humidity: " + (Math.floor(data.list[0].main.humidity) + " " + units().humidPercent));
-        wind.text("Wind speed: " + (Math.floor(data.list[0].wind.speed) + units().speed)); // create conversion function for wind?
-        airPressure.text("Air pressure: " + (Math.floor(data.list[0].main.pressure) + units().pressure));
-        tempHigh.text("High temp: " + (Math.floor(data.list[0].main.temp_max) + units().temp));
-        tempLow.text("Low temp: " + (Math.floor(data.list[0].main.temp_min) + units().temp));
-        // lower-right-side text with 5-day forecast icon, temperature
-        var fiveDay = $(".five-day");
-        var day;
-        // for JS loop. closer to behaving correctly than for each loop
-        // for (var i = 0; i < fiveDay.length; i++) {
-        //     // dt value changes correctly but .text keeps printing first day
-        //     day = Date((data.list[i+1].dt) * 1000).split(" ")
-        //     fiveDay.eq(i).find("h6").text(day[0]); 
-        //     // ...text(day[0]) === name of search-day and no extra info. example: Tue
-        //     // ...text(day[0])[i] === day of search-day posted one letter at a time. example: T - u - e
-        //     fiveDay.eq(i).find("p").text(Math.floor(data.list[i+1].main.temp) + units().temp); // correct temps posting
-        // }
-
-        // for each jQuery loop. list at index location [count] does not work
-        // var count = 1;
-        // fiveDay.children("h6").each(function() { // sets each h6 to TODAY instead of next days
-        //     $(this).text(Date((data.list[count].dt) * 1000).split(" ")[0]); // list at index COUNT does not work
-        //     count++;
-        // })
+        console.log(data);
+        postWeather(data);
     })
 }
 
+// collects city name to put into query
 runCitySearch.submit(function(event) {
     event.preventDefault();
     cityName = $("#form-text").val();
