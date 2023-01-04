@@ -150,11 +150,15 @@ function postWeather(data) {
 function getGeocoordinates(cityName, state, country) {
     var limit = 1; // max number of cities with shared names. possible values: 1-5
     const apiKey = "c6923045c685289a8524ccba359c3265";
-    const geoCodeUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName},${state},${country}&limit=${limit}&appid=${apiKey}&$lang=en`
-    // prevents empty value from being submitted
-    // if (!cityName || !state || !country) { // don't need this b/c geocoordinates have IF EMPTY conditions
-    //     return alert("Please specify a city, state, and country to view weather.");
-    // }
+    var geoCodeUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName},${state},${country}&limit=${limit}&appid=${apiKey}`
+    // prevents submitting empty value OR renames URL if state is missing
+    if (!cityName) {
+        return alert("Please specify a city to continue.");
+    } else if (!country) {
+        return alert("Please specify a country to continue.");
+    } else {
+        geoCodeUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName},${country}&limit=${limit}&appid=${apiKey}`
+    }
     fetch(geoCodeUrl)
     .then(function (response) {
         // add 100-500 error codes? and 200s?
@@ -165,6 +169,7 @@ function getGeocoordinates(cityName, state, country) {
         console.log(error);
     })
     .then(function (data) {
+        console.log(data)
         latitude = data[0].lat;
         longitude = data[0].lon;
         coordinatesWeather(latitude, longitude);
