@@ -16,7 +16,6 @@ const runCitySearch = $(".city-search");
 const cityId = "?id=numbers";
 const geoLocation = "?lat=numbers&lon=numbers";
 var cityName = ""; // store user input in this var as a query. state and country need to be specified as well
-var count = 1;
 
 // function tempConversions(kelvin) {
 //     var celcius = Math.round(parseFloat(kelvin) - 273.15);
@@ -88,7 +87,7 @@ function postWeather(data) {
     var tempHigh = $("#high-temp");
     var tempLow = $("#low-temp");
     humidity.text("Humidity: " + (Math.floor(data.list[0].main.humidity) + " " + units().humidPercent));
-    wind.text("Wind speed: " + (Math.floor(data.list[0].wind.speed) + units().speed)); // create conversion function for wind?
+    wind.text("Wind speed: " + (Math.floor(data.list[0].wind.speed) + units().speed));
     airPressure.text("Air pressure: " + (Math.floor(data.list[0].main.pressure) + units().pressure));
     tempHigh.text("High temp: " + (Math.floor(data.list[0].main.temp_max) + units().temp));
     tempLow.text("Low temp: " + (Math.floor(data.list[0].main.temp_min) + units().temp));
@@ -96,9 +95,10 @@ function postWeather(data) {
     var fiveDay = $(".five-day");
     // i++ on h6 elements; *7 on list location (*8 would produce one day short)
     for (var i = 0; i < data.list.length; i ++) { // each day has 8 datasets (3hr-increment updates = 40 datasets per 5 days)
-        // day = (new Date((data.list[(i+1) * 7].dt) * 1000)).toDateString().split(" ")[0];
-        fiveDay.eq(i).find("h6").text((new Date((data.list[(i+1) * 7].dt) * 1000)).toDateString().split(" ")[0])
-        fiveDay.eq(i).find("p").text(Math.floor(data.list[(i+1) * 7].main.temp) + units().temp);
+        fiveDay.eq(i).find(".days").text((new Date((data.list[(i+1) * 7].dt) * 1000)).toDateString().split(" ")[0]) // day name
+        fiveDay.eq(i).find(".temps").text(Math.floor(data.list[(i+1) * 7].main.temp) + units().temp); // temperature
+        fiveDay.eq(i).find(".winds").text(Math.floor(data.list[(i+1) * 7].wind.speed) + units().speed); // wind speed
+        fiveDay.eq(i).find(".humidities").text(Math.floor(data.list[(i+1) * 7].main.humidity) + units().humidPercent); // humidity percentage
     }
 }
 
