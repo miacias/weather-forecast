@@ -11,7 +11,8 @@ ERRORS
 - 500, 502, 503, 504 - CONTACT OpenWeather via email with example of api request that failed
 */
 
-const citySearchEl = $(".city-search");
+const citySearchHomeEl = $(".city-search-home")
+const citySearchResultsEl = $(".city-search-results")
 var cityName = "";
 var zip = "";
 var state = "";
@@ -159,7 +160,7 @@ function coordinatesWeather(latitude, longitude) {
 }
 
 // collects city info to put into query
-citySearchEl.submit(function(event) {
+citySearchHomeEl.submit(function(event) {
     event.preventDefault();
     cityName = $("#city-text").val();
     state = $("#state-text").val();
@@ -177,12 +178,7 @@ citySearchEl.submit(function(event) {
 })
 
 /* 
-- when you click Search, open next results.html
-- save local storage from search
-    - localStorage.setItem(cityName, JSON.stringify({
-            latitude: latitude,
-            longitude: longitude,
-            }))
+
 - if localStorage is true, home.html search history d-none to d-flex
 - search history list item = local storage key name
         - create a formatting that ensures either all caps or first character capital letter
