@@ -35,19 +35,6 @@ var toggle;
 var latitude = "";
 var longitude = "";
 
-// function tempConversions(kelvin) {
-//     var celcius = Math.round(parseFloat(kelvin) - 273.15);
-// 	var fahrenheit = Math.round(((parseFloat(kelvin) - 273.15) * 1.8) + 32);
-//     // var temperature = $("#temp");
-//     // if (locale === usa) {
-//         // temperature.text(fahrenheit + "\u00B0" + "F");
-//         return fahrenheit + "\u00B0" + "F";
-//     // } else {
-//         // temperature.text(celcius + "\u00B0" + "C");
-//         // return celcius;
-//     // }
-// }
-
 // function display() {
 //     if (???) {
 //         $(".search-for-location").addClass("d-none");

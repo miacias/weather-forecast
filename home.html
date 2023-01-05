@@ -40,102 +40,183 @@
         <h1>Weather Forecast</h1>
     </header>
 
-    <main class="weather-search d-flex justify-content-between">
-        <!-- search history controls -->
-        <aside id="sidebar" class="d-block flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px;">
-            <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-              <!-- <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg> -->
-              <span class="fs-4">Search History</span>
-            </a>
-            <hr>
-            <ul class="nav nav-pills flex-column mb-auto">
-                <!-- use as a template for how to create list items via JS that use city name and access local storage -->
-                <li class="nav-item">
-                    <a href="#" class="nav-link active" aria-current="page">
-                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
-                    City 1
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link text-white">
-                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
-                    City 2
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link text-white">
-                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
-                    City 3
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link text-white">
-                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
-                    City 4
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link text-white">
-                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
-                    City 5
-                    </a>
-                </li>
-            </ul>
-            <hr>
-            <div class="dropdown">
-                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
-                    <strong>Settings</strong>
+    <main class="home">
+        <div class="container d-flex">
+            <aside id="sidebar" class="d-block flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px;">
+                <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                <!-- <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg> -->
+                <span class="fs-4">Search History</span>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                    <li><a class="dropdown-item" href="#">Clear History</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#">Clear Home</a></li>
+                <hr>
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <!-- use as a template for how to create list items via JS that use city name and access local storage -->
+                    <li class="nav-item">
+                        <a href="#" class="nav-link active" aria-current="page">
+                        <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+                        City 1
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link text-white">
+                        <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                        City 2
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link text-white">
+                        <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
+                        City 3
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link text-white">
+                        <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
+                        City 4
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link text-white">
+                        <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
+                        City 5
+                        </a>
+                    </li>
                 </ul>
-            </div>
-        </aside>
-        <section class="welcome">
-            <h2>Welcome!</h2>
-            <p>Search a city</p>
-            <ul>
-                <li>add a ZIP for more accurate results!</li>
-                <li>switch easily between Imperial and Metric measurements!</li>
-                <li>save a special place as Home and revisit often ♥</li>
-            </ul>
-        </section>
-        <!-- request data page here -->
-        <section class="search-for-location d-block m-4 p-4">
-            <div class="d-flex justify-content-center">
-                <form class="city-search" role="search" action="" method="post" name="city-search">
-                    <div class="form-row">
-                        <div class="col-7">
-                            <input type="text" class="form-control" id="city-text" placeholder="City">
+                <hr>
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                        <strong>Settings</strong>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                        <li><a class="dropdown-item" href="#">Clear History</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Clear Home</a></li>
+                    </ul>
+                </div>
+            </aside>
+            <!-- search history controls -->
+            <section class="welcome">
+                <h2>Welcome!</h2>
+                <p>Search a city</p>
+                <ul>
+                    <li>add a ZIP for more accurate results!</li>
+                    <li>switch easily between Imperial and Metric measurements!</li>
+                    <li>save a special place as Home and revisit often ♥</li>
+                </ul>
+            </section>
+            <!-- request data page here -->
+            <section class="search-for-location d-block m-4 p-4">
+                <div class="d-flex">
+                    <form class="city-search" role="search" action="" method="post" name="city-search">
+                        <div class="form-row">
+                            <div class="col-7">
+                                <input type="text" class="form-control" id="city-text" placeholder="City">
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" id="state-text" placeholder="State">
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" id="zip-text" placeholder="Zip (optional)">
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" id="country-text" placeholder="Country Abbreviation">
+                            </div>
                         </div>
-                        <div class="col">
-                            <input type="text" class="form-control" id="state-text" placeholder="State">
-                        </div>
-                        <div class="col">
-                            <input type="text" class="form-control" id="zip-text" placeholder="Zip (optional)">
-                        </div>
-                        <div class="col">
-                            <input type="text" class="form-control" id="country-text" placeholder="Country Abbreviation">
+                        <!-- metric-imperial toggle -->
+                        <!-- https://www.youtube.com/watch?v=Atc0qPkDeKM -->
+                        <input 
+                        class="btn switch btn-primary" 
+                        type="checkbox"
+                        id="switch"
+                        checked 
+                        data-toggle="toggle" 
+                        data-on="Imperial: °F, mph" 
+                        data-off="Metric: °C, m/s">
+                        <button class="search btn btn-outline-info city-search" type="submit">Search</button>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </main>
+    <section class="home-weather">
+        <!-- returned data displayed here -->
+        <section class="weather-card mb-3 bg-secondary rounded m-auto" style="max-width: 540px;">
+            <div class="main-weather-card row g-0">
+                <!-- left-side image with date, city, temp, description -->
+                <div class="holds-left-side-data col-md-4">
+                    <div class="card text-bg-dark h-100">
+                        <img 
+                            src="./assets/images/jonathan-bowers-BqKdvJ8a5TI-unsplash.jpg" 
+                            class="card-img img-fluid rounded-start align-center h-100"
+                            alt="lightning over a field">
+                        <div class="card-img-overlay">
+                            <h2 id="weekday" class="card-title"></h2>
+                            <p id="month-date" class="card-text"></p>
+                            <p id="city-name" class="card-text"></p>
+                            <img id="today-icon" class="owm-weather-icon" rel="weather-icon" type="img/png" src=""></img>
+                            <p id="temp" class="card-text"></p>
+                            <p id="weather-event" class="card-text"></p>
                         </div>
                     </div>
-                    <!-- metric-imperial toggle -->
-                    <!-- https://www.youtube.com/watch?v=Atc0qPkDeKM -->
-                    <input 
-                    class="btn switch btn-primary" 
-                    type="checkbox"
-                    id="switch"
-                    checked 
-                    data-toggle="toggle" 
-                    data-on="Imperial: °F, mph" 
-                    data-off="Metric: °C, m/s">
-                    <button class="search btn btn-outline-info city-search" type="submit">Search</button>
-                </form>
+                </div>
+                <!-- right-side top and bottom -->
+                <div class="holds-right-side-data col p-1">
+                    <!-- upper-right-side text with humidity, wind, air pressure, high, low -->
+                    <div class="col-md-8 px-1">
+                        <div class="detailed-weather card-body" id="detailed-weather">
+                            <p id="humidity"></p>
+                            <p id="wind"></p>
+                            <p id="air-pressure"></p>
+                            <p id="high-temp"></p>
+                            <p id="low-temp"></p>
+                        </div>
+                    </div>
+                    <!-- lower-right-side days, icons, and temps -->
+                    <!-- card-group sticks cards together without space between -->
+                    <!-- card-deck is supposed to put space between, but ROW is needed in container and COL-2 is needed to size the cards -->
+                    <div class="five-day-weather text-muted card-group text-center">
+                        <div id="day-1" class="five-day card rounded m-1">
+                            <h6 class="days" id="h6-1"></h6>
+                            <i id="icon-1">
+                                <link rel="weather-icon" type="img/png" href="">
+                            </i>
+                            <p class="temps" id="temp-1"></p>
+                            <p class="winds" id="wind-1"></p>
+                            <p class="humidities" id="humidity-1"></p>
+                        </div>
+                        <div id="day-2" class="five-day card rounded m-1">
+                            <h6 class="days" id="h6-2"></h6>
+                            <i id="icon-2"></i>
+                            <p class="temps" id="temp-2"></p>
+                            <p class="winds" id="wind-2"></p>
+                            <p class="humidities" id="humidity-2"></p>
+                        </div>
+                        <div id="day-3" class="five-day card rounded m-1">
+                            <h6 class="days" id="h6-3"></h6>
+                            <i id="icon-3"></i>
+                            <p class="temps" id="temp-3"></p>
+                            <p class="winds" id="wind-3"></p>
+                            <p class="humidities" id="humidity-3"></p>
+                        </div>
+                        <div id="day-4" class="five-day card rounded m-1">
+                            <h6 class="days" id="h6-4"></h6>
+                            <i id="icon-4"></i>
+                            <p class="temps" id="temp-4"></p>
+                            <p class="winds" id="wind-4"></p>
+                            <p class="humidities" id="humidity-4"></p>
+                        </div>
+                        <div id="day-5" class="five-day card rounded m-1">
+                            <h6 class="days" id="h6-5"></h6>
+                            <i id="icon-5"></i>
+                            <p class="temps" id="temp-5"></p>
+                            <p class="winds" id="wind-5"></p>
+                            <p class="humidities" id="humidity-5"></p>
+                        </div>                
+                    </div>
+                </div>
             </div>
         </section>
-    </main>
+    </section>
 
     <footer class="d-flex flex-column flex-wrap align-items-center">
         <p>Weather data provided by OpenWeather</p>
@@ -166,6 +247,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
     <!-- local JS link -->
-    <script src="./assets/js/script.js"></script>
+    <script src="./assets/js/home.js"></script>
 </body>
 </html>
