@@ -2,22 +2,7 @@
 - set localStorage to save my-home key with city name and attach to home icon
 - set localStorage to save city names as key with fetched object as data?
 - auto update interval: every 10 minutes
-- recommended to represent weather with central point in territory instead of all 200,000+ cities
 - calling more than once per 10 min on free plan will auto-suspend key (code 429: blocked account)
-
-CUSTOMIZATION
-- consider changing navbar to have a dropdown that allows different search types: city name, city name and country, city name and state and country,  (first search-type done)
-    - city: `http://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${apiKey}&units=${measurementSystem()}`
-    - city & country code: `api.openweathermap.org/data/2.5/forecast?q={city name},{country code}&appid={API key}`
-    - city, state, country code: `api.openweathermap.org/data/2.5/forecast?q={city name},{state code},{country code}&appid={API key}`
-    ************************assignment requires latitude and longitude url*********************************
-    - longitude & latitude: `api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}`
-        - use geocoding API to convert coordinates to city name & zip
-        - direct geocoding (coordinate to city name): `http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}`
-        - use LIMIT parameter to limit how many similar named cities appear in call (Springfield in every state). default is maximum 5.
-        - city: http://api.openweathermap.org/geo/1.0/direct?q={city name}&limit=5&appid={API key}
-        - zip code: http://api.openweathermap.org/geo/1.0/zip?zip={zip code},{country code}&appid={API key}
-
 
 ERRORS
 - 401 - did not specify api key in request, wrong key, or fetching disallowed info (paid vs unpaid subscription)

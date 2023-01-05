@@ -20,29 +20,29 @@
     <!-- CSS links -->
     <link rel="reset" href="./assets/css/reset.css">
     <link rel="stylesheet" href="./assets/css/style.css">
-    <title>Five-Day Weather Forecast</title>
+    <title>Weather Forecast Home</title>
 </head>
 
 <body class="bg-dark text-light">
 
     <!-- bootstrap navbar -->
-    <nav class="navbar sticky-top bg-secondary">
+    <!-- <nav class="navbar sticky-top bg-secondary">
         <div class="container-fluid">
-            <a class="navbar-brand text-warning" href="#">Weather Just for You</a>
+            <a class="navbar-brand text-warning" href="#">Weather Just for You</a> -->
             <!-- <form class="city-search d-flex" role="search" action="" method="post" name="city-search">
                 <input class="form-control me-2" id="form-text" type="search" placeholder="City Search" aria-label="City Search">
                 <button class="locate btn btn-outline-info" type="submit">Locate</button>
             </form> -->
-        </div>
-    </nav>
+        <!-- </div>
+    </nav> -->
 
-    <header class="d-flex p-4 justify-content-between">
+    <header class="text-warning text-center p-4">
         <h1>Weather Forecast</h1>
     </header>
 
     <main class="home">
         <div class="container d-flex">
-            <aside id="sidebar" class="d-block flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px;">
+            <aside id="sidebar" class="d-none flex-column col-3 flex-shrink-0 p-3 text-white bg-dark" style="width: 280px;">
                 <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                 <!-- <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg> -->
                 <span class="fs-4">Search History</span>
@@ -94,9 +94,9 @@
                     </ul>
                 </div>
             </aside>
-            <!-- search history controls -->
-            <section class="welcome">
-                <h2>Welcome!</h2>
+            <!-- user welcome -->
+            <section class="welcome text-warningcol-6 align-items-center p-4">
+                <h2 class="text-center text-warning">Welcome!</h2>
                 <p>Search a city</p>
                 <ul>
                     <li>add a ZIP for more accurate results!</li>
@@ -104,8 +104,8 @@
                     <li>save a special place as Home and revisit often ♥</li>
                 </ul>
             </section>
-            <!-- request data page here -->
-            <section class="search-for-location d-block m-4 p-4">
+            <!-- request/search data here -->
+            <section class="search-for-location d-block col-3 p-4">
                 <div class="d-flex">
                     <form class="city-search" role="search" action="" method="post" name="city-search">
                         <div class="form-row">
@@ -115,30 +115,36 @@
                             <div class="col">
                                 <input type="text" class="form-control" id="state-text" placeholder="State">
                             </div>
-                            <div class="col">
+                            <!-- <div class="col">
                                 <input type="text" class="form-control" id="zip-text" placeholder="Zip (optional)">
-                            </div>
+                            </div> -->
                             <div class="col">
                                 <input type="text" class="form-control" id="country-text" placeholder="Country Abbreviation">
                             </div>
                         </div>
                         <!-- metric-imperial toggle -->
                         <!-- https://www.youtube.com/watch?v=Atc0qPkDeKM -->
-                        <input 
+                        <!-- <input 
                         class="btn switch btn-primary" 
                         type="checkbox"
                         id="switch"
                         checked 
                         data-toggle="toggle" 
                         data-on="Imperial: °F, mph" 
-                        data-off="Metric: °C, m/s">
+                        data-off="Metric: °C, m/s"> -->
+                        <div class="options switch">
+                            <input type="radio" class="btn-check" name="options-outlined" id="success-outlined" autocomplete="off" checked>
+                            <label class="btn btn-outline-success" for="success-outlined">Imperial: °F, mph</label>
+                            <input type="radio" class="btn-check" name="options-outlined" id="danger-outlined" autocomplete="off">
+                            <label class="btn btn-outline-danger" for="danger-outlined">Metric: °C, m/s</label>
+                        </div>
                         <button class="search btn btn-outline-info city-search" type="submit">Search</button>
                     </form>
                 </div>
             </section>
         </div>
     </main>
-    <section class="home-weather">
+    <section class="home-weather d-none">
         <!-- returned data displayed here -->
         <section class="weather-card mb-3 bg-secondary rounded m-auto" style="max-width: 540px;">
             <div class="main-weather-card row g-0">
