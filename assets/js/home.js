@@ -19,7 +19,7 @@ var country = "";
 var toggle;
 var latitude = "";
 var longitude = "";
-// var cityHistory;
+var cityHistory = [];
 
 // function display() {
 //     if (???) {
@@ -122,21 +122,18 @@ function getGeocoordinates(cityName, state, country) {
         console.log(error);
     })
     .then(function (data) {
-        // console.log(data)
         latitude = data[0].lat;
         longitude = data[0].lon;
         var location = {
             city: cityName,
             geolocation: [latitude, longitude]
         }
-        var cityHistory = JSON.parse(localStorage.getItem("history")); // history is localStorage key word
+        cityHistory = JSON.parse(localStorage.getItem("history")); // history is localStorage key word
         if (cityHistory === null) {
             cityHistory = []; // resets value to [] instead of localStorage.getItem
         }
         cityHistory.push(location);
-        console.log(cityHistory);
-        localStorage.setItem("history", JSON.stringify(location));
-        console.log("hello")
+        localStorage.setItem("history", JSON.stringify(cityHistory));
         coordinatesWeather(latitude, longitude);
     })
     return [latitude, longitude];
@@ -157,7 +154,6 @@ function coordinatesWeather(latitude, longitude) {
     })
     // linking JSON to DOM
     .then(function (data) {
-        // console.log(data);
         postWeather(data);
     })
 }
@@ -177,7 +173,7 @@ citySearchEl.submit(function(event) {
     //     geoCodeUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName},${country}&limit=${limit}&appid=${apiKey}&units=${measurementSystem()}`
     // }
     getGeocoordinates(cityName, state, country);
-    // window.location.href = "/results.html";
+    window.location.href = "/results.html";
 })
 
 /* 
