@@ -100,7 +100,7 @@ function postWeather(data) {
     city.text(data.city.name + ", " + data.city.country);
     description.text(data.list[0].weather[0].description);
     var icon = data.list[0].weather[0].icon;
-    var iconEl = $("#today-icon")
+    var iconEl = $("#today-icon");
     iconEl.attr("src", "http://openweathermap.org/img/wn/" + icon + "@2x.png");
     var temperature = $("#temp");
     temperature.text(Math.floor(data.list[0].main.temp) + units().temp);
