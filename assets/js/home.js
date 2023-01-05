@@ -11,8 +11,8 @@ ERRORS
 - 500, 502, 503, 504 - CONTACT OpenWeather via email with example of api request that failed
 */
 
-const citySearchHomeEl = $(".city-search-home")
-const citySearchResultsEl = $(".city-search-results")
+const citySearchHomeEl = $(".city-search-home");
+const citySearchResultsEl = $(".city-search-results");
 var cityName = "";
 var zip = "";
 var state = "";
@@ -136,6 +136,7 @@ function getGeocoordinates(cityName, state, country) {
         cityHistory.push(location);
         localStorage.setItem("history", JSON.stringify(cityHistory));
         coordinatesWeather(latitude, longitude);
+        window.location.href = "./results.html";
     })
     return [latitude, longitude];
 }
@@ -160,22 +161,24 @@ function coordinatesWeather(latitude, longitude) {
 }
 
 // collects city info to put into query
-citySearchHomeEl.submit(function(event) {
+citySearchHomeEl.click(function(event) {
+    console.log("hello")
     event.preventDefault();
     cityName = $("#city-text").val();
     state = $("#state-text").val();
-    zip = $("#zip-text").val();
+    // zip = $("#zip-text").val();
     country = $("#country-text").val();
-    // if (!cityName) {
-    //     return alert("Please specify a city to continue.");
-    // } else if (!country) {
-    //     return alert("Please specify a country to continue.");
-    // } else {
-    //     geoCodeUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName},${country}&limit=${limit}&appid=${apiKey}&units=${measurementSystem()}`
-    // }
-    getGeocoordinates(cityName, state, country);
-    window.location.href = "/results.html";
+    // getGeocoordinates(cityName, state, country);
 })
+
+// citySearchResultsEl.submit(function(event) {
+//     event.preventDefault();
+//     cityName = $("#city-text").val();
+//     state = $("#state-text").val();
+//     zip = $("#zip-text").val();
+//     country = $("#country-text").val();
+//     getGeocoordinates(cityName, state, country);
+// })
 
 /* 
 
