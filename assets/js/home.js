@@ -22,11 +22,31 @@ var latitude = "";
 var longitude = "";
 var cityHistory = [];
 
-// function display() {
-//     if (???) {
-//         $(".search-for-location").addClass("d-none");
-//     }
-// }
+function displayHistoryHome(cityHistory) {
+    var sidebar = $("#sidebar");
+    var listEl = $(".past-cities");
+    if (!localStorage.length) {
+        sidebar.removeClass("d-flex");
+        sidebar.addClass("d-none");
+    } else {
+        sidebar.removeClass("d-none");
+        sidebar.addClass("d-flex")
+        for (i = 0; i < cityHistory.length; i++) {
+            var cityItem = $("<li>", {
+                class: "nav-item",
+            })
+            listEl.append(cityItem);
+            var anchor = $("<a>", {
+                href: "#",
+                class: "nav-link active px-4",
+                ariaCurrent: "page",
+                text: JSON.parse(localStorage.getItem("history"))[i].city
+            })
+            cityItem.append(anchor);
+        }
+    }
+}
+displayHistoryHome();
 
 // sets units of measurement based on measurement system
 function units() {
@@ -135,6 +155,7 @@ function getGeocoordinates(cityName, state, country) {
         }
         cityHistory.push(location);
         localStorage.setItem("history", JSON.stringify(cityHistory));
+        displayHistoryHome(cityHistory);
         coordinatesWeather(latitude, longitude);
         window.location.href = "./results.html";
     })
@@ -162,13 +183,12 @@ function coordinatesWeather(latitude, longitude) {
 
 // collects city info to put into query
 citySearchHomeEl.click(function(event) {
-    console.log("hello")
     event.preventDefault();
     cityName = $("#city-text").val();
     state = $("#state-text").val();
     // zip = $("#zip-text").val();
     country = $("#country-text").val();
-    // getGeocoordinates(cityName, state, country);
+    getGeocoordinates(cityName, state, country);
 })
 
 // citySearchResultsEl.submit(function(event) {
