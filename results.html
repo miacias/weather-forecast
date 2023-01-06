@@ -26,7 +26,6 @@
 <body class="bg-dark text-light">
     
     <header class="text-warning text-center p-4">
-        <nav class="btn btn-outline-info justify-content-end col-1 text-center mx-4 p-1 rounded">back</nav>
         <h1>Weather Forecast</h1>
     </header>
 
@@ -161,7 +160,10 @@
                         data-off="Metric: °C, m/s"
                         data-onstyle="outline-warning text-nowrap"
                         data-offstyle="outline-info bg-dark text-info text-nowrap">
-                        <button class="search btn btn-outline-info city-search-results" type="submit">Search</button>
+                        <div class="button-container">
+                            <button class="city-search-results search btn btn-outline-info" type="submit">Search</button>
+                            <button class="back btn btn-outline-info justify-content-end text-center rounded">Back</button>
+                        </div>
                     </form>
                 </div>
             </section>
