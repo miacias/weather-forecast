@@ -1,8 +1,5 @@
 /*
-- set localStorage to save my-home key with city name and attach to home icon
-- set localStorage to save city names as key with fetched object as data?
 - auto update interval: every 10 minutes
-- calling more than once per 10 min on free plan will auto-suspend key (code 429: blocked account)
 
 ERRORS
 - 401 - did not specify api key in request, wrong key, or fetching disallowed info (paid vs unpaid subscription)
@@ -23,28 +20,38 @@ var latitude = "";
 var longitude = "";
 var cityHistory = [];
 
+// get string from localStorage with proper noun capitalization (only works with a singular word)
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
 // hide-show search history on home page
 function landingShowHide() {
+    // hide-show search history on landing page
     var sidebar = $("#sidebar-home");
     var listEl = $(".past-cities");
-    // if (!localStorage.length) {
-    //     sidebar.hide();
-    // } else {
-    //     sidebar.show();
-    //     for (i = 0; i < cityHistory.length; i++) {
-    //         var cityItem = $("<li>", {
-    //             class: "nav-item",
-    //         })
-    //         listEl.append(cityItem);
-    //         var anchor = $("<a>", {
-    //             href: "#",
-    //             class: "nav-link active px-4",
-    //             ariaCurrent: "page",
-    //             text: JSON.parse(localStorage.getItem("history"))[i].city
-    //         })
-    //         cityItem.append(anchor);
-    //     }
-    // }
+    var citiesStorage = JSON.parse(localStorage.getItem("history"));
+    var cityString;
+    if (citiesStorage) {
+        sidebar.show();
+        for (i = 0; i < cityHistory.length; i++) {
+            cityString = JSON.parse(localStorage.getItem("history"))[i].city;
+            var cityItem = $("<li>", {
+                class: "nav-item",
+            })
+            listEl.append(cityItem);
+            var anchor = $("<a>", {
+                href: "#",
+                class: "nav-link active px-4",
+                ariaCurrent: "page",
+                text: capitalizeFirstLetter(cityString)
+            })
+            cityItem.append(anchor);
+        }
+    } else {
+        sidebar.hide();
+    }
+    // hide-show home city on landing page
     var homeStorage = JSON.parse(localStorage.getItem("home"));
     if (homeStorage) { // if it exists
         $(".home-weather").show();
@@ -123,7 +130,7 @@ function postHomeWeather(data) {
     var fiveDay = $(".five-day");
     // i++ on h6 elements; *7 on list location (*8 would produce one day short)
     for (var i = 0; i < data.list.length; i ++) { // each day has 8 datasets (3hr-increment updates = 40 datasets per 5 days)
-        fiveDay.eq(i).find(".days").text((new Date((data.list[(i+1) * 7].dt) * 1000)).toDateString().split(" ")[0]) // day name
+        fiveDay.eq(i).find(".days").text((new Date((data.list[(i+1) * 7].dt) * 1000)).toDateString().split(" ")[0]) // day name (has TypeError: Cannot read properties of undefined (reading 'dt'))
         fiveDay.eq(i).find(".temps").text(Math.floor(data.list[(i+1) * 7].main.temp) + units().temp); // temperature
         fiveDay.eq(i).find(".winds").text(Math.floor(data.list[(i+1) * 7].wind.speed) + units().speed); // wind speed
         fiveDay.eq(i).find(".humidities").text(Math.floor(data.list[(i+1) * 7].main.humidity) + units().humidPercent); // humidity percentage
@@ -188,7 +195,7 @@ function saveGeoCoordinates(cityName, state, country) {
             } else {
                 homeAddress.splice(0, 1, homeLocation); // replaces previous home location
             }
-            localStorage.setItem("home", JSON.stringify(homeAddress));
+            localStorage.setItem("home", (JSON.stringify(homeAddress)).toLowerCase());
             weatherAtHomeCoordinates(latitude, longitude);
         } else { // home not selected, thus general search
             // setup localStorage for city history
@@ -208,7 +215,7 @@ function saveGeoCoordinates(cityName, state, country) {
             }
             if (!flag) { // if false
                 cityHistory.push(location);
-                localStorage.setItem("history", JSON.stringify(cityHistory));
+                localStorage.setItem("history", (JSON.stringify(cityHistory)).toLowerCase());
             }
             // window.location.href = "./results.html/" + "?q=" + cityName;
             // use results.js to complete the rest of the workflow. get local storage to continue

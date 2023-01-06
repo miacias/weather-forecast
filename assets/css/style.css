@@ -1,7 +1,10 @@
-body {
+body,
+#temp,
+#weekday {
     font-family: 'Bakbak One', cursive;
 }
 
-main {
+main, 
+.home-weather {
     font-family: 'Poppins', sans-serif;
 }
