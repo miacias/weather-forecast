@@ -31,7 +31,7 @@
 
     <main class="home">
         <div class="container d-flex">
-            <aside id="sidebar" class="d-block flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px;">
+            <aside id="sidebar" class="d-block flex-column flex-shrink-0 p-3 col-3 text-white bg-dark" style="width: 280px;">
                 <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                 <!-- <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg> -->
                 <span class="fs-4">Search History</span>
@@ -50,7 +50,7 @@
                     </ul>
                 </div>
             </aside>
-            <section class="home-weather d-block">
+            <section class="results-weather col-6 d-block">
                 <h2 class="text-center text-warning">Current Conditions</h2>
                 <!-- results displayed here -->
                 <section class="weather-card mb-3 bg-secondary rounded m-auto" style="max-width: 540px;">
@@ -131,7 +131,7 @@
                 </section>
             </section>
             <!-- request/search data here -->
-            <section class="search-for-location d-block m-4 p-4">
+            <section class="search-for-location d-block col-3 p-4">
                 <div class="d-flex">
                     <form class="city-search" role="search" action="" method="post" name="city-search">
                         <div class="form-row">
@@ -170,13 +170,13 @@
         </div>
     </main>
 
-    <footer class="d-flex flex-column flex-wrap align-items-center">
+    <footer class="d-flex flex-column flex-wrap align-items-center fixed-bottom my-3">
         <p>Weather data provided by OpenWeather</p>
         <a href="https://openweathermap.org/">
             <img 
                 src="./assets/images/OpenWeather-Master-Logo RGB2.png" 
                 alt="2-D vector art logo of orange sun above open water with a blank white background and Open Weather company name"
-                width="150" height="85"
+                width="90" height="52"
                 class="rounded">
         </a>
     </footer>
