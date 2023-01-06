@@ -22,15 +22,14 @@ var latitude = "";
 var longitude = "";
 var cityHistory = [];
 
+// hide-show 
 function displayHistoryHome(cityHistory) {
     var sidebar = $("#sidebar");
     var listEl = $(".past-cities");
     if (!localStorage.length) {
-        sidebar.removeClass("d-flex");
-        sidebar.addClass("d-none");
+        sidebar.hide();
     } else {
-        sidebar.removeClass("d-none");
-        sidebar.addClass("d-flex")
+        sidebar.show();
         for (i = 0; i < cityHistory.length; i++) {
             var cityItem = $("<li>", {
                 class: "nav-item",
