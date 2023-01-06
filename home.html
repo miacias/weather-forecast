@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- link for Day.js API -->
+    <script
+    src="https://cdn.jsdelivr.net/npm/dayjs@1.11.3/dayjs.min.js"
+    integrity="sha256-iu/zLUB+QgISXBLCW/mcDi/rnf4m4uEDO0wauy76x7U="
+    crossorigin="anonymous">
+    </script>
+    <!-- bootstrap CSS link -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <!-- google fonts Bakbak One -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bakbak+One&family=Poppins:wght@200&display=swap" rel="stylesheet">
+    <!-- CSS links -->
+    <link rel="reset" href="./assets/css/reset.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <title>Weather Forecast Home</title>
+</head>
+
+<body class="bg-dark text-light">
+
+    <!-- bootstrap navbar -->
+    <!-- <nav class="navbar sticky-top bg-secondary">
+        <div class="container-fluid">
+            <a class="navbar-brand text-warning" href="#">Weather Just for You</a> -->
+            <!-- <form class="city-search d-flex" role="search" action="" method="post" name="city-search">
+                <input class="form-control me-2" id="form-text" type="search" placeholder="City Search" aria-label="City Search">
+                <button class="locate btn btn-outline-info" type="submit">Locate</button>
+            </form> -->
+        <!-- </div>
+    </nav> -->
+
+    <header class="text-warning text-center p-4">
+        <h1>Weather Forecast</h1>
+    </header>
+
+    <main class="home">
+        <div class="container d-flex">
+            <aside id="sidebar" class="d-none flex-column col-3 flex-shrink-0 p-3 text-white bg-dark" style="width: 280px;">
+                <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                <!-- <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg> -->
+                <span class="fs-4">Search History</span>
+                </a>
+                <hr>
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <!-- use as a template for how to create list items via JS that use city name and access local storage -->
+                    <li class="nav-item">
+                        <a href="#" class="nav-link active" aria-current="page">
+                        <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+                        City 1
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link text-white">
+                        <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                        City 2
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link text-white">
+                        <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
+                        City 3
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link text-white">
+                        <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
+                        City 4
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link text-white">
+                        <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
+                        City 5
+                        </a>
+                    </li>
+                </ul>
+                <hr>
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                        <strong>Settings</strong>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                        <li><a class="dropdown-item" href="#">Clear History</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Clear Home</a></li>
+                    </ul>
+                </div>
+            </aside>
+            <!-- user welcome -->
+            <section class="welcome text-warningcol-6 align-items-center p-4">
+                <h2 class="text-center text-warning">Welcome!</h2>
+                <p>Search a city</p>
+                <ul>
+                    <li>add a ZIP for more accurate results!</li>
+                    <li>switch easily between Imperial and Metric measurements!</li>
+                    <li>save a special place as Home and revisit often ♥</li>
+                </ul>
+            </section>
+            <!-- request/search data here -->
+            <section class="search-for-location d-block col-3 p-4">
+                <div class="d-flex">
+                    <form class="city-search" role="search" action="" method="post" name="city-search">
+                        <div class="form-row">
+                            <div class="col-7">
+                                <input type="text" class="form-control" id="city-text" placeholder="City">
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" id="state-text" placeholder="State">
+                            </div>
+                            <!-- <div class="col">
+                                <input type="text" class="form-control" id="zip-text" placeholder="Zip (optional)">
+                            </div> -->
+                            <div class="col">
+                                <input type="text" class="form-control" id="country-text" placeholder="Country Abbreviation">
+                            </div>
+                        </div>
+                        <!-- metric-imperial toggle -->
+                        <!-- https://www.youtube.com/watch?v=Atc0qPkDeKM -->
+                        <input 
+                        class="btn switch btn-primary" 
+                        type="checkbox"
+                        id="switch"
+                        checked 
+                        data-toggle="toggle" 
+                        data-on="Imperial: °F, mph" 
+                        data-off="Metric: °C, m/s">
+                        <!-- <div class="options switch">
+                            <input type="radio" class="btn-check" name="options-outlined" id="success-outlined" autocomplete="off" checked>
+                            <label class="btn btn-outline-success" for="success-outlined">Imperial: °F, mph</label>
+                            <input type="radio" class="btn-check" name="options-outlined" id="danger-outlined" autocomplete="off">
+                            <label class="btn btn-outline-danger" for="danger-outlined">Metric: °C, m/s</label>
+                        </div> -->
+                        <button class="search btn btn-outline-info city-search-home" type="submit">Search</button>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </main>
+    <section class="home-weather d-none">
+        <!-- returned data displayed here -->
+        <section class="weather-card mb-3 bg-secondary rounded m-auto" style="max-width: 540px;">
+            <div class="main-weather-card row g-0">
+                <!-- left-side image with date, city, temp, description -->
+                <div class="holds-left-side-data col-md-4">
+                    <div class="card text-bg-dark h-100">
+                        <img 
+                            src="./assets/images/jonathan-bowers-BqKdvJ8a5TI-unsplash.jpg" 
+                            class="card-img img-fluid rounded-start align-center h-100"
+                            alt="lightning over a field">
+                        <div class="card-img-overlay">
+                            <h2 id="weekday" class="card-title"></h2>
+                            <p id="month-date" class="card-text"></p>
+                            <p id="city-name" class="card-text"></p>
+                            <img id="today-icon" class="owm-weather-icon" rel="weather-icon" type="img/png" src=""></img>
+                            <p id="temp" class="card-text"></p>
+                            <p id="weather-event" class="card-text"></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- right-side top and bottom -->
+                <div class="holds-right-side-data col p-1">
+                    <!-- upper-right-side text with humidity, wind, air pressure, high, low -->
+                    <div class="col-md-8 px-1">
+                        <div class="detailed-weather card-body" id="detailed-weather">
+                            <p id="humidity"></p>
+                            <p id="wind"></p>
+                            <p id="air-pressure"></p>
+                            <p id="high-temp"></p>
+                            <p id="low-temp"></p>
+                        </div>
+                    </div>
+                    <!-- lower-right-side days, icons, and temps -->
+                    <!-- card-group sticks cards together without space between -->
+                    <!-- card-deck is supposed to put space between, but ROW is needed in container and COL-2 is needed to size the cards -->
+                    <div class="five-day-weather text-muted card-group text-center">
+                        <div id="day-1" class="five-day card rounded m-1">
+                            <h6 class="days" id="h6-1"></h6>
+                            <i id="icon-1">
+                                <link rel="weather-icon" type="img/png" href="">
+                            </i>
+                            <p class="temps" id="temp-1"></p>
+                            <p class="winds" id="wind-1"></p>
+                            <p class="humidities" id="humidity-1"></p>
+                        </div>
+                        <div id="day-2" class="five-day card rounded m-1">
+                            <h6 class="days" id="h6-2"></h6>
+                            <i id="icon-2"></i>
+                            <p class="temps" id="temp-2"></p>
+                            <p class="winds" id="wind-2"></p>
+                            <p class="humidities" id="humidity-2"></p>
+                        </div>
+                        <div id="day-3" class="five-day card rounded m-1">
+                            <h6 class="days" id="h6-3"></h6>
+                            <i id="icon-3"></i>
+                            <p class="temps" id="temp-3"></p>
+                            <p class="winds" id="wind-3"></p>
+                            <p class="humidities" id="humidity-3"></p>
+                        </div>
+                        <div id="day-4" class="five-day card rounded m-1">
+                            <h6 class="days" id="h6-4"></h6>
+                            <i id="icon-4"></i>
+                            <p class="temps" id="temp-4"></p>
+                            <p class="winds" id="wind-4"></p>
+                            <p class="humidities" id="humidity-4"></p>
+                        </div>
+                        <div id="day-5" class="five-day card rounded m-1">
+                            <h6 class="days" id="h6-5"></h6>
+                            <i id="icon-5"></i>
+                            <p class="temps" id="temp-5"></p>
+                            <p class="winds" id="wind-5"></p>
+                            <p class="humidities" id="humidity-5"></p>
+                        </div>                
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+
+    <footer class="d-flex flex-column flex-wrap align-items-center">
+        <p>Weather data provided by OpenWeather</p>
+        <a href="https://openweathermap.org/">
+            <img 
+                src="./assets/images/OpenWeather-Master-Logo RGB2.png" 
+                alt="2-D vector art logo of orange sun above open water with a blank white background and Open Weather company name"
+                width="150" height="85"
+                class="rounded">
+        </a>
+    </footer>
+    
+
+    <!-- jQuery link -->
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+    <!-- Link the DayJS library -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/dayjs@1.11.3/dayjs.min.js"
+      integrity="sha256-iu/zLUB+QgISXBLCW/mcDi/rnf4m4uEDO0wauy76x7U="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.3/plugin/advancedFormat.js"></script>
+    <!-- Load plugin as window.dayjs_plugin_NAME -->
+    <script>
+      dayjs.extend(window.dayjs_plugin_advancedFormat)
+    </script>
+    <!-- bootstrap JS link -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <!-- local JS link -->
+    <script src="./assets/js/home.js"></script>
+</body>
+</html>
