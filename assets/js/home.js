@@ -14,7 +14,8 @@ ERRORS
 const citySearchHomeEl = $(".city-search-home");
 const citySearchResultsEl = $(".city-search-results");
 var cityName = "";
-var zip = "";
+var homeAddress = [];
+// var zip = "";
 var state = "";
 var country = "";
 var toggle;
@@ -22,11 +23,37 @@ var latitude = "";
 var longitude = "";
 var cityHistory = [];
 
-// function display() {
-//     if (???) {
-//         $(".search-for-location").addClass("d-none");
-//     }
-// }
+// hide-show search history on home page
+function landingShowHide() {
+    var sidebar = $("#sidebar-home");
+    var listEl = $(".past-cities");
+    // if (!localStorage.length) {
+    //     sidebar.hide();
+    // } else {
+    //     sidebar.show();
+    //     for (i = 0; i < cityHistory.length; i++) {
+    //         var cityItem = $("<li>", {
+    //             class: "nav-item",
+    //         })
+    //         listEl.append(cityItem);
+    //         var anchor = $("<a>", {
+    //             href: "#",
+    //             class: "nav-link active px-4",
+    //             ariaCurrent: "page",
+    //             text: JSON.parse(localStorage.getItem("history"))[i].city
+    //         })
+    //         cityItem.append(anchor);
+    //     }
+    // }
+    var homeStorage = JSON.parse(localStorage.getItem("home"));
+    if (homeStorage) { // if it exists
+        $(".home-weather").show();
+        weatherAtHomeCoordinates(homeStorage[0].geolocation[0], homeStorage[0].geolocation[1]);
+    } else {
+        $(".home-weather").hide();
+    }
+}
+landingShowHide()
 
 // sets units of measurement based on measurement system
 function units() {
@@ -58,8 +85,11 @@ function measurementSystem() {
     }
 }
 
-// adds specific data to HTML
-function postWeather(data) {
+// // adds specific data to HTML
+function postHomeWeather(data) {
+    if (homeAddress) {
+        $(".home-weather").show();
+    }
     // left-side image with date, city, temp, description
     var weekday = $("#weekday");
     var monthDate = $("#month-date");
@@ -100,8 +130,27 @@ function postWeather(data) {
     }
 }
 
+// fetch longitude and latitude
+function weatherAtHomeCoordinates(latitude, longitude) {
+    const apiKey = "c6923045c685289a8524ccba359c3265";
+    const coordinateQueryUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=${measurementSystem()}`;
+    fetch(coordinateQueryUrl)
+    .then(function (response) {
+        // add 100-500 error codes? and 200s?
+        return response.json();
+    })
+    .catch(function(error) {
+        console.log("An error occurred.");
+        console.log(error);
+    })
+    // linking JSON to DOM
+    .then(function (data) {
+        postHomeWeather(data);
+    })
+}
+
 // converts user-proivded CITY NAME to longitude and latitude
-function getGeocoordinates(cityName, state, country) {
+function saveGeoCoordinates(cityName, state, country) {
     var limit = 1; // max number of cities with shared names. possible values: 1-5
     const apiKey = "c6923045c685289a8524ccba359c3265";
     var geoCodeUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName},${state},${country}&limit=${limit}&appid=${apiKey}&units=${measurementSystem()}`
@@ -125,50 +174,58 @@ function getGeocoordinates(cityName, state, country) {
     .then(function (data) {
         latitude = data[0].lat;
         longitude = data[0].lon;
-        var location = {
-            city: cityName,
-            geolocation: [latitude, longitude]
+        // localStorage for HOME or GENERAL SEARCH
+        if ($(".form-check-input").prop("checked")) { // home selected
+            // setup localStorage for home address
+            var homeLocation = {
+                homeCity: cityName,
+                geolocation: [latitude, longitude]
+            }
+            homeAddress = JSON.parse(localStorage.getItem("home"));
+            if (homeAddress === null) {
+                homeAddress = []; // resets value to [] instead of localStorage.getItem
+                homeAddress.push(homeLocation);
+            } else {
+                homeAddress.splice(0, 1, homeLocation); // replaces previous home location
+            }
+            localStorage.setItem("home", JSON.stringify(homeAddress));
+            weatherAtHomeCoordinates(latitude, longitude);
+        } else { // home not selected, thus general search
+            // setup localStorage for city history
+            var location = {
+                city: cityName,
+                geolocation: [latitude, longitude]
+            }
+            cityHistory = JSON.parse(localStorage.getItem("history")); // history is localStorage key word
+            if (cityHistory === null) {
+                cityHistory = []; // resets value to [] instead of localStorage.getItem
+            }
+            var flag = false; // placeholder true/false
+            for (i = 0; i< cityHistory.length; i++) { // scan array of objects to see if city name is repeated. set to true if found repeated values
+                if (cityHistory[i].city === cityName); {
+                    flag = true;
+                }
+            }
+            if (!flag) { // if false
+                cityHistory.push(location);
+                localStorage.setItem("history", JSON.stringify(cityHistory));
+            }
+            // window.location.href = "./results.html/" + "?q=" + cityName;
+            // use results.js to complete the rest of the workflow. get local storage to continue
+            // showSearchHistoryLanding(cityHistory);
         }
-        cityHistory = JSON.parse(localStorage.getItem("history")); // history is localStorage key word
-        if (cityHistory === null) {
-            cityHistory = []; // resets value to [] instead of localStorage.getItem
-        }
-        cityHistory.push(location);
-        localStorage.setItem("history", JSON.stringify(cityHistory));
-        coordinatesWeather(latitude, longitude);
-        window.location.href = "./results.html";
     })
     return [latitude, longitude];
 }
 
-// fetch longitude and latitude
-function coordinatesWeather(latitude, longitude) {
-    const apiKey = "c6923045c685289a8524ccba359c3265";
-    const coordinateQueryUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=${measurementSystem()}`;
-    fetch(coordinateQueryUrl)
-    .then(function (response) {
-        // add 100-500 error codes? and 200s?
-        return response.json();
-    })
-    .catch(function(error) {
-        console.log("An error occurred.");
-        console.log(error);
-    })
-    // linking JSON to DOM
-    .then(function (data) {
-        postWeather(data);
-    })
-}
-
-// collects city info to put into query
+// collects city info from landing page to put into query
 citySearchHomeEl.click(function(event) {
-    console.log("hello")
     event.preventDefault();
     cityName = $("#city-text").val();
     state = $("#state-text").val();
     // zip = $("#zip-text").val();
     country = $("#country-text").val();
-    // getGeocoordinates(cityName, state, country);
+    saveGeoCoordinates(cityName, state, country);
 })
 
 // citySearchResultsEl.submit(function(event) {

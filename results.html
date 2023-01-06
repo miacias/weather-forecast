@@ -24,56 +24,22 @@
 </head>
 
 <body class="bg-dark text-light">
-
+    
     <header class="text-warning text-center p-4">
         <h1>Weather Forecast</h1>
     </header>
 
     <main class="home">
         <div class="container d-flex">
-            <aside id="sidebar" class="d-block flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px;">
+            <aside id="sidebar" class="d-block flex-column flex-shrink-0 p-3 col-3 text-white bg-dark" style="width: 280px;">
                 <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                <!-- <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg> -->
                 <span class="fs-4">Search History</span>
                 </a>
                 <hr>
-                <ul class="nav nav-pills flex-column mb-auto">
-                    <!-- use as a template for how to create list items via JS that use city name and access local storage -->
-                    <li class="nav-item">
-                        <a href="#" class="nav-link active" aria-current="page">
-                        <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
-                        City 1
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link text-white">
-                        <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
-                        City 2
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link text-white">
-                        <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
-                        City 3
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link text-white">
-                        <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
-                        City 4
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link text-white">
-                        <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
-                        City 5
-                        </a>
-                    </li>
-                </ul>
+                <ul class="past-cities nav nav-pills flex-column mb-auto"></ul>
                 <hr>
                 <div class="dropdown">
                     <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
                         <strong>Settings</strong>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
@@ -83,7 +49,7 @@
                     </ul>
                 </div>
             </aside>
-            <section class="home-weather d-block">
+            <section class="results-weather col-6 d-block">
                 <h2 class="text-center text-warning">Current Conditions</h2>
                 <!-- results displayed here -->
                 <section class="weather-card mb-3 bg-secondary rounded m-auto" style="max-width: 540px;">
@@ -164,47 +130,52 @@
                 </section>
             </section>
             <!-- request/search data here -->
-            <section class="search-for-location d-block m-4 p-4">
+            <section class="search-for-location d-block col-3 p-4">
                 <div class="d-flex">
                     <form class="city-search" role="search" action="" method="post" name="city-search">
                         <div class="form-row">
-                            <div class="col-7">
+                            <div class="my-1 col-7">
                                 <input type="text" class="form-control" id="city-text" placeholder="City">
                             </div>
-                            <div class="col">
+                            <div class="my-1 col">
                                 <input type="text" class="form-control" id="state-text" placeholder="State">
                             </div>
                             <!-- <div class="col">
                                 <input type="text" class="form-control" id="zip-text" placeholder="Zip (optional)">
                             </div> -->
-                            <div class="col">
+                            <div class="my-1 col">
                                 <input type="text" class="form-control" id="country-text" placeholder="Country Abbreviation">
                             </div>
                         </div>
                         <!-- metric-imperial toggle -->
                         <!-- https://www.youtube.com/watch?v=Atc0qPkDeKM -->
                         <input 
-                        class="btn switch btn-primary" 
+                        class="btn switch btn-primary my-1" 
                         type="checkbox"
                         id="switch"
                         checked 
                         data-toggle="toggle" 
                         data-on="Imperial: °F, mph" 
-                        data-off="Metric: °C, m/s">
-                        <button class="search btn btn-outline-info city-search-results" type="submit">Search</button>
+                        data-off="Metric: °C, m/s"
+                        data-onstyle="outline-warning text-nowrap"
+                        data-offstyle="outline-info bg-dark text-info text-nowrap">
+                        <div class="button-container my-1 ">
+                            <button class="city-search-results search btn btn-outline-info" type="submit">Search</button>
+                            <button class="back btn btn-outline-info justify-content-end text-center rounded">Back</button>
+                        </div>
                     </form>
                 </div>
             </section>
         </div>
     </main>
 
-    <footer class="d-flex flex-column flex-wrap align-items-center">
+    <footer class="d-flex flex-column flex-wrap align-items-center fixed-bottom my-3">
         <p>Weather data provided by OpenWeather</p>
         <a href="https://openweathermap.org/">
             <img 
                 src="./assets/images/OpenWeather-Master-Logo RGB2.png" 
                 alt="2-D vector art logo of orange sun above open water with a blank white background and Open Weather company name"
-                width="150" height="85"
+                width="120" height="69"
                 class="rounded">
         </a>
     </footer>
