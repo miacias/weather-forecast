@@ -79,46 +79,46 @@ function measurementSystem() {
 }
 
 // // adds specific data to HTML
-// function postWeather(data) {
-//     // left-side image with date, city, temp, description
-//     var weekday = $("#weekday");
-//     var monthDate = $("#month-date");
-//     var city = $("#city-name");
-//     var description = $("#weather-event");
-//     // sets HTML in left-side
-//     weekday.text(dayjs().format("dddd"));
-//     monthDate.text(dayjs().format("MMMM Do"));
-//     // sample of how to print today's day name, example: Tue
-//     // var todayData = Date((data.list[0].dt) * 1000).split(" ");
-//     // var today = todayData[0];
-//     city.text(data.city.name + ", " + data.city.country);
-//     description.text(data.list[0].weather[0].description);
-//     var icon = data.list[0].weather[0].icon;
-//     var iconEl = $("#today-icon");
-//     iconEl.attr("src", "http://openweathermap.org/img/wn/" + icon + "@2x.png");
-//     var temperature = $("#temp");
-//     temperature.text(Math.floor(data.list[0].main.temp) + units().temp);
-//     // upper-right-side text with humidity, wind, air pressure, high, low
-//     var humidity = $("#humidity");
-//     var wind = $("#wind");
-//     var airPressure = $("#air-pressure");
-//     var tempHigh = $("#high-temp");
-//     var tempLow = $("#low-temp");
-//     humidity.text("Humidity: " + (Math.floor(data.list[0].main.humidity) + " " + units().humidPercent));
-//     wind.text("Wind speed: " + (Math.floor(data.list[0].wind.speed) + units().speed));
-//     airPressure.text("Air pressure: " + (Math.floor(data.list[0].main.pressure) + units().pressure)); // CONVERSION REQUIRED?!
-//     tempHigh.text("High temp: " + (Math.floor(data.list[0].main.temp_max) + units().temp));
-//     tempLow.text("Low temp: " + (Math.floor(data.list[0].main.temp_min) + units().temp));
-//     // lower-right-side text with 5-day forecast icon, temperature
-//     var fiveDay = $(".five-day");
-//     // i++ on h6 elements; *7 on list location (*8 would produce one day short)
-//     for (var i = 0; i < data.list.length; i ++) { // each day has 8 datasets (3hr-increment updates = 40 datasets per 5 days)
-//         fiveDay.eq(i).find(".days").text((new Date((data.list[(i+1) * 7].dt) * 1000)).toDateString().split(" ")[0]) // day name
-//         fiveDay.eq(i).find(".temps").text(Math.floor(data.list[(i+1) * 7].main.temp) + units().temp); // temperature
-//         fiveDay.eq(i).find(".winds").text(Math.floor(data.list[(i+1) * 7].wind.speed) + units().speed); // wind speed
-//         fiveDay.eq(i).find(".humidities").text(Math.floor(data.list[(i+1) * 7].main.humidity) + units().humidPercent); // humidity percentage
-//     }
-// }
+function postHomeWeather(data) {
+    // left-side image with date, city, temp, description
+    var weekday = $("#weekday");
+    var monthDate = $("#month-date");
+    var city = $("#city-name");
+    var description = $("#weather-event");
+    // sets HTML in left-side
+    weekday.text(dayjs().format("dddd"));
+    monthDate.text(dayjs().format("MMMM Do"));
+    // sample of how to print today's day name, example: Tue
+    // var todayData = Date((data.list[0].dt) * 1000).split(" ");
+    // var today = todayData[0];
+    city.text(data.city.name + ", " + data.city.country);
+    description.text(data.list[0].weather[0].description);
+    var icon = data.list[0].weather[0].icon;
+    var iconEl = $("#today-icon");
+    iconEl.attr("src", "http://openweathermap.org/img/wn/" + icon + "@2x.png");
+    var temperature = $("#temp");
+    temperature.text(Math.floor(data.list[0].main.temp) + units().temp);
+    // upper-right-side text with humidity, wind, air pressure, high, low
+    var humidity = $("#humidity");
+    var wind = $("#wind");
+    var airPressure = $("#air-pressure");
+    var tempHigh = $("#high-temp");
+    var tempLow = $("#low-temp");
+    humidity.text("Humidity: " + (Math.floor(data.list[0].main.humidity) + " " + units().humidPercent));
+    wind.text("Wind speed: " + (Math.floor(data.list[0].wind.speed) + units().speed));
+    airPressure.text("Air pressure: " + (Math.floor(data.list[0].main.pressure) + units().pressure)); // CONVERSION REQUIRED?!
+    tempHigh.text("High temp: " + (Math.floor(data.list[0].main.temp_max) + units().temp));
+    tempLow.text("Low temp: " + (Math.floor(data.list[0].main.temp_min) + units().temp));
+    // lower-right-side text with 5-day forecast icon, temperature
+    var fiveDay = $(".five-day");
+    // i++ on h6 elements; *7 on list location (*8 would produce one day short)
+    for (var i = 0; i < data.list.length; i ++) { // each day has 8 datasets (3hr-increment updates = 40 datasets per 5 days)
+        fiveDay.eq(i).find(".days").text((new Date((data.list[(i+1) * 7].dt) * 1000)).toDateString().split(" ")[0]) // day name
+        fiveDay.eq(i).find(".temps").text(Math.floor(data.list[(i+1) * 7].main.temp) + units().temp); // temperature
+        fiveDay.eq(i).find(".winds").text(Math.floor(data.list[(i+1) * 7].wind.speed) + units().speed); // wind speed
+        fiveDay.eq(i).find(".humidities").text(Math.floor(data.list[(i+1) * 7].main.humidity) + units().humidPercent); // humidity percentage
+    }
+}
 
 // converts user-proivded CITY NAME to longitude and latitude
 function saveGeoCoordinates(cityName, state, country) {
@@ -159,6 +159,7 @@ function saveGeoCoordinates(cityName, state, country) {
             } else {
                 homeAddress.splice(0, 1, homeLocation); // replaces previous home location
             }
+            weatherAtCoordinates(latitude, longitude);
         } else { // home not selected, thus general search
             // setup localStorage for city history
             var location = {
@@ -173,14 +174,13 @@ function saveGeoCoordinates(cityName, state, country) {
             localStorage.setItem("history", JSON.stringify(cityHistory));
         }
         // displayHistoryHome(cityHistory);
-        coordinatesWeather(latitude, longitude);
-        window.location.href = "./results.html";
+        // window.location.href = "./results.html";
     })
     return [latitude, longitude];
 }
 
 // fetch longitude and latitude
-function coordinatesWeather(latitude, longitude) {
+function weatherAtCoordinates(latitude, longitude) {
     const apiKey = "c6923045c685289a8524ccba359c3265";
     const coordinateQueryUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=${measurementSystem()}`;
     fetch(coordinateQueryUrl)
