@@ -24,7 +24,7 @@ var longitude = "";
 var cityHistory = [];
 
 // hide-show search history on home page
-function displayHistoryHome(cityHistory) {
+function showSearchHistoryLanding(cityHistory) {
     var sidebar = $("#sidebar-home");
     var listEl = $(".past-cities");
     if (!localStorage.length) {
@@ -46,7 +46,6 @@ function displayHistoryHome(cityHistory) {
         }
     }
 }
-displayHistoryHome();
 
 // sets units of measurement based on measurement system
 function units() {
@@ -80,6 +79,9 @@ function measurementSystem() {
 
 // // adds specific data to HTML
 function postHomeWeather(data) {
+    if (homeAddress) {
+        $(".home-weather").show();
+    }
     // left-side image with date, city, temp, description
     var weekday = $("#weekday");
     var monthDate = $("#month-date");
@@ -118,6 +120,25 @@ function postHomeWeather(data) {
         fiveDay.eq(i).find(".winds").text(Math.floor(data.list[(i+1) * 7].wind.speed) + units().speed); // wind speed
         fiveDay.eq(i).find(".humidities").text(Math.floor(data.list[(i+1) * 7].main.humidity) + units().humidPercent); // humidity percentage
     }
+}
+
+// fetch longitude and latitude
+function weatherAtHomeCoordinates(latitude, longitude) {
+    const apiKey = "c6923045c685289a8524ccba359c3265";
+    const coordinateQueryUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=${measurementSystem()}`;
+    fetch(coordinateQueryUrl)
+    .then(function (response) {
+        // add 100-500 error codes? and 200s?
+        return response.json();
+    })
+    .catch(function(error) {
+        console.log("An error occurred.");
+        console.log(error);
+    })
+    // linking JSON to DOM
+    .then(function (data) {
+        postHomeWeather(data);
+    })
 }
 
 // converts user-proivded CITY NAME to longitude and latitude
@@ -159,7 +180,7 @@ function saveGeoCoordinates(cityName, state, country) {
             } else {
                 homeAddress.splice(0, 1, homeLocation); // replaces previous home location
             }
-            weatherAtCoordinates(latitude, longitude);
+            weatherAtHomeCoordinates(latitude, longitude);
         } else { // home not selected, thus general search
             // setup localStorage for city history
             var location = {
@@ -172,30 +193,12 @@ function saveGeoCoordinates(cityName, state, country) {
             }
             cityHistory.push(location);
             localStorage.setItem("history", JSON.stringify(cityHistory));
+            // window.location.href = "./results.html";
+            // use results.js to complete the rest of the workflow. get local storage to continue
+            // showSearchHistoryLanding(cityHistory);
         }
-        // displayHistoryHome(cityHistory);
-        // window.location.href = "./results.html";
     })
     return [latitude, longitude];
-}
-
-// fetch longitude and latitude
-function weatherAtCoordinates(latitude, longitude) {
-    const apiKey = "c6923045c685289a8524ccba359c3265";
-    const coordinateQueryUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=${measurementSystem()}`;
-    fetch(coordinateQueryUrl)
-    .then(function (response) {
-        // add 100-500 error codes? and 200s?
-        return response.json();
-    })
-    .catch(function(error) {
-        console.log("An error occurred.");
-        console.log(error);
-    })
-    // linking JSON to DOM
-    .then(function (data) {
-        postWeather(data);
-    })
 }
 
 // collects city info from landing page to put into query
