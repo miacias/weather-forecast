@@ -24,28 +24,36 @@ var longitude = "";
 var cityHistory = [];
 
 // hide-show search history on home page
-function showSearchHistoryLanding(cityHistory) {
+function landingShowHide() {
     var sidebar = $("#sidebar-home");
     var listEl = $(".past-cities");
-    if (!localStorage.length) {
-        sidebar.hide();
+    // if (!localStorage.length) {
+    //     sidebar.hide();
+    // } else {
+    //     sidebar.show();
+    //     for (i = 0; i < cityHistory.length; i++) {
+    //         var cityItem = $("<li>", {
+    //             class: "nav-item",
+    //         })
+    //         listEl.append(cityItem);
+    //         var anchor = $("<a>", {
+    //             href: "#",
+    //             class: "nav-link active px-4",
+    //             ariaCurrent: "page",
+    //             text: JSON.parse(localStorage.getItem("history"))[i].city
+    //         })
+    //         cityItem.append(anchor);
+    //     }
+    // }
+    var homeStorage = JSON.parse(localStorage.getItem("home"));
+    if (homeStorage) { // if it exists
+        $(".home-weather").show();
+        weatherAtHomeCoordinates(homeStorage[0].geolocation[0], homeStorage[0].geolocation[1]);
     } else {
-        sidebar.show();
-        for (i = 0; i < cityHistory.length; i++) {
-            var cityItem = $("<li>", {
-                class: "nav-item",
-            })
-            listEl.append(cityItem);
-            var anchor = $("<a>", {
-                href: "#",
-                class: "nav-link active px-4",
-                ariaCurrent: "page",
-                text: JSON.parse(localStorage.getItem("history"))[i].city
-            })
-            cityItem.append(anchor);
-        }
+        $(".home-weather").hide();
     }
 }
+landingShowHide()
 
 // sets units of measurement based on measurement system
 function units() {
@@ -180,6 +188,7 @@ function saveGeoCoordinates(cityName, state, country) {
             } else {
                 homeAddress.splice(0, 1, homeLocation); // replaces previous home location
             }
+            localStorage.setItem("home", JSON.stringify(homeAddress));
             weatherAtHomeCoordinates(latitude, longitude);
         } else { // home not selected, thus general search
             // setup localStorage for city history
@@ -191,9 +200,17 @@ function saveGeoCoordinates(cityName, state, country) {
             if (cityHistory === null) {
                 cityHistory = []; // resets value to [] instead of localStorage.getItem
             }
-            cityHistory.push(location);
-            localStorage.setItem("history", JSON.stringify(cityHistory));
-            // window.location.href = "./results.html";
+            var flag = false; // placeholder true/false
+            for (i = 0; i< cityHistory.length; i++) { // scan array of objects to see if city name is repeated. set to true if found repeated values
+                if (cityHistory[i].city === cityName); {
+                    flag = true;
+                }
+            }
+            if (!flag) { // if false
+                cityHistory.push(location);
+                localStorage.setItem("history", JSON.stringify(cityHistory));
+            }
+            // window.location.href = "./results.html/" + "?q=" + cityName;
             // use results.js to complete the rest of the workflow. get local storage to continue
             // showSearchHistoryLanding(cityHistory);
         }
