@@ -14,6 +14,7 @@ ERRORS
 const citySearchHomeEl = $(".city-search-home");
 const citySearchResultsEl = $(".city-search-results");
 var cityName = "";
+var homeAddress = [];
 // var zip = "";
 var state = "";
 var country = "";
@@ -120,7 +121,7 @@ function measurementSystem() {
 // }
 
 // converts user-proivded CITY NAME to longitude and latitude
-function getGeocoordinates(cityName, state, country) {
+function saveGeoCoordinates(cityName, state, country) {
     var limit = 1; // max number of cities with shared names. possible values: 1-5
     const apiKey = "c6923045c685289a8524ccba359c3265";
     var geoCodeUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName},${state},${country}&limit=${limit}&appid=${apiKey}&units=${measurementSystem()}`
@@ -144,16 +145,33 @@ function getGeocoordinates(cityName, state, country) {
     .then(function (data) {
         latitude = data[0].lat;
         longitude = data[0].lon;
-        var location = {
-            city: cityName,
-            geolocation: [latitude, longitude]
+        // localStorage for HOME or GENERAL SEARCH
+        if ($(".form-check-input").prop("checked")) { // home selected
+            // setup localStorage for home address
+            var homeLocation = {
+                homeCity: cityName,
+                geolocation: [latitude, longitude]
+            }
+            homeAddress = JSON.parse(localStorage.getItem("home"));
+            if (homeAddress === null) {
+                homeAddress = []; // resets value to [] instead of localStorage.getItem
+                homeAddress.push(homeLocation);
+            } else {
+                homeAddress.splice(0, 1, homeLocation); // replaces previous home location
+            }
+        } else { // home not selected, thus general search
+            // setup localStorage for city history
+            var location = {
+                city: cityName,
+                geolocation: [latitude, longitude]
+            }
+            cityHistory = JSON.parse(localStorage.getItem("history")); // history is localStorage key word
+            if (cityHistory === null) {
+                cityHistory = []; // resets value to [] instead of localStorage.getItem
+            }
+            cityHistory.push(location);
+            localStorage.setItem("history", JSON.stringify(cityHistory));
         }
-        cityHistory = JSON.parse(localStorage.getItem("history")); // history is localStorage key word
-        if (cityHistory === null) {
-            cityHistory = []; // resets value to [] instead of localStorage.getItem
-        }
-        cityHistory.push(location);
-        localStorage.setItem("history", JSON.stringify(cityHistory));
         // displayHistoryHome(cityHistory);
         coordinatesWeather(latitude, longitude);
         window.location.href = "./results.html";
@@ -180,14 +198,14 @@ function coordinatesWeather(latitude, longitude) {
     })
 }
 
-// collects city info to put into query
+// collects city info from landing page to put into query
 citySearchHomeEl.click(function(event) {
     event.preventDefault();
     cityName = $("#city-text").val();
     state = $("#state-text").val();
     // zip = $("#zip-text").val();
     country = $("#country-text").val();
-    getGeocoordinates(cityName, state, country);
+    saveGeoCoordinates(cityName, state, country);
 })
 
 // citySearchResultsEl.submit(function(event) {
