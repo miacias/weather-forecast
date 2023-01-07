@@ -20,6 +20,16 @@ var latitude = "";
 var longitude = "";
 var cityHistory = [];
 
+// changes view from landing page to results page
+function changeToResultsHtml() {
+    window.location = ("./results.html")
+}
+
+// changes view from 
+function changeToLandingHtml() {
+    window.location = ("./landing.html")
+}
+
 // get string from localStorage with proper noun capitalization
 function capitalizeFirstLetter(string) {
     var upperCase = string.split(" ");
@@ -52,10 +62,10 @@ function landingShowHide() {
             })
             cityItem.append(anchor);
             // create event listener per search history item using stored latitude and longitude
-            cityItem.click(weatherAtLandingCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1])));
+            cityItem.click(weatherAtLandingCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1]))); // need to test
         }
     } else {
-        sidebar.hide();
+        sidebarListEl.hide();
     }
     // hide-show home city on landing page
     var homeStorage = JSON.parse(localStorage.getItem("home"));
@@ -67,7 +77,7 @@ function landingShowHide() {
     }
 }
 landingShowHide(); // on page load
-setInterval(landingShowHide(), 600001); // refresh every 10min
+// setInterval(landingShowHide(), 600001); // refresh every 10min
 
 // sets units of measurement based on measurement system
 function units() {
