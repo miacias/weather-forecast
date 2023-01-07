@@ -196,7 +196,7 @@ function saveGeoCoordinates(cityName, state, country) {
             } else {
                 homeAddress.splice(0, 1, homeLocation); // replaces previous home location
             }
-            localStorage.setItem("home", (JSON.stringify(homeAddress)).toLowerCase());
+            localStorage.setItem("home", (JSON.stringify(homeAddress)));
             weatherAtHomeCoordinates(latitude, longitude);
         } else { // home not selected, thus general search
             // setup localStorage for city history
@@ -208,44 +208,35 @@ function saveGeoCoordinates(cityName, state, country) {
             if (cityHistory === null) {
                 cityHistory = []; // resets value to [] instead of localStorage.getItem
             }
-            for (i = 0; i< cityHistory.length; i++) { // scan array of objects to see if city name is repeated. set to true if found repeated values
+            var flag = false; // placeholder true/false
+            for (var i = 0; i< cityHistory.length; i++) { // scan array of objects to see if city name is repeated. set to true if found repeated values
                 if (cityHistory[i].city === cityName); {
-                    return
+                    flag = true;
+                    break
                 }
             }
-            cityHistory.push(searchLocation);
-            localStorage.setItem("history", (JSON.stringify(cityHistory)));
-            // var flag = false; // placeholder true/false
-            // for (i = 0; i< cityHistory.length; i++) { // scan array of objects to see if city name is repeated. set to true if found repeated values
-            //     if (cityHistory[i].city === cityName); {
-            //         flag = true;
-            //     }
-            // }
-            // if (!flag) { // if false
-            //     cityHistory.push(location);
-            //     localStorage.setItem("history", (JSON.stringify(cityHistory)).toLowerCase());
-            // }
-            // window.location.href = "./results.html/" + "?q=" + cityName;
-            // use results.js to complete the rest of the workflow. get local storage to continue
-            // showSearchHistoryLanding(cityHistory);
+            if (!flag) { // if false
+                cityHistory.push(searchLocation);
+                localStorage.setItem("history", JSON.stringify(cityHistory));
+            }
         }
     })
-    return [latitude, longitude];
+    // return [latitude, longitude];
 }
 
 // collects city info from landing page to put into query
 citySearchHomeEl.click(function(event) {
     event.preventDefault();    
+    cityName = $("#city-text").val();
+    state = $("#state-text").val();
+    // zip = $("#zip-text").val();
+    country = $("#country-text").val();
     if (!cityName) {
         return alert("Please specify a city to continue.");
     } else if (!country) {
         return alert("Please specify a country to continue.");
     } else {
-        cityName = $("#city-text").val().toLowerCase();
-        state = $("#state-text").val();
-        // zip = $("#zip-text").val();
-        country = $("#country-text").val();
-        saveGeoCoordinates(cityName, state, country);
+        saveGeoCoordinates(cityName.toLowerCase(), state, country);
     }
 })
 
