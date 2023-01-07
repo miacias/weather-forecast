@@ -27,19 +27,29 @@ function capitalizeFirstLetter(string) {
     for (var i = 0; i < upperCase.length; i++) {
         prettyCity.push(upperCase[i].charAt(0).toUpperCase() + upperCase[i].slice(1));
     }
-    // return upperCase.charAt(0).toUpperCase() + string.slice(1);
     return prettyCity.join(" ");
   }
+
+// function landingShowHideHome() {
+//     // hide-show home city on landing page
+//     var homeStorage = JSON.parse(localStorage.getItem("home"));
+//     if (homeStorage) { // if it exists
+//         $(".home-weather").show();
+//         weatherAtHomeCoordinates(homeStorage[0].geolocation[0], homeStorage[0].geolocation[1]);
+//     } else {
+//         $(".home-weather").hide();
+//     }
+// }
 
 // hide-show search history on home page
 function landingShowHide() {
     // hide-show search history on landing page
-    var sidebar = $("#sidebar-home");
+    var sidebarListEl = $(".past-cities-home");
     var listEl = $(".past-cities-home");
     var citiesStorage = JSON.parse(localStorage.getItem("history"));
     if (citiesStorage) {
-        // sidebar.remove(".search-history-item"); // need to remove children from item
-        sidebar.show();
+        $(".search-history-item").remove(); // reset container to empty before changes
+        sidebarListEl.show();
         for (var i = 0; i < citiesStorage.length; i++) {
             var cityItem = $("<li>", {
                 class: "search-history-item nav-item",
@@ -134,7 +144,7 @@ function postHomeWeather(data) {
     // lower-right-side text with 5-day forecast icon, temperature
     var fiveDay = $(".five-day");
     // i++ on h6 elements; *7 on list location (*8 would produce one day short)
-    for (var i = 0; i < (data.list.length)/8; i ++) { // each day has 8 datasets (3hr-increment updates = 40 datasets per 5 days)
+    for (var i = 0; i < (data.list.length)/8; i ++) { // .length is /8 to get 5 days since each day has 8 datasets (3hr-increment updates = 40 datasets per 5 days)
         icon = data.list[(i+1) * 7].weather[0].icon;
         fiveDay.eq(i).find(".icons").attr("src", `http://openweathermap.org/img/wn/${icon}@2x.png`)
         fiveDay.eq(i).find(".days").text((new Date((data.list[(i+1) * 7].dt) * 1000)).toDateString().split(" ")[0]) // day name (has TypeError: Cannot read properties of undefined (reading 'dt'))
