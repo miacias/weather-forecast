@@ -19,11 +19,13 @@ main,
     line-height: 1em;
 }
 
-.search-history-item {
+.home-search-item,
+.search-history-item-results {
     margin: 0.1em 0 0 0;
     opacity: 0.9;
 }
 
-.search-history-item:hover {
+.home-search-item:hover,
+.search-history-item-results:hover {
     opacity: 1;
 }

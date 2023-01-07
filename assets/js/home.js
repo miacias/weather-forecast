@@ -6,8 +6,7 @@ ERRORS
 - 500, 502, 503, 504 - CONTACT OpenWeather via email with example of api request that failed
 */
 
-const citySearchHomeEl = $(".city-search-home");
-const citySearchResultsEl = $(".city-search-results");
+const searchBtn = $("#search-button")
 const clearHistoryEl = $(".clear-history");
 const clearHomeEl = $(".clear-home");
 var cityName = "";
@@ -19,6 +18,16 @@ var toggle;
 var latitude = "";
 var longitude = "";
 var cityHistory = [];
+
+// changes view from landing page to results page
+function changeToResultsHtml() {
+    window.location = ("./results.html")
+}
+
+// changes view from 
+function changeToLandingHtml() {
+    window.location = ("./index.html")
+}
 
 // get string from localStorage with proper noun capitalization
 function capitalizeFirstLetter(string) {
@@ -33,26 +42,27 @@ function capitalizeFirstLetter(string) {
 // hide-show search history and home weather updates on landing page
 function landingShowHide() {
     // hide-show search history on landing page
-    var sidebarListEl = $(".past-cities-home");
-    var listEl = $(".past-cities-home");
+    var sidebar = $("#sidebar-home") // entire sidebar
+    var parentListEl = $(".past-cities-landing"); // parent container of landing page list
+    var childListEl = $(".home-search-item") // class of items added to/removed from landing page list
     var citiesStorage = JSON.parse(localStorage.getItem("history"));
     if (citiesStorage) {
-        $(".search-history-item").remove(); // reset container to empty before changes
-        sidebarListEl.show();
+        childListEl.remove(); // reset container to empty before changes
+        sidebar.show();
         for (var i = 0; i < citiesStorage.length; i++) {
             var cityItem = $("<li>", {
-                class: "search-history-item nav-item",
+                class: "home-search-item nav-item",
             })
-            listEl.append(cityItem);
+            parentListEl.append(cityItem);
             var anchor = $("<a>", {
                 href: "#",
-                class: "search-history-item bg-info text-dark text-center nav-link active px-4",
+                class: "home-search-item bg-info text-dark text-center nav-link active px-4",
                 ariaCurrent: "page",
                 text: capitalizeFirstLetter((citiesStorage[i]).city)
             })
             cityItem.append(anchor);
             // create event listener per search history item using stored latitude and longitude
-            cityItem.click(weatherAtLandingCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1])));
+            cityItem.click(weatherAtGeneralCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1]))); // need to test
         }
     } else {
         sidebar.hide();
@@ -67,7 +77,6 @@ function landingShowHide() {
     }
 }
 landingShowHide(); // on page load
-setInterval(landingShowHide(), 600001); // refresh every 10min
 
 // sets units of measurement based on measurement system
 function units() {
@@ -99,7 +108,7 @@ function measurementSystem() {
     }
 }
 
-// // adds specific data to HTML
+// adds specific fetch data to HTML's home city
 function postHomeWeather(data) {
     if (homeAddress) {
         $(".home-weather").show();
@@ -112,9 +121,6 @@ function postHomeWeather(data) {
     // sets HTML in left-side
     weekday.text(dayjs().format("dddd"));
     monthDate.text(dayjs().format("MMMM Do"));
-    // sample of how to print today's day name, example: Tue
-    // var todayData = Date((data.list[0].dt) * 1000).split(" ");
-    // var today = todayData[0];
     city.text(data.city.name + ", " + data.city.country);
     description.text(data.list[0].weather[0].description);
     var icon = data.list[0].weather[0].icon;
@@ -136,7 +142,8 @@ function postHomeWeather(data) {
     // lower-right-side text with 5-day forecast icon, temperature
     var fiveDay = $(".five-day");
     // i++ on h6 elements; *7 on list location (*8 would produce one day short)
-    for (var i = 0; i < (data.list.length)/8; i ++) { // .length is /8 to get 5 days since each day has 8 datasets (3hr-increment updates = 40 datasets per 5 days)
+    // .length is /8 to get 5 days since each day has 8 datasets (3hr-increment updates = 40 datasets per 5 days)
+    for (var i = 0; i < (data.list.length)/8; i ++) { 
         icon = data.list[(i+1) * 7].weather[0].icon;
         fiveDay.eq(i).find(".icons").attr("src", `http://openweathermap.org/img/wn/${icon}@2x.png`)
         fiveDay.eq(i).find(".days").text((new Date((data.list[(i+1) * 7].dt) * 1000)).toDateString().split(" ")[0]) // day name (has TypeError: Cannot read properties of undefined (reading 'dt'))
@@ -146,7 +153,49 @@ function postHomeWeather(data) {
     }
 }
 
-// fetch longitude and latitude
+// adds specific fetch data to HTML's general search city
+function postGeneralWeather(data) {
+    // left-side image with date, city, temp, description
+    var weekday = $("#weekday-general");
+    var monthDate = $("#month-date-general");
+    var city = $("#city-name-general");
+    var description = $("#weather-event-general");
+    // sets HTML in left-side
+    weekday.text(dayjs().format("dddd"));
+    monthDate.text(dayjs().format("MMMM Do"));
+    city.text(data.city.name + ", " + data.city.country);
+    description.text(data.list[0].weather[0].description);
+    var icon = data.list[0].weather[0].icon;
+    var iconEl = $("#today-icon-general");
+    iconEl.attr("src", `http://openweathermap.org/img/wn/${icon}@2x.png`);
+    var temperature = $("#temp-general");
+    temperature.text(Math.floor(data.list[0].main.temp) + units().temp);
+    // upper-right-side text with humidity, wind, air pressure, high, low
+    var humidity = $("#humidity-general");
+    var wind = $("#wind-general");
+    var airPressure = $("#air-pressure-general");
+    var tempHigh = $("#high-temp-general");
+    var tempLow = $("#low-temp-general");
+    humidity.text("Humidity: " + (Math.floor(data.list[0].main.humidity) + " " + units().humidPercent));
+    wind.text("Wind speed: " + (Math.floor(data.list[0].wind.speed) + units().speed));
+    airPressure.text("Air pressure: " + (Math.floor(data.list[0].main.pressure) + units().pressure)); // CONVERSION REQUIRED?!
+    tempHigh.text("High temp: " + (Math.floor(data.list[0].main.temp_max) + units().temp));
+    tempLow.text("Low temp: " + (Math.floor(data.list[0].main.temp_min) + units().temp));
+    // lower-right-side text with 5-day forecast icon, temperature
+    var fiveDay = $(".five-day-general");
+    // i++ on h6 elements; *7 on list location (*8 would produce one day short)
+    // .length is /8 to get 5 days since each day has 8 datasets (3hr-increment updates = 40 datasets per 5 days)
+    for (var i = 0; i < (data.list.length)/8; i ++) { 
+        icon = data.list[(i+1) * 7].weather[0].icon;
+        fiveDay.eq(i).find(".icons-general").attr("src", `http://openweathermap.org/img/wn/${icon}@2x.png`)
+        fiveDay.eq(i).find(".days-general").text((new Date((data.list[(i+1) * 7].dt) * 1000)).toDateString().split(" ")[0]) // day name (has TypeError: Cannot read properties of undefined (reading 'dt'))
+        fiveDay.eq(i).find(".temps-general").text(Math.floor(data.list[(i+1) * 7].main.temp) + units().temp); // temperature
+        fiveDay.eq(i).find(".winds-general").text(Math.floor(data.list[(i+1) * 7].wind.speed) + units().speed); // wind speed
+        fiveDay.eq(i).find(".humidities-general").text(Math.floor(data.list[(i+1) * 7].main.humidity) + units().humidPercent); // humidity percentage
+    }
+}
+
+// fetch longitude and latitude of home city
 function weatherAtLandingCoordinates(latitude, longitude) {
     const apiKey = "c6923045c685289a8524ccba359c3265";
     const coordinateQueryUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=${measurementSystem()}`;
@@ -162,6 +211,26 @@ function weatherAtLandingCoordinates(latitude, longitude) {
     // linking JSON to DOM
     .then(function (data) {
         postHomeWeather(data);
+        // postGeneralWeather(data);
+    })
+}
+
+// fetch longitude and latitude of general city search
+function weatherAtGeneralCoordinates(latitude, longitude) {
+    const apiKey = "c6923045c685289a8524ccba359c3265";
+    const coordinateQueryUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=${measurementSystem()}`;
+    fetch(coordinateQueryUrl)
+    .then(function (response) {
+        // add 100-500 error codes? and 200s?
+        return response.json();
+    })
+    .catch(function(error) {
+        console.log("An error occurred.");
+        console.log(error);
+    })
+    // linking JSON to DOM
+    .then(function (data) {
+        postGeneralWeather(data);
     })
 }
 
@@ -217,7 +286,7 @@ function saveGeoCoordinates(cityName, state, country) {
                 cityHistory = []; // resets value to [] instead of localStorage.getItem
             }
             var flag = false; // placeholder true/false
-            for (var i = 0; i< cityHistory.length; i++) { // scan array of objects to see if city name is repeated. set to true if found repeated values
+            for (var i = 0; i< cityHistory.length; i++) { // scan array of objects to see if city name is repeated. set to true if found repeated/duplicate values
                 if (cityName === cityHistory[i].city) {
                     flag = true;
                     break
@@ -227,12 +296,15 @@ function saveGeoCoordinates(cityName, state, country) {
                 cityHistory.push(searchLocation);
                 localStorage.setItem("history", JSON.stringify(cityHistory));
             }
+            weatherAtGeneralCoordinates(latitude, longitude);
+            changeToResultsHtml();
         }
     })
 }
 
+
 // collects city info from landing page to put into query
-citySearchHomeEl.click(function(event) {
+searchBtn.click(function(event) {
     event.preventDefault();    
     cityName = $("#city-text").val();
     state = $("#state-text").val();
@@ -255,4 +327,9 @@ clearHistoryEl.click(function() {
 clearHomeEl.click(function() {
     localStorage.removeItem("home");
     landingShowHide();
+})
+
+$("#back").click(function(event) {
+    event.preventDefault();
+    changeToLandingHtml();
 })
