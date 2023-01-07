@@ -210,7 +210,7 @@ function saveGeoCoordinates(cityName, state, country) {
             }
             var flag = false; // placeholder true/false
             for (var i = 0; i< cityHistory.length; i++) { // scan array of objects to see if city name is repeated. set to true if found repeated values
-                if (cityHistory[i].city === cityName); {
+                if (cityHistory[i].city === cityName) {
                     flag = true;
                     break
                 }
@@ -221,7 +221,6 @@ function saveGeoCoordinates(cityName, state, country) {
             }
         }
     })
-    // return [latitude, longitude];
 }
 
 // collects city info from landing page to put into query
@@ -240,22 +239,8 @@ citySearchHomeEl.click(function(event) {
     }
 })
 
-// citySearchResultsEl.submit(function(event) {
-//     event.preventDefault();
-//     cityName = $("#city-text").val();
-//     state = $("#state-text").val();
-//     zip = $("#zip-text").val();
-//     country = $("#country-text").val();
-//     getGeocoordinates(cityName, state, country);
-// })
-
 /* 
 
-- if localStorage is true, home.html search history d-none to d-flex
 - search history list item = local storage key name
         - create a formatting that ensures either all caps or first character capital letter
-- set local storage into array
-    - entire array gets pushed into Search History
-    - repeat values not allowed
-    - last value/ most recent value goes into current results
 */
