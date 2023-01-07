@@ -43,21 +43,21 @@ function capitalizeFirstLetter(string) {
 // hide-show search history and home weather updates on landing page
 function landingShowHide() {
     // hide-show search history on landing page
-    var sidebar = $("#sidebar-home")
-    var sidebarListEl = $(".search-history-item")
-    var listEl = $(".past-cities-home");
+    var sidebar = $("#sidebar-home") // entire sidebar
+    var parentListEl = $(".past-cities-landing"); // parent container of landing page list
+    var childListEl = $(".home-search-item") // class of items added to/removed from landing page list
     var citiesStorage = JSON.parse(localStorage.getItem("history"));
     if (citiesStorage) {
-        sidebarListEl.remove(); // reset container to empty before changes
+        childListEl.remove(); // reset container to empty before changes
         sidebar.show();
         for (var i = 0; i < citiesStorage.length; i++) {
             var cityItem = $("<li>", {
-                class: "search-history-item nav-item",
+                class: "home-search-item nav-item",
             })
-            listEl.append(cityItem);
+            parentListEl.append(cityItem);
             var anchor = $("<a>", {
                 href: "#",
-                class: "search-history-item bg-info text-dark text-center nav-link active px-4",
+                class: "home-search-item bg-info text-dark text-center nav-link active px-4",
                 ariaCurrent: "page",
                 text: capitalizeFirstLetter((citiesStorage[i]).city)
             })
@@ -78,41 +78,6 @@ function landingShowHide() {
     }
 }
 landingShowHide(); // on page load
-
-// hide-show search history and home weather updates on results page
-function resultsShowHide() {
-    // hide-show search history on results page
-    var sidebar = $("#sidebar-results")
-    var sidebarListEl = $(".search-history-item")
-    var listEl = $(".past-cities-results");
-    var citiesStorage = JSON.parse(localStorage.getItem("history"));
-    if (citiesStorage) {
-        sidebarListEl.remove(); // reset container to empty before changes
-        sidebar.show();
-        for (var i = 0; i < citiesStorage.length; i++) {
-            var cityItem = $("<li>", {
-                class: "search-history-item-results nav-item",
-            })
-            listEl.append(cityItem);
-            var anchor = $("<a>", {
-                href: "#",
-                class: "search-history-item-results bg-info text-dark text-center nav-link active px-4",
-                ariaCurrent: "page",
-                text: capitalizeFirstLetter((citiesStorage[i]).city)
-            })
-            cityItem.append(anchor);
-            cityItem.click(function(event) {
-                event.preventDefault();
-                weatherAtGeneralCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1]));
-                changeToResultsHtml();
-            }); // need to test
-        }
-    } else {
-        sidebar.hide();
-    }
-}
-resultsShowHide(); // on page load
-// setInterval(landingShowHide(), 600001); // refresh every 10min
 
 // sets units of measurement based on measurement system
 function units() {
