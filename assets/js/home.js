@@ -167,11 +167,7 @@ function saveGeoCoordinates(cityName, state, country) {
     const apiKey = "c6923045c685289a8524ccba359c3265";
     var geoCodeUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName},${state},${country}&limit=${limit}&appid=${apiKey}&units=${measurementSystem()}`
     // prevents submitting empty value OR renames URL if state is missing
-    if (!cityName) {
-        return alert("Please specify a city to continue.");
-    } else if (!country) {
-        return alert("Please specify a country to continue.");
-    } else {
+    if (!state) {
         geoCodeUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName},${country}&limit=${limit}&appid=${apiKey}&units=${measurementSystem()}`
     }
     fetch(geoCodeUrl)
@@ -204,7 +200,7 @@ function saveGeoCoordinates(cityName, state, country) {
             weatherAtHomeCoordinates(latitude, longitude);
         } else { // home not selected, thus general search
             // setup localStorage for city history
-            var location = {
+            var searchLocation = {
                 city: cityName,
                 geolocation: [latitude, longitude]
             }
@@ -212,16 +208,23 @@ function saveGeoCoordinates(cityName, state, country) {
             if (cityHistory === null) {
                 cityHistory = []; // resets value to [] instead of localStorage.getItem
             }
-            var flag = false; // placeholder true/false
             for (i = 0; i< cityHistory.length; i++) { // scan array of objects to see if city name is repeated. set to true if found repeated values
                 if (cityHistory[i].city === cityName); {
-                    flag = true;
+                    return
                 }
             }
-            if (!flag) { // if false
-                cityHistory.push(location);
-                localStorage.setItem("history", (JSON.stringify(cityHistory)).toLowerCase());
-            }
+            cityHistory.push(searchLocation);
+            localStorage.setItem("history", (JSON.stringify(cityHistory)));
+            // var flag = false; // placeholder true/false
+            // for (i = 0; i< cityHistory.length; i++) { // scan array of objects to see if city name is repeated. set to true if found repeated values
+            //     if (cityHistory[i].city === cityName); {
+            //         flag = true;
+            //     }
+            // }
+            // if (!flag) { // if false
+            //     cityHistory.push(location);
+            //     localStorage.setItem("history", (JSON.stringify(cityHistory)).toLowerCase());
+            // }
             // window.location.href = "./results.html/" + "?q=" + cityName;
             // use results.js to complete the rest of the workflow. get local storage to continue
             // showSearchHistoryLanding(cityHistory);
@@ -232,12 +235,18 @@ function saveGeoCoordinates(cityName, state, country) {
 
 // collects city info from landing page to put into query
 citySearchHomeEl.click(function(event) {
-    event.preventDefault();
-    cityName = $("#city-text").val();
-    state = $("#state-text").val();
-    // zip = $("#zip-text").val();
-    country = $("#country-text").val();
-    saveGeoCoordinates(cityName, state, country);
+    event.preventDefault();    
+    if (!cityName) {
+        return alert("Please specify a city to continue.");
+    } else if (!country) {
+        return alert("Please specify a country to continue.");
+    } else {
+        cityName = $("#city-text").val().toLowerCase();
+        state = $("#state-text").val();
+        // zip = $("#zip-text").val();
+        country = $("#country-text").val();
+        saveGeoCoordinates(cityName, state, country);
+    }
 })
 
 // citySearchResultsEl.submit(function(event) {
