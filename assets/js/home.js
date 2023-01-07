@@ -200,8 +200,8 @@ function saveGeoCoordinates(cityName, state, country) {
             localStorage.setItem("home", (JSON.stringify(homeAddress)));
             weatherAtHomeCoordinates(latitude, longitude);
         } else { // home not selected, thus general search
-            // prevent home city from being added to other searches
-            if (cityName === ((JSON.parse(localStorage.getItem("home")))[0]).homeCity) {
+            // prevent home city from being added to other searches, and doesn't brake if home city hasn't been set yet
+            if (((JSON.parse(localStorage.getItem("home"))) !== null) && (cityName === ((JSON.parse(localStorage.getItem("home")))[0]).homeCity)) {
                 return
             }
             // setup localStorage for city history
