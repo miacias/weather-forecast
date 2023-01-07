@@ -38,15 +38,16 @@ function landingShowHide() {
     var listEl = $(".past-cities-home");
     var citiesStorage = JSON.parse(localStorage.getItem("history"));
     if (citiesStorage) {
+        // sidebar.remove(".search-history-item"); // need to remove children from item
         sidebar.show();
         for (var i = 0; i < citiesStorage.length; i++) {
             var cityItem = $("<li>", {
-                class: "nav-item",
+                class: "search-history-item nav-item",
             })
             listEl.append(cityItem);
             var anchor = $("<a>", {
                 href: "#",
-                class: "nav-link active px-4",
+                class: "search-history-item nav-link active px-4",
                 ariaCurrent: "page",
                 text: capitalizeFirstLetter((citiesStorage[i]).city)
             })
