@@ -34,13 +34,11 @@ function capitalizeFirstLetter(string) {
 function landingShowHide() {
     // hide-show search history on landing page
     var sidebar = $("#sidebar-home");
-    var listEl = $(".past-cities");
+    var listEl = $(".past-cities-home");
     var citiesStorage = JSON.parse(localStorage.getItem("history"));
-    var cityString;
     if (citiesStorage) {
         sidebar.show();
-        for (i = 0; i < cityHistory.length; i++) {
-            cityString = JSON.parse(localStorage.getItem("history"))[i].city;
+        for (var i = 0; i < citiesStorage.length; i++) {
             var cityItem = $("<li>", {
                 class: "nav-item",
             })
@@ -49,7 +47,7 @@ function landingShowHide() {
                 href: "#",
                 class: "nav-link active px-4",
                 ariaCurrent: "page",
-                text: capitalizeFirstLetter(cityString)
+                text: capitalizeFirstLetter((citiesStorage[i]).city)
             })
             cityItem.append(anchor);
         }
