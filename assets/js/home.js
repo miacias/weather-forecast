@@ -6,8 +6,7 @@ ERRORS
 - 500, 502, 503, 504 - CONTACT OpenWeather via email with example of api request that failed
 */
 
-const citySearchHomeEl = $(".city-search-home");
-const citySearchResultsEl = $(".city-search-results");
+const searchBtn = $("#search-button")
 const clearHistoryEl = $(".clear-history");
 const clearHomeEl = $(".clear-home");
 var cityName = "";
@@ -303,8 +302,9 @@ function saveGeoCoordinates(cityName, state, country) {
     })
 }
 
+
 // collects city info from landing page to put into query
-citySearchHomeEl.click(function(event) {
+searchBtn.click(function(event) {
     event.preventDefault();    
     cityName = $("#city-text").val();
     state = $("#state-text").val();
