@@ -23,11 +23,12 @@ var cityHistory = [];
 // get string from localStorage with proper noun capitalization
 function capitalizeFirstLetter(string) {
     var upperCase = string.split(" ");
+    var prettyCity = [];
     for (var i = 0; i < upperCase.length; i++) {
-        upperCase[i] = upperCase[i].charAt(0).toUpperCase() + upperCase.slice(1)
+        prettyCity.push(upperCase[i].charAt(0).toUpperCase() + upperCase[i].slice(1));
     }
     // return upperCase.charAt(0).toUpperCase() + string.slice(1);
-    return upperCase.join(" ");
+    return prettyCity.join(" ");
   }
 
 // hide-show search history on home page
@@ -199,6 +200,10 @@ function saveGeoCoordinates(cityName, state, country) {
             localStorage.setItem("home", (JSON.stringify(homeAddress)));
             weatherAtHomeCoordinates(latitude, longitude);
         } else { // home not selected, thus general search
+            // prevent home city from being added to other searches
+            if (cityName === ((JSON.parse(localStorage.getItem("home")))[0]).homeCity) {
+                return
+            }
             // setup localStorage for city history
             var searchLocation = {
                 city: cityName,
@@ -210,7 +215,7 @@ function saveGeoCoordinates(cityName, state, country) {
             }
             var flag = false; // placeholder true/false
             for (var i = 0; i< cityHistory.length; i++) { // scan array of objects to see if city name is repeated. set to true if found repeated values
-                if (cityHistory[i].city === cityName) {
+                if (cityName === cityHistory[i].city) {
                     flag = true;
                     break
                 }
