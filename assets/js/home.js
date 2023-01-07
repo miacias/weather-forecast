@@ -1,9 +1,4 @@
 /*
-- set localStorage to save my-home key with city name and attach to home icon
-- set localStorage to save city names as key with fetched object as data?
-- auto update interval: every 10 minutes
-- calling more than once per 10 min on free plan will auto-suspend key (code 429: blocked account)
-
 ERRORS
 - 401 - did not specify api key in request, wrong key, or fetching disallowed info (paid vs unpaid subscription)
 - 404 - wrong city name, ZIP, or city ID. or wrong request format
@@ -13,6 +8,8 @@ ERRORS
 
 const citySearchHomeEl = $(".city-search-home");
 const citySearchResultsEl = $(".city-search-results");
+const clearHistoryEl = $(".clear-history");
+const clearHomeEl = $(".clear-home");
 var cityName = "";
 var homeAddress = [];
 // var zip = "";
@@ -23,37 +20,54 @@ var latitude = "";
 var longitude = "";
 var cityHistory = [];
 
-// hide-show search history on home page
+// get string from localStorage with proper noun capitalization
+function capitalizeFirstLetter(string) {
+    var upperCase = string.split(" ");
+    var prettyCity = [];
+    for (var i = 0; i < upperCase.length; i++) {
+        prettyCity.push(upperCase[i].charAt(0).toUpperCase() + upperCase[i].slice(1));
+    }
+    return prettyCity.join(" ");
+  }
+
+// hide-show search history and home weather updates on landing page
 function landingShowHide() {
-    var sidebar = $("#sidebar-home");
-    var listEl = $(".past-cities");
-    // if (!localStorage.length) {
-    //     sidebar.hide();
-    // } else {
-    //     sidebar.show();
-    //     for (i = 0; i < cityHistory.length; i++) {
-    //         var cityItem = $("<li>", {
-    //             class: "nav-item",
-    //         })
-    //         listEl.append(cityItem);
-    //         var anchor = $("<a>", {
-    //             href: "#",
-    //             class: "nav-link active px-4",
-    //             ariaCurrent: "page",
-    //             text: JSON.parse(localStorage.getItem("history"))[i].city
-    //         })
-    //         cityItem.append(anchor);
-    //     }
-    // }
+    // hide-show search history on landing page
+    var sidebarListEl = $(".past-cities-home");
+    var listEl = $(".past-cities-home");
+    var citiesStorage = JSON.parse(localStorage.getItem("history"));
+    if (citiesStorage) {
+        $(".search-history-item").remove(); // reset container to empty before changes
+        sidebarListEl.show();
+        for (var i = 0; i < citiesStorage.length; i++) {
+            var cityItem = $("<li>", {
+                class: "search-history-item nav-item",
+            })
+            listEl.append(cityItem);
+            var anchor = $("<a>", {
+                href: "#",
+                class: "search-history-item bg-info text-dark text-center nav-link active px-4",
+                ariaCurrent: "page",
+                text: capitalizeFirstLetter((citiesStorage[i]).city)
+            })
+            cityItem.append(anchor);
+            // create event listener per search history item using stored latitude and longitude
+            cityItem.click(weatherAtLandingCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1])));
+        }
+    } else {
+        sidebar.hide();
+    }
+    // hide-show home city on landing page
     var homeStorage = JSON.parse(localStorage.getItem("home"));
     if (homeStorage) { // if it exists
         $(".home-weather").show();
-        weatherAtHomeCoordinates(homeStorage[0].geolocation[0], homeStorage[0].geolocation[1]);
+        weatherAtLandingCoordinates((homeStorage[0].geolocation[0]), (homeStorage[0].geolocation[1]));
     } else {
         $(".home-weather").hide();
     }
 }
-landingShowHide()
+landingShowHide(); // on page load
+setInterval(landingShowHide(), 600001); // refresh every 10min
 
 // sets units of measurement based on measurement system
 function units() {
@@ -105,7 +119,7 @@ function postHomeWeather(data) {
     description.text(data.list[0].weather[0].description);
     var icon = data.list[0].weather[0].icon;
     var iconEl = $("#today-icon");
-    iconEl.attr("src", "http://openweathermap.org/img/wn/" + icon + "@2x.png");
+    iconEl.attr("src", `http://openweathermap.org/img/wn/${icon}@2x.png`);
     var temperature = $("#temp");
     temperature.text(Math.floor(data.list[0].main.temp) + units().temp);
     // upper-right-side text with humidity, wind, air pressure, high, low
@@ -122,8 +136,10 @@ function postHomeWeather(data) {
     // lower-right-side text with 5-day forecast icon, temperature
     var fiveDay = $(".five-day");
     // i++ on h6 elements; *7 on list location (*8 would produce one day short)
-    for (var i = 0; i < data.list.length; i ++) { // each day has 8 datasets (3hr-increment updates = 40 datasets per 5 days)
-        fiveDay.eq(i).find(".days").text((new Date((data.list[(i+1) * 7].dt) * 1000)).toDateString().split(" ")[0]) // day name
+    for (var i = 0; i < (data.list.length)/8; i ++) { // .length is /8 to get 5 days since each day has 8 datasets (3hr-increment updates = 40 datasets per 5 days)
+        icon = data.list[(i+1) * 7].weather[0].icon;
+        fiveDay.eq(i).find(".icons").attr("src", `http://openweathermap.org/img/wn/${icon}@2x.png`)
+        fiveDay.eq(i).find(".days").text((new Date((data.list[(i+1) * 7].dt) * 1000)).toDateString().split(" ")[0]) // day name (has TypeError: Cannot read properties of undefined (reading 'dt'))
         fiveDay.eq(i).find(".temps").text(Math.floor(data.list[(i+1) * 7].main.temp) + units().temp); // temperature
         fiveDay.eq(i).find(".winds").text(Math.floor(data.list[(i+1) * 7].wind.speed) + units().speed); // wind speed
         fiveDay.eq(i).find(".humidities").text(Math.floor(data.list[(i+1) * 7].main.humidity) + units().humidPercent); // humidity percentage
@@ -131,7 +147,7 @@ function postHomeWeather(data) {
 }
 
 // fetch longitude and latitude
-function weatherAtHomeCoordinates(latitude, longitude) {
+function weatherAtLandingCoordinates(latitude, longitude) {
     const apiKey = "c6923045c685289a8524ccba359c3265";
     const coordinateQueryUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=${measurementSystem()}`;
     fetch(coordinateQueryUrl)
@@ -155,11 +171,7 @@ function saveGeoCoordinates(cityName, state, country) {
     const apiKey = "c6923045c685289a8524ccba359c3265";
     var geoCodeUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName},${state},${country}&limit=${limit}&appid=${apiKey}&units=${measurementSystem()}`
     // prevents submitting empty value OR renames URL if state is missing
-    if (!cityName) {
-        return alert("Please specify a city to continue.");
-    } else if (!country) {
-        return alert("Please specify a country to continue.");
-    } else {
+    if (!state) {
         geoCodeUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName},${country}&limit=${limit}&appid=${apiKey}&units=${measurementSystem()}`
     }
     fetch(geoCodeUrl)
@@ -188,11 +200,15 @@ function saveGeoCoordinates(cityName, state, country) {
             } else {
                 homeAddress.splice(0, 1, homeLocation); // replaces previous home location
             }
-            localStorage.setItem("home", JSON.stringify(homeAddress));
-            weatherAtHomeCoordinates(latitude, longitude);
+            localStorage.setItem("home", (JSON.stringify(homeAddress)));
+            weatherAtLandingCoordinates(latitude, longitude);
         } else { // home not selected, thus general search
+            // prevent home city from being added to other searches, and doesn't brake if home city hasn't been set yet
+            if (((JSON.parse(localStorage.getItem("home"))) !== null) && (cityName === ((JSON.parse(localStorage.getItem("home")))[0]).homeCity)) {
+                return
+            }
             // setup localStorage for city history
-            var location = {
+            var searchLocation = {
                 city: cityName,
                 geolocation: [latitude, longitude]
             }
@@ -201,49 +217,42 @@ function saveGeoCoordinates(cityName, state, country) {
                 cityHistory = []; // resets value to [] instead of localStorage.getItem
             }
             var flag = false; // placeholder true/false
-            for (i = 0; i< cityHistory.length; i++) { // scan array of objects to see if city name is repeated. set to true if found repeated values
-                if (cityHistory[i].city === cityName); {
+            for (var i = 0; i< cityHistory.length; i++) { // scan array of objects to see if city name is repeated. set to true if found repeated values
+                if (cityName === cityHistory[i].city) {
                     flag = true;
+                    break
                 }
             }
             if (!flag) { // if false
-                cityHistory.push(location);
+                cityHistory.push(searchLocation);
                 localStorage.setItem("history", JSON.stringify(cityHistory));
             }
-            // window.location.href = "./results.html/" + "?q=" + cityName;
-            // use results.js to complete the rest of the workflow. get local storage to continue
-            // showSearchHistoryLanding(cityHistory);
         }
     })
-    return [latitude, longitude];
 }
 
 // collects city info from landing page to put into query
 citySearchHomeEl.click(function(event) {
-    event.preventDefault();
+    event.preventDefault();    
     cityName = $("#city-text").val();
     state = $("#state-text").val();
     // zip = $("#zip-text").val();
     country = $("#country-text").val();
-    saveGeoCoordinates(cityName, state, country);
+    if (!cityName) {
+        return alert("Please specify a city to continue.");
+    } else if (!country) {
+        return alert("Please specify a country to continue.");
+    } else {
+        saveGeoCoordinates(cityName.toLowerCase(), state, country);
+    }
 })
 
-// citySearchResultsEl.submit(function(event) {
-//     event.preventDefault();
-//     cityName = $("#city-text").val();
-//     state = $("#state-text").val();
-//     zip = $("#zip-text").val();
-//     country = $("#country-text").val();
-//     getGeocoordinates(cityName, state, country);
-// })
+clearHistoryEl.click(function() {
+    localStorage.removeItem("history");
+    landingShowHide();
+})
 
-/* 
-
-- if localStorage is true, home.html search history d-none to d-flex
-- search history list item = local storage key name
-        - create a formatting that ensures either all caps or first character capital letter
-- set local storage into array
-    - entire array gets pushed into Search History
-    - repeat values not allowed
-    - last value/ most recent value goes into current results
-*/
+clearHomeEl.click(function() {
+    localStorage.removeItem("home");
+    landingShowHide();
+})

@@ -25,38 +25,27 @@
 
 <body class="bg-dark text-light">
 
-    <!-- bootstrap navbar -->
-    <!-- <nav class="navbar sticky-top bg-secondary">
-        <div class="container-fluid">
-            <a class="navbar-brand text-warning" href="#">Weather Just for You</a> -->
-            <!-- <form class="city-search d-flex" role="search" action="" method="post" name="city-search">
-                <input class="form-control me-2" id="form-text" type="search" placeholder="City Search" aria-label="City Search">
-                <button class="locate btn btn-outline-info" type="submit">Locate</button>
-            </form> -->
-        <!-- </div>
-    </nav> -->
-
     <header class="text-warning text-center p-4">
         <h1>Weather Forecast</h1>
     </header>
 
     <main class="home">
         <div class="container d-flex justify-content-center">
-            <aside id="sidebar-home" class="d-none flex-column col-3 flex-shrink-0 p-3 text-white bg-dark" style="width: 280px;">
+            <aside id="sidebar-home" class="flex-column col-3 flex-shrink-0 p-3 text-white bg-dark" style="width: 280px;">
                 <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                 <span class="fs-4">Search History</span>
                 </a>
                 <hr>
-                <ul class="past-cities nav nav-pills flex-column mb-auto"></ul>
+                <ul class="past-cities-home nav nav-pills flex-column mb-auto"></ul>
                 <hr>
                 <div class="dropdown">
                     <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                         <strong>Settings</strong>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                        <li><a class="dropdown-item" href="#">Clear History</a></li>
+                        <li><a class="dropdown-item clear-history" href="#">Clear History</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Clear Home</a></li>
+                        <li><a class="dropdown-item clear-home" href="#">Clear Home</a></li>
                     </ul>
                 </div>
             </aside>
@@ -123,14 +112,14 @@
                     <div class="card text-bg-dark h-100">
                         <img 
                             src="./assets/images/jonathan-bowers-BqKdvJ8a5TI-unsplash.jpg" 
-                            class="card-img img-fluid rounded-start align-center h-100"
+                            class="card-img img-fluid rounded-start align-center h-100 opacity-50"
                             alt="lightning over a field">
                         <div class="card-img-overlay">
                             <h2 id="weekday" class="card-title"></h2>
                             <p id="month-date" class="card-text"></p>
                             <p id="city-name" class="card-text"></p>
                             <img id="today-icon" class="owm-weather-icon" rel="weather-icon" type="img/png" src=""></img>
-                            <p id="temp" class="card-text"></p>
+                            <h4 id="temp" class="card-text"></h4>
                             <p id="weather-event" class="card-text"></p>
                         </div>
                     </div>
@@ -138,8 +127,8 @@
                 <!-- right-side top and bottom -->
                 <div class="holds-right-side-data col p-1">
                     <!-- upper-right-side text with humidity, wind, air pressure, high, low -->
-                    <div class="col-md-8 px-1">
-                        <div class="detailed-weather card-body" id="detailed-weather">
+                    <div class="col-md-8">
+                        <div class="detailed-weather card-body px-3" id="detailed-weather">
                             <p id="humidity"></p>
                             <p id="wind"></p>
                             <p id="air-pressure"></p>
@@ -148,42 +137,38 @@
                         </div>
                     </div>
                     <!-- lower-right-side days, icons, and temps -->
-                    <!-- card-group sticks cards together without space between -->
-                    <!-- card-deck is supposed to put space between, but ROW is needed in container and COL-2 is needed to size the cards -->
                     <div class="five-day-weather text-muted card-group text-center">
                         <div id="day-1" class="five-day card rounded m-1">
+                            <img class="icons" rel="weather-icon" type="img/png" src="" id="icon-1"></img>
                             <h6 class="days" id="h6-1"></h6>
-                            <i id="icon-1">
-                                <link rel="weather-icon" type="img/png" href="">
-                            </i>
                             <p class="temps" id="temp-1"></p>
                             <p class="winds" id="wind-1"></p>
                             <p class="humidities" id="humidity-1"></p>
                         </div>
                         <div id="day-2" class="five-day card rounded m-1">
+                            <img class="icons" rel="weather-icon" type="img/png" src="" id="icon-2"></img>
                             <h6 class="days" id="h6-2"></h6>
-                            <i id="icon-2"></i>
                             <p class="temps" id="temp-2"></p>
                             <p class="winds" id="wind-2"></p>
                             <p class="humidities" id="humidity-2"></p>
                         </div>
                         <div id="day-3" class="five-day card rounded m-1">
+                            <img class="icons" rel="weather-icon" type="img/png" src="" id="icon-3"></img>
                             <h6 class="days" id="h6-3"></h6>
-                            <i id="icon-3"></i>
                             <p class="temps" id="temp-3"></p>
                             <p class="winds" id="wind-3"></p>
                             <p class="humidities" id="humidity-3"></p>
                         </div>
                         <div id="day-4" class="five-day card rounded m-1">
+                            <img class="icons" rel="weather-icon" type="img/png" src="" id="icon-4"></img>
                             <h6 class="days" id="h6-4"></h6>
-                            <i id="icon-4"></i>
                             <p class="temps" id="temp-4"></p>
                             <p class="winds" id="wind-4"></p>
                             <p class="humidities" id="humidity-4"></p>
                         </div>
                         <div id="day-5" class="five-day card rounded m-1">
+                            <img class="icons" rel="weather-icon" type="img/png" src="" id="icon-5"></img>
                             <h6 class="days" id="h6-5"></h6>
-                            <i id="icon-5"></i>
                             <p class="temps" id="temp-5"></p>
                             <p class="winds" id="wind-5"></p>
                             <p class="humidities" id="humidity-5"></p>
@@ -194,7 +179,7 @@
         </section>
     </section>
 
-    <footer class="d-flex flex-column flex-wrap align-items-center fixed-bottom my-3">
+    <footer class="d-flex flex-column flex-wrap align-items-center my-3">
         <p>Weather data provided by OpenWeather</p>
         <a href="https://openweathermap.org/">
             <img 
