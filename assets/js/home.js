@@ -20,9 +20,14 @@ var latitude = "";
 var longitude = "";
 var cityHistory = [];
 
-// get string from localStorage with proper noun capitalization (only works with a singular word)
+// get string from localStorage with proper noun capitalization
 function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+    var upperCase = string.split(" ");
+    for (var i = 0; i < upperCase.length; i++) {
+        upperCase[i] = upperCase[i].charAt(0).toUpperCase() + upperCase.slice(1)
+    }
+    // return upperCase.charAt(0).toUpperCase() + string.slice(1);
+    return upperCase.join(" ");
   }
 
 // hide-show search history on home page
@@ -112,7 +117,7 @@ function postHomeWeather(data) {
     description.text(data.list[0].weather[0].description);
     var icon = data.list[0].weather[0].icon;
     var iconEl = $("#today-icon");
-    iconEl.attr("src", "http://openweathermap.org/img/wn/" + icon + "@2x.png");
+    iconEl.attr("src", `http://openweathermap.org/img/wn/${icon}@2x.png`);
     var temperature = $("#temp");
     temperature.text(Math.floor(data.list[0].main.temp) + units().temp);
     // upper-right-side text with humidity, wind, air pressure, high, low
@@ -129,7 +134,9 @@ function postHomeWeather(data) {
     // lower-right-side text with 5-day forecast icon, temperature
     var fiveDay = $(".five-day");
     // i++ on h6 elements; *7 on list location (*8 would produce one day short)
-    for (var i = 0; i < data.list.length; i ++) { // each day has 8 datasets (3hr-increment updates = 40 datasets per 5 days)
+    for (var i = 0; i < (data.list.length)/8; i ++) { // each day has 8 datasets (3hr-increment updates = 40 datasets per 5 days)
+        icon = data.list[(i+1) * 7].weather[0].icon;
+        fiveDay.eq(i).find(".icons").attr("src", `http://openweathermap.org/img/wn/${icon}@2x.png`)
         fiveDay.eq(i).find(".days").text((new Date((data.list[(i+1) * 7].dt) * 1000)).toDateString().split(" ")[0]) // day name (has TypeError: Cannot read properties of undefined (reading 'dt'))
         fiveDay.eq(i).find(".temps").text(Math.floor(data.list[(i+1) * 7].main.temp) + units().temp); // temperature
         fiveDay.eq(i).find(".winds").text(Math.floor(data.list[(i+1) * 7].wind.speed) + units().speed); // wind speed

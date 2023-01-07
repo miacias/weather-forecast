@@ -9,6 +9,13 @@ main,
     font-family: 'Poppins', sans-serif;
 }
 
-/* .card-img {
-    opacity: 1;
-} */
+.winds,
+.humidities {
+    font-size: 0.8em;
+    line-height: 0.8em;
+}
+
+.detailed-weather {
+    line-height: 1em;
+
+}
