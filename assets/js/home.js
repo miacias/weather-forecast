@@ -244,8 +244,15 @@ citySearchHomeEl.click(function(event) {
     }
 })
 
-/* 
+const clearHistoryEl = $(".clear-history");
+const clearHomeEl = $(".clear-home");
 
-- search history list item = local storage key name
-        - create a formatting that ensures either all caps or first character capital letter
-*/
+clearHistoryEl.click(function() {
+    localStorage.removeItem("history");
+    landingShowHide();
+})
+
+clearHomeEl.click(function() {
+    localStorage.removeItem("home");
+    landingShowHide();
+})
