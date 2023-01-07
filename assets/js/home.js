@@ -78,6 +78,40 @@ function landingShowHide() {
     }
 }
 landingShowHide(); // on page load
+
+// hide-show search history and home weather updates on results page
+function resultsShowHide() {
+    // hide-show search history on results page
+    var sidebar = $("#sidebar-results")
+    var sidebarListEl = $(".search-history-item")
+    var listEl = $(".past-cities-results");
+    var citiesStorage = JSON.parse(localStorage.getItem("history"));
+    if (citiesStorage) {
+        sidebarListEl.remove(); // reset container to empty before changes
+        sidebar.show();
+        for (var i = 0; i < citiesStorage.length; i++) {
+            var cityItem = $("<li>", {
+                class: "search-history-item-results nav-item",
+            })
+            listEl.append(cityItem);
+            var anchor = $("<a>", {
+                href: "#",
+                class: "search-history-item-results bg-info text-dark text-center nav-link active px-4",
+                ariaCurrent: "page",
+                text: capitalizeFirstLetter((citiesStorage[i]).city)
+            })
+            cityItem.append(anchor);
+            cityItem.click(function(event) {
+                event.preventDefault();
+                weatherAtGeneralCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1]));
+                changeToResultsHtml();
+            }); // need to test
+        }
+    } else {
+        sidebar.hide();
+    }
+}
+resultsShowHide(); // on page load
 // setInterval(landingShowHide(), 600001); // refresh every 10min
 
 // sets units of measurement based on measurement system
