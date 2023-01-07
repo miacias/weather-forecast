@@ -43,12 +43,13 @@ function capitalizeFirstLetter(string) {
 // hide-show search history and home weather updates on landing page
 function landingShowHide() {
     // hide-show search history on landing page
-    var sidebarListEl = $(".past-cities-home");
+    var sidebar = $("#sidebar-home")
+    var sidebarListEl = $(".search-history-item")
     var listEl = $(".past-cities-home");
     var citiesStorage = JSON.parse(localStorage.getItem("history"));
     if (citiesStorage) {
-        $(".search-history-item").remove(); // reset container to empty before changes
-        sidebarListEl.show();
+        sidebarListEl.remove(); // reset container to empty before changes
+        sidebar.show();
         for (var i = 0; i < citiesStorage.length; i++) {
             var cityItem = $("<li>", {
                 class: "search-history-item nav-item",
@@ -65,7 +66,7 @@ function landingShowHide() {
             cityItem.click(weatherAtLandingCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1]))); // need to test
         }
     } else {
-        sidebarListEl.hide();
+        sidebar.hide();
     }
     // hide-show home city on landing page
     var homeStorage = JSON.parse(localStorage.getItem("home"));
@@ -237,6 +238,7 @@ function saveGeoCoordinates(cityName, state, country) {
                 cityHistory.push(searchLocation);
                 localStorage.setItem("history", JSON.stringify(cityHistory));
             }
+            changeToResultsHtml()
         }
     })
 }
