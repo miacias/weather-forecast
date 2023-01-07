@@ -46,7 +46,7 @@ function landingShowHide() {
             listEl.append(cityItem);
             var anchor = $("<a>", {
                 href: "#",
-                class: "search-history-item nav-link active px-4",
+                class: "search-history-item bg-info text-dark text-center nav-link active px-4",
                 ariaCurrent: "page",
                 text: capitalizeFirstLetter((citiesStorage[i]).city)
             })
@@ -67,7 +67,7 @@ function landingShowHide() {
     }
 }
 landingShowHide(); // on page load
-setInterval(landingShowHide(), 600001); // while page is open
+setInterval(landingShowHide(), 600001); // refresh every 10min
 
 // sets units of measurement based on measurement system
 function units() {
