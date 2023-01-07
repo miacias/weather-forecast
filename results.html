@@ -62,12 +62,12 @@
                                     class="card-img img-fluid rounded-start align-center h-100"
                                     alt="lightning over a field">
                                 <div class="card-img-overlay">
-                                    <h2 id="weekday" class="card-title"></h2>
-                                    <p id="month-date" class="card-text"></p>
-                                    <p id="city-name" class="card-text"></p>
-                                    <img id="today-icon" class="owm-weather-icon" rel="weather-icon" type="img/png" src=""></img>
-                                    <p id="temp" class="card-text"></p>
-                                    <p id="weather-event" class="card-text"></p>
+                                    <h2 id="weekday-general" class="card-title"></h2>
+                                    <p id="month-date-general" class="card-text"></p>
+                                    <p id="city-name-general" class="card-text"></p>
+                                    <img id="today-icon-general" class="owm-weather-icon" rel="weather-icon" type="img/png" src=""></img>
+                                    <p id="temp-general" class="card-text"></p>
+                                    <p id="weather-event-general" class="card-text"></p>
                                 </div>
                             </div>
                         </div>
@@ -75,55 +75,51 @@
                         <div class="holds-right-side-data col p-1">
                             <!-- upper-right-side text with humidity, wind, air pressure, high, low -->
                             <div class="col-md-8 px-1">
-                                <div class="detailed-weather card-body" id="detailed-weather">
-                                    <p id="humidity"></p>
-                                    <p id="wind"></p>
-                                    <p id="air-pressure"></p>
-                                    <p id="high-temp"></p>
-                                    <p id="low-temp"></p>
+                                <div class="detailed-weather card-body" id="detailed-weather-general">
+                                    <p id="humidity-general"></p>
+                                    <p id="wind-general"></p>
+                                    <p id="air-pressure-general"></p>
+                                    <p id="high-temp-general"></p>
+                                    <p id="low-temp-general"></p>
                                 </div>
                             </div>
                             <!-- lower-right-side days, icons, and temps -->
-                            <!-- card-group sticks cards together without space between -->
-                            <!-- card-deck is supposed to put space between, but ROW is needed in container and COL-2 is needed to size the cards -->
                             <div class="five-day-weather text-muted card-group text-center">
                                 <div id="day-1" class="five-day card rounded m-1">
-                                    <h6 class="days" id="h6-1"></h6>
-                                    <i id="icon-1">
-                                        <link rel="weather-icon" type="img/png" href="">
-                                    </i>
-                                    <p class="temps" id="temp-1"></p>
-                                    <p class="winds" id="wind-1"></p>
-                                    <p class="humidities" id="humidity-1"></p>
+                                    <img class="icons-general" rel="weather-icon" type="img/png" src="" id="icon-1"></img>
+                                    <h6 class="days-general" id="h6-1"></h6>
+                                    <p class="temps-general" id="temp-1"></p>
+                                    <p class="winds-general" id="wind-1"></p>
+                                    <p class="humidities-general" id="humidity-1"></p>
                                 </div>
                                 <div id="day-2" class="five-day card rounded m-1">
-                                    <h6 class="days" id="h6-2"></h6>
-                                    <i id="icon-2"></i>
-                                    <p class="temps" id="temp-2"></p>
-                                    <p class="winds" id="wind-2"></p>
-                                    <p class="humidities" id="humidity-2"></p>
+                                    <img class="icons-general" rel="weather-icon" type="img/png" src="" id="icon-2"></img>
+                                    <h6 class="days-general" id="h6-2"></h6>
+                                    <p class="temps-general" id="temp-2"></p>
+                                    <p class="winds-general" id="wind-2"></p>
+                                    <p class="humidities-general" id="humidity-2"></p>
                                 </div>
                                 <div id="day-3" class="five-day card rounded m-1">
-                                    <h6 class="days" id="h6-3"></h6>
-                                    <i id="icon-3"></i>
-                                    <p class="temps" id="temp-3"></p>
-                                    <p class="winds" id="wind-3"></p>
-                                    <p class="humidities" id="humidity-3"></p>
+                                    <img class="icons-general" rel="weather-icon" type="img/png" src="" id="icon-3"></img>
+                                    <h6 class="days-general" id="h6-3"></h6>
+                                    <p class="temps-general" id="temp-3"></p>
+                                    <p class="winds-general" id="wind-3"></p>
+                                    <p class="humidities-general" id="humidity-3"></p>
                                 </div>
                                 <div id="day-4" class="five-day card rounded m-1">
-                                    <h6 class="days" id="h6-4"></h6>
-                                    <i id="icon-4"></i>
-                                    <p class="temps" id="temp-4"></p>
-                                    <p class="winds" id="wind-4"></p>
-                                    <p class="humidities" id="humidity-4"></p>
+                                    <img class="icons-general" rel="weather-icon" type="img/png" src="" id="icon-4"></img>
+                                    <h6 class="days-general" id="h6-4"></h6>
+                                    <p class="temps-general" id="temp-4"></p>
+                                    <p class="winds-general" id="wind-4"></p>
+                                    <p class="humidities-general" id="humidity-4"></p>
                                 </div>
                                 <div id="day-5" class="five-day card rounded m-1">
-                                    <h6 class="days" id="h6-5"></h6>
-                                    <i id="icon-5"></i>
-                                    <p class="temps" id="temp-5"></p>
-                                    <p class="winds" id="wind-5"></p>
-                                    <p class="humidities" id="humidity-5"></p>
-                                </div>                
+                                    <img class="icons-general" rel="weather-icon" type="img/png" src="" id="icon-5"></img>
+                                    <h6 class="days-general" id="h6-5"></h6>
+                                    <p class="temps-general" id="temp-5"></p>
+                                    <p class="winds-general" id="wind-5"></p>
+                                    <p class="humidities-general" id="humidity-5"></p>
+                                </div>            
                             </div>
                         </div>
                     </div>
@@ -140,9 +136,6 @@
                             <div class="my-1 col">
                                 <input type="text" class="form-control" id="state-text" placeholder="State">
                             </div>
-                            <!-- <div class="col">
-                                <input type="text" class="form-control" id="zip-text" placeholder="Zip (optional)">
-                            </div> -->
                             <div class="my-1 col">
                                 <input type="text" class="form-control" id="country-text" placeholder="Country Abbreviation">
                             </div>
@@ -161,7 +154,7 @@
                         data-offstyle="outline-info bg-dark text-info text-nowrap">
                         <div class="button-container my-1 ">
                             <button class="city-search-results search btn btn-outline-info" type="submit">Search</button>
-                            <button class="back btn btn-outline-info justify-content-end text-center rounded">Back</button>
+                            <button id="back" class="back btn btn-outline-info justify-content-end text-center rounded">Back</button>
                         </div>
                     </form>
                 </div>
