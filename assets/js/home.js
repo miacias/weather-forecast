@@ -27,7 +27,7 @@ function changeToResultsHtml() {
 
 // changes view from 
 function changeToLandingHtml() {
-    window.location = ("./landing.html")
+    window.location = ("./index.html")
 }
 
 // get string from localStorage with proper noun capitalization
