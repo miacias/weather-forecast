@@ -1,6 +1,4 @@
 /*
-- auto update interval: every 10 minutes
-
 ERRORS
 - 401 - did not specify api key in request, wrong key, or fetching disallowed info (paid vs unpaid subscription)
 - 404 - wrong city name, ZIP, or city ID. or wrong request format
@@ -10,6 +8,9 @@ ERRORS
 
 const citySearchHomeEl = $(".city-search-home");
 const citySearchResultsEl = $(".city-search-results");
+const clearHistoryEl = $(".clear-history");
+const clearHomeEl = $(".clear-home");
+// var pastCity = $("<li class=\"search-history-item nav-item\"></li>")
 var cityName = "";
 var homeAddress = [];
 // var zip = "";
@@ -30,18 +31,7 @@ function capitalizeFirstLetter(string) {
     return prettyCity.join(" ");
   }
 
-// function landingShowHideHome() {
-//     // hide-show home city on landing page
-//     var homeStorage = JSON.parse(localStorage.getItem("home"));
-//     if (homeStorage) { // if it exists
-//         $(".home-weather").show();
-//         weatherAtHomeCoordinates(homeStorage[0].geolocation[0], homeStorage[0].geolocation[1]);
-//     } else {
-//         $(".home-weather").hide();
-//     }
-// }
-
-// hide-show search history on home page
+// hide-show search history and home weather updates on landing page
 function landingShowHide() {
     // hide-show search history on landing page
     var sidebarListEl = $(".past-cities-home");
@@ -62,6 +52,8 @@ function landingShowHide() {
                 text: capitalizeFirstLetter((citiesStorage[i]).city)
             })
             cityItem.append(anchor);
+            // create event listener per search history item using stored latitude and longitude
+            cityItem.click(weatherAtHomeCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1])));
         }
     } else {
         sidebar.hide();
@@ -75,7 +67,8 @@ function landingShowHide() {
         $(".home-weather").hide();
     }
 }
-landingShowHide()
+landingShowHide(); // on page load
+setInterval(landingShowHide(), 600001); // while page is open
 
 // sets units of measurement based on measurement system
 function units() {
@@ -254,9 +247,6 @@ citySearchHomeEl.click(function(event) {
         saveGeoCoordinates(cityName.toLowerCase(), state, country);
     }
 })
-
-const clearHistoryEl = $(".clear-history");
-const clearHomeEl = $(".clear-home");
 
 clearHistoryEl.click(function() {
     localStorage.removeItem("history");
