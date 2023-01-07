@@ -17,5 +17,13 @@ main,
 
 .detailed-weather {
     line-height: 1em;
+}
 
+.search-history-item {
+    margin: 0.1em 0 0 0;
+    opacity: 0.9;
+}
+
+.search-history-item:hover {
+    opacity: 1;
 }

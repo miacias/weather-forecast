@@ -10,7 +10,6 @@ const citySearchHomeEl = $(".city-search-home");
 const citySearchResultsEl = $(".city-search-results");
 const clearHistoryEl = $(".clear-history");
 const clearHomeEl = $(".clear-home");
-// var pastCity = $("<li class=\"search-history-item nav-item\"></li>")
 var cityName = "";
 var homeAddress = [];
 // var zip = "";
@@ -53,7 +52,7 @@ function landingShowHide() {
             })
             cityItem.append(anchor);
             // create event listener per search history item using stored latitude and longitude
-            cityItem.click(weatherAtHomeCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1])));
+            cityItem.click(weatherAtLandingCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1])));
         }
     } else {
         sidebar.hide();
@@ -62,7 +61,7 @@ function landingShowHide() {
     var homeStorage = JSON.parse(localStorage.getItem("home"));
     if (homeStorage) { // if it exists
         $(".home-weather").show();
-        weatherAtHomeCoordinates(homeStorage[0].geolocation[0], homeStorage[0].geolocation[1]);
+        weatherAtLandingCoordinates((homeStorage[0].geolocation[0]), (homeStorage[0].geolocation[1]));
     } else {
         $(".home-weather").hide();
     }
@@ -148,7 +147,7 @@ function postHomeWeather(data) {
 }
 
 // fetch longitude and latitude
-function weatherAtHomeCoordinates(latitude, longitude) {
+function weatherAtLandingCoordinates(latitude, longitude) {
     const apiKey = "c6923045c685289a8524ccba359c3265";
     const coordinateQueryUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=${measurementSystem()}`;
     fetch(coordinateQueryUrl)
@@ -202,7 +201,7 @@ function saveGeoCoordinates(cityName, state, country) {
                 homeAddress.splice(0, 1, homeLocation); // replaces previous home location
             }
             localStorage.setItem("home", (JSON.stringify(homeAddress)));
-            weatherAtHomeCoordinates(latitude, longitude);
+            weatherAtLandingCoordinates(latitude, longitude);
         } else { // home not selected, thus general search
             // prevent home city from being added to other searches, and doesn't brake if home city hasn't been set yet
             if (((JSON.parse(localStorage.getItem("home"))) !== null) && (cityName === ((JSON.parse(localStorage.getItem("home")))[0]).homeCity)) {
