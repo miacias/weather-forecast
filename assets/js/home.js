@@ -53,7 +53,7 @@ function duplicateCheck(cityName) {
 }
 
 // hide-show search history and home weather updates on landing page
-function landingShowHide() {
+function showHide() {
     // hide-show search history on landing page
     var sidebar = $("#sidebar-home") // entire sidebar
     var parentListEl = $(".past-cities-landing"); // parent container of landing page list
@@ -89,7 +89,7 @@ function landingShowHide() {
         $(".home-weather").hide();
     }
 }
-landingShowHide(); // on page load
+showHide(); // on page load
 
 // sets units of measurement based on measurement system
 function units() {
@@ -328,15 +328,16 @@ searchBtn.click(function(event) {
 
 clearHistoryEl.click(function() {
     localStorage.removeItem("history");
-    landingShowHide();
+    showHide();
 })
 
 clearHomeEl.click(function() {
     localStorage.removeItem("home");
-    landingShowHide();
+    showHide();
 })
 
 $("#back").click(function(event) {
     event.preventDefault();
     changeToLandingHtml();
 })
+
