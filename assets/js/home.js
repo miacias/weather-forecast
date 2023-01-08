@@ -40,6 +40,7 @@ function capitalizeFirstLetter(string) {
     return prettyCity.join(" ");
 }
 
+// BROKEN: currently returns localStorage length +1. example: if three items, returned number is 3 instead of 2
 // checks if search is a duplicate and where in localStorage index location duplicate is found
 function duplicateCheck(cityName) {
     var matchingCity = false; // placeholder true/false
@@ -59,18 +60,18 @@ function duplicateCheck(cityName) {
 }
 
 // returns true or false if a city is matched or not matched to localStorage
-function repeatCity() {
+function repeatCity(cityName) {
     // tutorial https://www.javascripttutorial.net/javascript-return-multiple-values/
-    let matchCheck = duplicateCheck();
+    let matchCheck = duplicateCheck(cityName);
     const matchedCity = matchCheck[0];
     console.log("matchingCity is " + matchedCity);
     return matchedCity;
 }
 
-// returns index number from localStorage
-function storageLocation() {
+// returns index number from localStorage of desired previously-searched city
+function storageLocation(cityName) {
     // tutorial https://www.javascripttutorial.net/javascript-return-multiple-values/
-    let matchCheck = duplicateCheck();
+    let matchCheck = duplicateCheck(cityName);
     const matchedIndex = matchCheck[1];
     return matchedIndex;
 }
@@ -103,7 +104,7 @@ function populateSidebar() {
             // retrieves button text as lowercase and finds the matching localStorage object
             var newIndex = storageLocation($(this).text().toLowerCase()) // retrieves localStorage index location of city
             // broken below
-            // weatherAtGeneralCoordinates((citiesStorage[newIndex]).geolocation[0], (citiesStorage[newIndex]).geolocation[1])
+            weatherAtGeneralCoordinates((citiesStorage[newIndex]).geolocation[0], (citiesStorage[newIndex]).geolocation[1])
         })
         // commenting out this event listener breaks the HTML below: results page weather card
         // cityItem.click(weatherAtGeneralCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1]))); // need to test
