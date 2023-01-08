@@ -10,6 +10,7 @@ const searchBtn = $("#search-button")
 const clearHistoryEl = $(".clear-history");
 const clearHomeEl = $(".clear-home");
 var cityName = "";
+var buttonCity = "";
 var homeAddress = [];
 // var zip = "";
 var state = "";
@@ -37,7 +38,19 @@ function capitalizeFirstLetter(string) {
         prettyCity.push(upperCase[i].charAt(0).toUpperCase() + upperCase[i].slice(1));
     }
     return prettyCity.join(" ");
-  }
+}
+
+function duplicateCheck(cityName) {
+    // check if search is a duplicate before pushing to localStorage
+    var matchingCity = false; // placeholder true/false
+    for (var i = 0; i < cityHistory.length; i++) { // scan array of objects to see if city name is repeated. set to true if found repeated/duplicate values
+        if (cityName === cityHistory[i].city) {
+            matchingCity = true;
+            break
+        }
+    }
+    return matchingCity // true means found a match, false means no match found
+}
 
 // hide-show search history and home weather updates on landing page
 function landingShowHide() {
@@ -285,14 +298,8 @@ function saveGeoCoordinates(cityName, state, country) {
             if (cityHistory === null) {
                 cityHistory = []; // resets value to [] instead of localStorage.getItem
             }
-            var flag = false; // placeholder true/false
-            for (var i = 0; i< cityHistory.length; i++) { // scan array of objects to see if city name is repeated. set to true if found repeated/duplicate values
-                if (cityName === cityHistory[i].city) {
-                    flag = true;
-                    break
-                }
-            }
-            if (!flag) { // if false
+            // check if search is a duplicate before pushing to localStorage
+            if (!(duplicateCheck(cityName))) { // if false
                 cityHistory.push(searchLocation);
                 localStorage.setItem("history", JSON.stringify(cityHistory));
             }
