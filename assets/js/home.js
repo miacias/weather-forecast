@@ -20,12 +20,12 @@ var latitude = "";
 var longitude = "";
 var cityHistory = [];
 
-// changes view from landing page to results page
+// changes view to results page
 function changeToResultsHtml() {
     window.location = ("./results.html")
 }
 
-// changes view from 
+// changes view to home page
 function changeToLandingHtml() {
     window.location = ("./index.html")
 }
@@ -40,38 +40,42 @@ function capitalizeFirstLetter(string) {
     return prettyCity.join(" ");
 }
 
+// checks if search is a duplicate and where in localStorage index location duplicate is found
 function duplicateCheck(cityName) {
-    // check if search is a duplicate before pushing to localStorage
     var matchingCity = false; // placeholder true/false
     var citiesStorage = JSON.parse(localStorage.getItem("history"));
-    for (var m = 0; m < citiesStorage.length; m++) { // scan array of objects to see if city name is repeated. set to true if found repeated/duplicate values
+    if (citiesStorage === null) {
+        return false;
+    }
+    // scans array of objects to see if city name is repeated. set to true if found repeated/duplicate values
+    for (var m = 0; m < citiesStorage.length; m++) { 
         if (cityName === (citiesStorage[m]).city) {
             matchingCity = true;
             break
         }
     }
-    console.log("matchingCity is " + matchingCity)
     console.log("localStorage matching index location is " + m)
     return [matchingCity, m] // true means found a match, false means no match found
 }
 
-function storageLocation() { // returns index number from localStorage
+// returns true or false if a city is matched or not matched to localStorage
+function repeatCity() {
     // tutorial https://www.javascripttutorial.net/javascript-return-multiple-values/
     let matchCheck = duplicateCheck();
     const matchedCity = matchCheck[0];
+    console.log("matchingCity is " + matchedCity);
+    return matchedCity;
+}
+
+// returns index number from localStorage
+function storageLocation() {
+    // tutorial https://www.javascripttutorial.net/javascript-return-multiple-values/
+    let matchCheck = duplicateCheck();
     const matchedIndex = matchCheck[1];
     return matchedIndex;
 }
 
-function repeatCity() { // returns true or false
-    // tutorial https://www.javascripttutorial.net/javascript-return-multiple-values/
-    let matchCheck = duplicateCheck();
-    const matchedCity = matchCheck[0];
-    const matchedIndex = matchCheck[1];
-    return matchedCity;
-}
-
-
+// adds text and event listeners to sidebar
 function populateSidebar() {
     var parentListEl = $(".past-cities-landing"); // parent container of landing page list
     var childListEl = $(".home-search-item") // class of items added to/removed from landing page list
@@ -101,7 +105,7 @@ function populateSidebar() {
             // broken below
             // weatherAtGeneralCoordinates((citiesStorage[newIndex]).geolocation[0], (citiesStorage[newIndex]).geolocation[1])
         })
-        // commenting out this event listener breaks the HTML below: weather card
+        // commenting out this event listener breaks the HTML below: results page weather card
         // cityItem.click(weatherAtGeneralCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1]))); // need to test
     }
 }
@@ -340,7 +344,7 @@ function saveGeoCoordinates(cityName, state, country) {
             localStorage.setItem("home", (JSON.stringify(homeAddress)));
             weatherAtLandingCoordinates(latitude, longitude);
         } else { // home not selected, thus general search
-            // prevent home city from being added to other searches, and doesn't brake if home city hasn't been set yet
+            // prevent home city from being added to other searches, and doesn't break if home city hasn't been set yet
             if (((JSON.parse(localStorage.getItem("home"))) !== null) && (cityName === ((JSON.parse(localStorage.getItem("home")))[0]).homeCity)) {
                 return
             }
@@ -354,7 +358,8 @@ function saveGeoCoordinates(cityName, state, country) {
                 cityHistory = []; // resets value to [] instead of localStorage.getItem
             }
             // check if search is a duplicate before pushing to localStorage
-            if (!(duplicateCheck(cityName))) { // if false
+            if (!(repeatCity(cityName))) { // if false
+            // if (!(duplicateCheck(cityName))) { // if false
                 cityHistory.push(searchLocation);
                 localStorage.setItem("history", JSON.stringify(cityHistory));
             }
@@ -383,6 +388,7 @@ searchBtn.click(function(event) {
 
 clearHistoryEl.click(function() {
     localStorage.removeItem("history");
+    changeToLandingHtml();
     showHide();
 })
 
@@ -395,4 +401,3 @@ $("#back").click(function(event) {
     event.preventDefault();
     changeToLandingHtml();
 })
-
