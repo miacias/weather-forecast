@@ -43,8 +43,9 @@ function capitalizeFirstLetter(string) {
 function duplicateCheck(cityName) {
     // check if search is a duplicate before pushing to localStorage
     var matchingCity = false; // placeholder true/false
-    for (var i = 0; i < cityHistory.length; i++) { // scan array of objects to see if city name is repeated. set to true if found repeated/duplicate values
-        if (cityName === cityHistory[i].city) {
+    var citiesStorage = JSON.parse(localStorage.getItem("history"));
+    for (var i = 0; i < citiesStorage.length; i++) { // scan array of objects to see if city name is repeated. set to true if found repeated/duplicate values
+        if (cityName === (citiesStorage[i]).city) {
             matchingCity = true;
             break
         }
@@ -73,12 +74,12 @@ function populateSidebar() {
             text: capitalizeFirstLetter((citiesStorage[i]).city)
         })
         cityItem.append(anchor);
-        // create event listener per search history item that retrieves city name text of button
+        // creates event listener per search history item that retrieves city name text of button
         var historyButtonEl = $("#city-button-" + i);
         historyButtonEl.click(function(event) {
             event.preventDefault();
-            console.log($(this).text());
-            duplicateCheck($(this).text());
+            // retrieves button text as lowercase and finds the matching localStorage object
+            duplicateCheck($(this).text().toLowerCase());
         })
         // create event listener per search history item using stored latitude and longitude
         // commenting out this event listener breaks the HTML below: weather card
