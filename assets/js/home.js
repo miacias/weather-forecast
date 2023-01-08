@@ -55,6 +55,23 @@ function duplicateCheck(cityName) {
     return [matchingCity, m] // true means found a match, false means no match found
 }
 
+function storageLocation() { // returns index number from localStorage
+    // tutorial https://www.javascripttutorial.net/javascript-return-multiple-values/
+    let matchCheck = duplicateCheck();
+    const matchedCity = matchCheck[0];
+    const matchedIndex = matchCheck[1];
+    return matchedIndex;
+}
+
+function repeatCity() { // returns true or false
+    // tutorial https://www.javascripttutorial.net/javascript-return-multiple-values/
+    let matchCheck = duplicateCheck();
+    const matchedCity = matchCheck[0];
+    const matchedIndex = matchCheck[1];
+    return matchedCity;
+}
+
+
 function populateSidebar() {
     var parentListEl = $(".past-cities-landing"); // parent container of landing page list
     var childListEl = $(".home-search-item") // class of items added to/removed from landing page list
@@ -80,14 +97,13 @@ function populateSidebar() {
         historyButtonEl.click(function(event) {
             event.preventDefault();
             // retrieves button text as lowercase and finds the matching localStorage object
-            duplicateCheck($(this).text().toLowerCase());
-            // weatherAtGeneralCoordinates(citiesStorage[m].geolocation[0], citiesStorage[m].geolocation[1])
+            var newIndex = storageLocation($(this).text().toLowerCase()) // retrieves localStorage index location of city
+            // broken below
+            // weatherAtGeneralCoordinates((citiesStorage[newIndex]).geolocation[0], (citiesStorage[newIndex]).geolocation[1])
         })
-        // create event listener per search history item using stored latitude and longitude
         // commenting out this event listener breaks the HTML below: weather card
         // cityItem.click(weatherAtGeneralCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1]))); // need to test
     }
-
 }
 
 // hide-show search history and home weather updates on landing page
