@@ -22,12 +22,12 @@ var cityHistory = [];
 
 // changes view to results page
 function changeToResultsHtml() {
-    window.location = ("./results.html")
+    window.location.pathname = ("./results.html")
 }
 
 // changes view to home page
 function changeToLandingHtml() {
-    window.location = ("./index.html")
+    window.location.pathname = ("./index.html")
 }
 
 // get string from localStorage with proper noun capitalization
@@ -54,7 +54,7 @@ function duplicateCheck(cityName) {
             break
         }
     }
-    console.log("localStorage matching index location is " + m)
+    // console.log("localStorage matching index location is " + m)
     return [matchingCity, m] // true means found a match, false means no match found
 }
 
@@ -102,9 +102,10 @@ function populateSidebar() {
             // retrieves button text as lowercase and finds the matching localStorage object to be reused
             var newIndex = storageLocation($(this).text().toLowerCase()); // retrieves localStorage index location of city
             weatherAtGeneralCoordinates((citiesStorage[newIndex]).geolocation[0], (citiesStorage[newIndex]).geolocation[1]);
-            if (window.location.pathname === ("./index.html")) {
-                changeToResultsHtml();
-            }
+            changeToResultsHtml()
+            // if (window.location.pathname === ("./index.html")) {
+            //     changeToResultsHtml();
+            // }
         })
         // on page refresh, shows random weather in local storage, probably...
         // cityItem.click(weatherAtGeneralCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1]))); // need to test
@@ -140,29 +141,20 @@ function showHide() {
     } else {
         sidebar.hide();
     }
-    // // hide-show home city on landing page
-    // var homeStorage = JSON.parse(localStorage.getItem("home"));
-    // if (homeStorage) { // if home city exists in local storage
-    //     $(".home-weather").show();
-    //     weatherAtLandingCoordinates((homeStorage[0].geolocation[0]), (homeStorage[0].geolocation[1]));
-    // } else {
-    //     $(".home-weather").hide();
-    // }
 }
 showHide(); // run on page load
 
 function showHideHome() {
     // hide-show home city on landing page
-    if (window.location.pathname === "./index.html") {
     var homeStorage = JSON.parse(localStorage.getItem("home"));
-    if (homeStorage) { // if home city exists in local storage
+    if (homeStorage /*&& (window.location.pathname === "./index.html")*/) { // if home city exists in local storage (and viewing homepage. this part does not behave as intended)
         $(".home-weather").show();
         weatherAtHomeCoordinates((homeStorage[0].geolocation[0]), (homeStorage[0].geolocation[1]));
     } else {
         $(".home-weather").hide();
     }
-    }
 }
+showHideHome();
 setInterval(showHideHome, 60001); // refreshes home city weather every 10min
 
 // sets units of measurement based on measurement system
@@ -242,6 +234,7 @@ function postHomeWeather(data) {
 
 // adds specific fetch data to HTML's general search city
 function postGeneralWeather(data) {
+    console.log("postGeneralWeather is here")
     // left-side image with date, city, temp, description
     var weekday = $("#weekday-general");
     var monthDate = $("#month-date-general");
@@ -298,13 +291,12 @@ function weatherAtHomeCoordinates(latitude, longitude) {
     // linking JSON to DOM
     .then(function (data) {
         postHomeWeather(data);
-        // postGeneralWeather(data);
     })
 }
 
 // fetch longitude and latitude of general city search
 function weatherAtGeneralCoordinates(latitude, longitude) {
-    console.log("weatherAtGeneralCoordinates is running")
+    console.log("weatherAtGeneralCoordinates is here")
     const apiKey = "c6923045c685289a8524ccba359c3265";
     const coordinateQueryUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=${measurementSystem()}`;
     fetch(coordinateQueryUrl)
