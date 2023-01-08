@@ -44,14 +44,15 @@ function duplicateCheck(cityName) {
     // check if search is a duplicate before pushing to localStorage
     var matchingCity = false; // placeholder true/false
     var citiesStorage = JSON.parse(localStorage.getItem("history"));
-    for (var i = 0; i < citiesStorage.length; i++) { // scan array of objects to see if city name is repeated. set to true if found repeated/duplicate values
-        if (cityName === (citiesStorage[i]).city) {
+    for (var m = 0; m < citiesStorage.length; m++) { // scan array of objects to see if city name is repeated. set to true if found repeated/duplicate values
+        if (cityName === (citiesStorage[m]).city) {
             matchingCity = true;
             break
         }
     }
     console.log("matchingCity is " + matchingCity)
-    return matchingCity // true means found a match, false means no match found
+    console.log("localStorage matching index location is " + m)
+    return [matchingCity, m] // true means found a match, false means no match found
 }
 
 function populateSidebar() {
@@ -80,6 +81,7 @@ function populateSidebar() {
             event.preventDefault();
             // retrieves button text as lowercase and finds the matching localStorage object
             duplicateCheck($(this).text().toLowerCase());
+            // weatherAtGeneralCoordinates(citiesStorage[m].geolocation[0], citiesStorage[m].geolocation[1])
         })
         // create event listener per search history item using stored latitude and longitude
         // commenting out this event listener breaks the HTML below: weather card
