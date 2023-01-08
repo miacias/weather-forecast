@@ -100,17 +100,20 @@ function populateSidebar() {
         historyButtonEl.click(function(event) {
             event.preventDefault();
             // retrieves button text as lowercase and finds the matching localStorage object to be reused
-            var newIndex = storageLocation($(this).text().toLowerCase()) // retrieves localStorage index location of city
-            weatherAtGeneralCoordinates((citiesStorage[newIndex]).geolocation[0], (citiesStorage[newIndex]).geolocation[1])
+            var newIndex = storageLocation($(this).text().toLowerCase()); // retrieves localStorage index location of city
+            weatherAtGeneralCoordinates((citiesStorage[newIndex]).geolocation[0], (citiesStorage[newIndex]).geolocation[1]);
+            if (window.location.pathname === ("./index.html")) {
+                changeToResultsHtml();
+            }
         })
-        // commenting out this event listener breaks the HTML below: results page weather card
+        // on page refresh, shows random weather in local storage, probably...
         // cityItem.click(weatherAtGeneralCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1]))); // need to test
     }
 }
 
 // hide-show search history and home weather updates on landing page
 function showHide() {
-    // hide-show search history on landing page
+    // hide-show search history on landing and results page
     var sidebar = $("#sidebar-home") // entire sidebar
     // var parentListEl = $(".past-cities-landing"); // parent container of landing page list
     // var childListEl = $(".home-search-item") // class of items added to/removed from landing page list
@@ -119,34 +122,48 @@ function showHide() {
         populateSidebar();
 //         childListEl.remove(); // reset container to empty before changes
         sidebar.show();
-//         for (var i = 0; i < citiesStorage.length; i++) {
-//             var cityItem = $("<li>", {
-//                 class: "home-search-item nav-item",
-//             })
-//             parentListEl.append(cityItem);
-//             var anchor = $("<a>", {
-//                 href: "#",
-//                 class: "home-search-item bg-info text-dark text-center nav-link active px-4",
-//                 ariaCurrent: "page",
-//                 text: capitalizeFirstLetter((citiesStorage[i]).city)
-//             })
-//             cityItem.append(anchor);
+        // for (var i = 0; i < citiesStorage.length; i++) {
+        //     var cityItem = $("<li>", {
+        //         class: "home-search-item nav-item",
+        //     })
+        //     parentListEl.append(cityItem);
+        //     var anchor = $("<a>", {
+        //         href: "#",
+        //         class: "home-search-item bg-info text-dark text-center nav-link active px-4",
+        //         ariaCurrent: "page",
+        //         text: capitalizeFirstLetter((citiesStorage[i]).city)
+        //     })
+        //     cityItem.append(anchor);
 //             // create event listener per search history item using stored latitude and longitude
-//             cityItem.click(weatherAtGeneralCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1]))); // need to test
+            // cityItem.click(weatherAtGeneralCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1]))); // need to test
 //         }
     } else {
         sidebar.hide();
     }
+    // // hide-show home city on landing page
+    // var homeStorage = JSON.parse(localStorage.getItem("home"));
+    // if (homeStorage) { // if home city exists in local storage
+    //     $(".home-weather").show();
+    //     weatherAtLandingCoordinates((homeStorage[0].geolocation[0]), (homeStorage[0].geolocation[1]));
+    // } else {
+    //     $(".home-weather").hide();
+    // }
+}
+showHide(); // run on page load
+
+function showHideHome() {
     // hide-show home city on landing page
+    if (window.location.pathname === "./index.html") {
     var homeStorage = JSON.parse(localStorage.getItem("home"));
     if (homeStorage) { // if home city exists in local storage
         $(".home-weather").show();
-        weatherAtLandingCoordinates((homeStorage[0].geolocation[0]), (homeStorage[0].geolocation[1]));
+        weatherAtHomeCoordinates((homeStorage[0].geolocation[0]), (homeStorage[0].geolocation[1]));
     } else {
         $(".home-weather").hide();
     }
+    }
 }
-showHide(); // run on page load
+setInterval(showHideHome, 60001); // refreshes home city weather every 10min
 
 // sets units of measurement based on measurement system
 function units() {
@@ -266,7 +283,7 @@ function postGeneralWeather(data) {
 }
 
 // fetch longitude and latitude of home city
-function weatherAtLandingCoordinates(latitude, longitude) {
+function weatherAtHomeCoordinates(latitude, longitude) {
     const apiKey = "c6923045c685289a8524ccba359c3265";
     const coordinateQueryUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=${measurementSystem()}`;
     fetch(coordinateQueryUrl)
@@ -287,6 +304,7 @@ function weatherAtLandingCoordinates(latitude, longitude) {
 
 // fetch longitude and latitude of general city search
 function weatherAtGeneralCoordinates(latitude, longitude) {
+    console.log("weatherAtGeneralCoordinates is running")
     const apiKey = "c6923045c685289a8524ccba359c3265";
     const coordinateQueryUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=${measurementSystem()}`;
     fetch(coordinateQueryUrl)
@@ -340,7 +358,7 @@ function saveGeoCoordinates(cityName, state, country) {
                 homeAddress.splice(0, 1, homeLocation); // replaces previous home location
             }
             localStorage.setItem("home", (JSON.stringify(homeAddress)));
-            weatherAtLandingCoordinates(latitude, longitude);
+            weatherAtHomeCoordinates(latitude, longitude);
         } else { // home not selected, thus general search
             // prevent home city from being added to other searches, and doesn't break if home city hasn't been set yet
             if (((JSON.parse(localStorage.getItem("home"))) !== null) && (cityName === ((JSON.parse(localStorage.getItem("home")))[0]).homeCity)) {
