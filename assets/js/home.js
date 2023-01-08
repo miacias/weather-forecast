@@ -40,7 +40,6 @@ function capitalizeFirstLetter(string) {
     return prettyCity.join(" ");
 }
 
-// BROKEN: currently returns localStorage length +1. example: if three items, returned number is 3 instead of 2
 // checks if search is a duplicate and where in localStorage index location duplicate is found
 function duplicateCheck(cityName) {
     var matchingCity = false; // placeholder true/false
@@ -64,7 +63,6 @@ function repeatCity(cityName) {
     // tutorial https://www.javascripttutorial.net/javascript-return-multiple-values/
     let matchCheck = duplicateCheck(cityName);
     const matchedCity = matchCheck[0];
-    console.log("matchingCity is " + matchedCity);
     return matchedCity;
 }
 
@@ -82,7 +80,7 @@ function populateSidebar() {
     var childListEl = $(".home-search-item") // class of items added to/removed from landing page list
     var citiesStorage = JSON.parse(localStorage.getItem("history"));
     if (citiesStorage) {
-        childListEl.remove(); // reset container to empty before changes
+        childListEl.remove(); // resets container to empty before changes
     }
     for (var i = 0; i < citiesStorage.length; i++) {
         var cityItem = $("<li>", {
@@ -101,9 +99,8 @@ function populateSidebar() {
         var historyButtonEl = $("#city-button-" + i);
         historyButtonEl.click(function(event) {
             event.preventDefault();
-            // retrieves button text as lowercase and finds the matching localStorage object
+            // retrieves button text as lowercase and finds the matching localStorage object to be reused
             var newIndex = storageLocation($(this).text().toLowerCase()) // retrieves localStorage index location of city
-            // broken below
             weatherAtGeneralCoordinates((citiesStorage[newIndex]).geolocation[0], (citiesStorage[newIndex]).geolocation[1])
         })
         // commenting out this event listener breaks the HTML below: results page weather card
@@ -142,14 +139,14 @@ function showHide() {
     }
     // hide-show home city on landing page
     var homeStorage = JSON.parse(localStorage.getItem("home"));
-    if (homeStorage) { // if it exists
+    if (homeStorage) { // if home city exists in local storage
         $(".home-weather").show();
         weatherAtLandingCoordinates((homeStorage[0].geolocation[0]), (homeStorage[0].geolocation[1]));
     } else {
         $(".home-weather").hide();
     }
 }
-showHide(); // on page load
+showHide(); // run on page load
 
 // sets units of measurement based on measurement system
 function units() {
