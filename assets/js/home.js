@@ -300,6 +300,7 @@ function weatherAtGeneralCoordinates(latitude, longitude) {
     const apiKey = "c6923045c685289a8524ccba359c3265";
     const coordinateQueryUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=${measurementSystem()}`;
     fetch(coordinateQueryUrl)
+    console.log("general fetch is here")
     .then(function (response) {
         // add 100-500 error codes? and 200s?
         return response.json();
