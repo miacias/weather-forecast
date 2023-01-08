@@ -49,34 +49,70 @@ function duplicateCheck(cityName) {
             break
         }
     }
+    console.log("matchingCity is " + matchingCity)
     return matchingCity // true means found a match, false means no match found
+}
+
+function populateSidebar() {
+    var parentListEl = $(".past-cities-landing"); // parent container of landing page list
+    var childListEl = $(".home-search-item") // class of items added to/removed from landing page list
+    var citiesStorage = JSON.parse(localStorage.getItem("history"));
+    if (citiesStorage) {
+        childListEl.remove(); // reset container to empty before changes
+    }
+    for (var i = 0; i < citiesStorage.length; i++) {
+        var cityItem = $("<li>", {
+            class: "home-search-item nav-item",
+        })
+        parentListEl.append(cityItem);
+        var anchor = $("<a>", {
+            href: "#",
+            class: "home-search-item bg-info text-dark text-center nav-link active px-4",
+            id: "city-button-"+ i,
+            ariaCurrent: "page",
+            text: capitalizeFirstLetter((citiesStorage[i]).city)
+        })
+        cityItem.append(anchor);
+        // create event listener per search history item that retrieves city name text of button
+        var historyButtonEl = $("#city-button-" + i);
+        historyButtonEl.click(function(event) {
+            event.preventDefault();
+            console.log($(this).text());
+            duplicateCheck($(this).text());
+        })
+        // create event listener per search history item using stored latitude and longitude
+        // commenting out this event listener breaks the HTML below: weather card
+        // cityItem.click(weatherAtGeneralCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1]))); // need to test
+    }
+
 }
 
 // hide-show search history and home weather updates on landing page
 function showHide() {
     // hide-show search history on landing page
     var sidebar = $("#sidebar-home") // entire sidebar
-    var parentListEl = $(".past-cities-landing"); // parent container of landing page list
-    var childListEl = $(".home-search-item") // class of items added to/removed from landing page list
+    // var parentListEl = $(".past-cities-landing"); // parent container of landing page list
+    // var childListEl = $(".home-search-item") // class of items added to/removed from landing page list
     var citiesStorage = JSON.parse(localStorage.getItem("history"));
     if (citiesStorage) {
-        childListEl.remove(); // reset container to empty before changes
+        populateSidebar();
+//         childListEl.remove(); // reset container to empty before changes
         sidebar.show();
-        for (var i = 0; i < citiesStorage.length; i++) {
-            var cityItem = $("<li>", {
-                class: "home-search-item nav-item",
-            })
-            parentListEl.append(cityItem);
-            var anchor = $("<a>", {
-                href: "#",
-                class: "home-search-item bg-info text-dark text-center nav-link active px-4",
-                ariaCurrent: "page",
-                text: capitalizeFirstLetter((citiesStorage[i]).city)
-            })
-            cityItem.append(anchor);
-            // create event listener per search history item using stored latitude and longitude
-            cityItem.click(weatherAtGeneralCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1]))); // need to test
-        }
+//         for (var i = 0; i < citiesStorage.length; i++) {
+//             var cityItem = $("<li>", {
+//                 class: "home-search-item nav-item",
+//             })
+//             parentListEl.append(cityItem);
+//             var anchor = $("<a>", {
+//                 href: "#",
+//                 class: "home-search-item bg-info text-dark text-center nav-link active px-4",
+//                 ariaCurrent: "page",
+//                 text: capitalizeFirstLetter((citiesStorage[i]).city)
+//             })
+//             cityItem.append(anchor);
+//             // create event listener per search history item using stored latitude and longitude
+//             cityItem.click(weatherAtGeneralCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1]))); // need to test
+//         }
     } else {
         sidebar.hide();
     }
