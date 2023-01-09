@@ -107,36 +107,17 @@ function populateSidebar() {
             }
         })
         // on page refresh, shows random weather in local storage, probably...
-        // cityItem.click(weatherAtGeneralCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1]))); // need to test
+        cityItem.click(weatherAtGeneralCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1]))); // need to test
     }
 }
 
 // hide-show search history and home weather updates on landing page
 function showHide() {
-    // hide-show search history on landing and results page
-    var sidebar = $("#sidebar-home") // entire sidebar
-    // var parentListEl = $(".past-cities-landing"); // parent container of landing page list
-    // var childListEl = $(".home-search-item") // class of items added to/removed from landing page list
+    var sidebar = $("#sidebar-home"); // entire sidebar
     var citiesStorage = JSON.parse(localStorage.getItem("history"));
     if (citiesStorage) {
         populateSidebar();
-//         childListEl.remove(); // reset container to empty before changes
         sidebar.show();
-        // for (var i = 0; i < citiesStorage.length; i++) {
-        //     var cityItem = $("<li>", {
-        //         class: "home-search-item nav-item",
-        //     })
-        //     parentListEl.append(cityItem);
-        //     var anchor = $("<a>", {
-        //         href: "#",
-        //         class: "home-search-item bg-info text-dark text-center nav-link active px-4",
-        //         ariaCurrent: "page",
-        //         text: capitalizeFirstLetter((citiesStorage[i]).city)
-        //     })
-        //     cityItem.append(anchor);
-//             // create event listener per search history item using stored latitude and longitude
-            // cityItem.click(weatherAtGeneralCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1]))); // need to test
-//         }
     } else {
         sidebar.hide();
     }
