@@ -59,7 +59,6 @@ function duplicateCheck(cityName) {
 
 // returns true or false if a city is matched or not matched to localStorage
 function repeatCity(cityName) {
-    // tutorial https://www.javascripttutorial.net/javascript-return-multiple-values/
     let matchCheck = duplicateCheck(cityName);
     const matchedCity = matchCheck[0];
     return matchedCity;
@@ -67,7 +66,6 @@ function repeatCity(cityName) {
 
 // returns index number from localStorage of desired previously-searched city
 function storageLocation(cityName) {
-    // tutorial https://www.javascripttutorial.net/javascript-return-multiple-values/
     let matchCheck = duplicateCheck(cityName);
     const matchedIndex = matchCheck[1];
     return matchedIndex;
