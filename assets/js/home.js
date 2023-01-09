@@ -54,7 +54,6 @@ function duplicateCheck(cityName) {
             break
         }
     }
-    // console.log("localStorage matching index location is " + m)
     return [matchingCity, m] // true means found a match, false means no match found
 }
 
@@ -102,10 +101,10 @@ function populateSidebar() {
             // retrieves button text as lowercase and finds the matching localStorage object to be reused
             var newIndex = storageLocation($(this).text().toLowerCase()); // retrieves localStorage index location of city
             weatherAtGeneralCoordinates((citiesStorage[newIndex]).geolocation[0], (citiesStorage[newIndex]).geolocation[1]);
-            changeToResultsHtml()
-            // if (window.location.pathname === ("./index.html")) {
-            //     changeToResultsHtml();
-            // }
+            // changeToResultsHtml();
+            if (window.location.pathname === ("./index.html")) {
+                changeToResultsHtml();
+            }
         })
         // on page refresh, shows random weather in local storage, probably...
         // cityItem.click(weatherAtGeneralCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1]))); // need to test
@@ -234,7 +233,6 @@ function postHomeWeather(data) {
 
 // adds specific fetch data to HTML's general search city
 function postGeneralWeather(data) {
-    console.log("postGeneralWeather is here")
     // left-side image with date, city, temp, description
     var weekday = $("#weekday-general");
     var monthDate = $("#month-date-general");
@@ -285,7 +283,7 @@ function weatherAtHomeCoordinates(latitude, longitude) {
         return response.json();
     })
     .catch(function(error) {
-        console.log("An error occurred.");
+        console.log("An error occurred here: weatherAtHomeCoordinates.");
         console.log(error);
     })
     // linking JSON to DOM
@@ -296,17 +294,15 @@ function weatherAtHomeCoordinates(latitude, longitude) {
 
 // fetch longitude and latitude of general city search
 function weatherAtGeneralCoordinates(latitude, longitude) {
-    console.log("weatherAtGeneralCoordinates is here")
     const apiKey = "c6923045c685289a8524ccba359c3265";
     const coordinateQueryUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=${measurementSystem()}`;
     fetch(coordinateQueryUrl)
-    console.log("general fetch is here")
     .then(function (response) {
         // add 100-500 error codes? and 200s?
         return response.json();
     })
     .catch(function(error) {
-        console.log("An error occurred.");
+        console.log("An error occurred here: weatherAtGeneralCoordinates.");
         console.log(error);
     })
     // linking JSON to DOM
@@ -330,7 +326,7 @@ function saveGeoCoordinates(cityName, state, country) {
         return response.json();
     })
     .catch(function(error) {
-        console.log("An error occurred.");
+        console.log("An error occurred here: saveGeoCoordinates.");
         console.log(error);
     })
     .then(function (data) {
