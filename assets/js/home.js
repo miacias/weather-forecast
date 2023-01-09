@@ -189,7 +189,7 @@ function postHomeWeather(data) {
     description.text(data.list[0].weather[0].description);
     var icon = data.list[0].weather[0].icon;
     var iconEl = $("#today-icon");
-    iconEl.attr("src", `http://openweathermap.org/img/wn/${icon}@2x.png`);
+    iconEl.attr("src", `https://openweathermap.org/img/wn/${icon}@2x.png`);
     var temperature = $("#temp");
     temperature.text(Math.floor(data.list[0].main.temp) + units().temp);
     // upper-right-side text with humidity, wind, air pressure, high, low
@@ -209,7 +209,7 @@ function postHomeWeather(data) {
     // .length is /8 to get 5 days since each day has 8 datasets (3hr-increment updates = 40 datasets per 5 days)
     for (var i = 0; i < (data.list.length)/8; i ++) { 
         icon = data.list[(i+1) * 7].weather[0].icon;
-        fiveDay.eq(i).find(".icons").attr("src", `http://openweathermap.org/img/wn/${icon}@2x.png`)
+        fiveDay.eq(i).find(".icons").attr("src", `https://openweathermap.org/img/wn/${icon}@2x.png`)
         fiveDay.eq(i).find(".days").text((new Date((data.list[(i+1) * 7].dt) * 1000)).toDateString().split(" ")[0]) // day name (has TypeError: Cannot read properties of undefined (reading 'dt'))
         fiveDay.eq(i).find(".temps").text(Math.floor(data.list[(i+1) * 7].main.temp) + units().temp); // temperature
         fiveDay.eq(i).find(".winds").text(Math.floor(data.list[(i+1) * 7].wind.speed) + units().speed); // wind speed
@@ -231,7 +231,7 @@ function postGeneralWeather(data) {
     description.text(data.list[0].weather[0].description);
     var icon = data.list[0].weather[0].icon;
     var iconEl = $("#today-icon-general");
-    iconEl.attr("src", `http://openweathermap.org/img/wn/${icon}@2x.png`);
+    iconEl.attr("src", `https://openweathermap.org/img/wn/${icon}@2x.png`);
     var temperature = $("#temp-general");
     temperature.text(Math.floor(data.list[0].main.temp) + units().temp);
     // upper-right-side text with humidity, wind, air pressure, high, low
@@ -251,7 +251,7 @@ function postGeneralWeather(data) {
     // .length is /8 to get 5 days since each day has 8 datasets (3hr-increment updates = 40 datasets per 5 days)
     for (var i = 0; i < (data.list.length)/8; i ++) { 
         icon = data.list[(i+1) * 7].weather[0].icon;
-        fiveDay.eq(i).find(".icons-general").attr("src", `http://openweathermap.org/img/wn/${icon}@2x.png`)
+        fiveDay.eq(i).find(".icons-general").attr("src", `https://openweathermap.org/img/wn/${icon}@2x.png`)
         fiveDay.eq(i).find(".days-general").text((new Date((data.list[(i+1) * 7].dt) * 1000)).toDateString().split(" ")[0]) // day name (has TypeError: Cannot read properties of undefined (reading 'dt'))
         fiveDay.eq(i).find(".temps-general").text(Math.floor(data.list[(i+1) * 7].main.temp) + units().temp); // temperature
         fiveDay.eq(i).find(".winds-general").text(Math.floor(data.list[(i+1) * 7].wind.speed) + units().speed); // wind speed
@@ -301,10 +301,10 @@ function weatherAtGeneralCoordinates(latitude, longitude) {
 function saveGeoCoordinates(cityName, state, country) {
     var limit = 1; // max number of cities with shared names. possible values: 1-5
     const apiKey = "c6923045c685289a8524ccba359c3265";
-    var geoCodeUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName},${state},${country}&limit=${limit}&appid=${apiKey}&units=${measurementSystem()}`
+    var geoCodeUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName},${state},${country}&limit=${limit}&appid=${apiKey}&units=${measurementSystem()}`
     // prevents submitting empty value OR renames URL if state is missing
     if (!state) {
-        geoCodeUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName},${country}&limit=${limit}&appid=${apiKey}&units=${measurementSystem()}`
+        geoCodeUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName},${country}&limit=${limit}&appid=${apiKey}&units=${measurementSystem()}`
     }
     fetch(geoCodeUrl)
     .then(function (response) {
