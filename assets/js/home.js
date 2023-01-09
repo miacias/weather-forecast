@@ -210,10 +210,10 @@ function postHomeWeather(data) {
     for (var i = 0; i < (data.list.length)/8; i ++) { 
         icon = data.list[(i+1) * 7].weather[0].icon;
         fiveDay.eq(i).find(".icons").attr("src", `https://openweathermap.org/img/wn/${icon}@2x.png`)
-        fiveDay.eq(i).find(".days").text((new Date((data.list[(i+1) * 7].dt) * 1000)).toDateString().split(" ")[0]) // day name (has TypeError: Cannot read properties of undefined (reading 'dt'))
-        fiveDay.eq(i).find(".temps").text(Math.floor(data.list[(i+1) * 7].main.temp) + units().temp); // temperature
-        fiveDay.eq(i).find(".winds").text(Math.floor(data.list[(i+1) * 7].wind.speed) + units().speed); // wind speed
-        fiveDay.eq(i).find(".humidities").text(Math.floor(data.list[(i+1) * 7].main.humidity) + units().humidPercent); // humidity percentage
+        fiveDay.eq(i).find(".days").text((new Date((data.list[((i+1)*8) - 1].dt) * 1000)).toDateString().split(" ")[0]) // day name (has TypeError: Cannot read properties of undefined (reading 'dt'))
+        fiveDay.eq(i).find(".temps").text(Math.floor(data.list[((i+1)*8) - 1].main.temp) + units().temp); // temperature
+        fiveDay.eq(i).find(".winds").text(Math.floor(data.list[((i+1)*8) - 1].wind.speed) + units().speed); // wind speed
+        fiveDay.eq(i).find(".humidities").text(Math.floor(data.list[((i+1)*8) - 1].main.humidity) + units().humidPercent); // humidity percentage
     }
 }
 
@@ -252,10 +252,10 @@ function postGeneralWeather(data) {
     for (var i = 0; i < (data.list.length)/8; i ++) { 
         icon = data.list[(i+1) * 7].weather[0].icon;
         fiveDay.eq(i).find(".icons-general").attr("src", `https://openweathermap.org/img/wn/${icon}@2x.png`)
-        fiveDay.eq(i).find(".days-general").text((new Date((data.list[(i+1) * 7].dt) * 1000)).toDateString().split(" ")[0]) // day name (has TypeError: Cannot read properties of undefined (reading 'dt'))
-        fiveDay.eq(i).find(".temps-general").text(Math.floor(data.list[(i+1) * 7].main.temp) + units().temp); // temperature
-        fiveDay.eq(i).find(".winds-general").text(Math.floor(data.list[(i+1) * 7].wind.speed) + units().speed); // wind speed
-        fiveDay.eq(i).find(".humidities-general").text(Math.floor(data.list[(i+1) * 7].main.humidity) + units().humidPercent); // humidity percentage
+        fiveDay.eq(i).find(".days-general").text((new Date((data.list[((i+1)*8) - 1].dt) * 1000)).toDateString().split(" ")[0]) // day name (has TypeError: Cannot read properties of undefined (reading 'dt'))
+        fiveDay.eq(i).find(".temps-general").text(Math.floor(data.list[((i+1)*8) - 1].main.temp) + units().temp); // temperature
+        fiveDay.eq(i).find(".winds-general").text(Math.floor(data.list[((i+1)*8) - 1].wind.speed) + units().speed); // wind speed
+        fiveDay.eq(i).find(".humidities-general").text(Math.floor(data.list[((i+1)*8) - 1].main.humidity) + units().humidPercent); // humidity percentage
     }
 }
 
