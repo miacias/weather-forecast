@@ -97,16 +97,16 @@ function populateSidebar() {
         var historyButtonEl = $("#city-button-" + i);
         historyButtonEl.click(function(event) {
             event.preventDefault();
-            // retrieves button text as lowercase and finds the matching localStorage object to be reused
-            var newIndex = storageLocation($(this).text().toLowerCase()); // retrieves localStorage index location of city
-            weatherAtGeneralCoordinates((citiesStorage[newIndex]).geolocation[0], (citiesStorage[newIndex]).geolocation[1]);
             if (window.location.pathname === ("./five-day-weather-forecast/")) {
                 changeToResultsHtml();
             }
+            // retrieves button text as lowercase and finds the matching localStorage object to be reused
+            var newIndex = storageLocation($(this).text().toLowerCase()); // retrieves localStorage index location of city
+            weatherAtGeneralCoordinates((citiesStorage[newIndex]).geolocation[0], (citiesStorage[newIndex]).geolocation[1]);
         })
         // on page refresh, shows random weather in local storage based on this for loop, probably...
         // this code will eventually be removed, see below
-        // weatherAtGeneralCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1]));
+        weatherAtGeneralCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1]));
     }
     /* 
     This is where code needs to be added, inside the for loop. 
@@ -215,7 +215,6 @@ function postHomeWeather(data) {
         fiveDay.eq(i).find(".temps").text(Math.floor(data.list[((i+1)*8) - 1].main.temp) + units().temp); // temperature
         fiveDay.eq(i).find(".winds").text(Math.floor(data.list[((i+1)*8) - 1].wind.speed) + units().speed); // wind speed
         fiveDay.eq(i).find(".humidities").text(Math.floor(data.list[((i+1)*8) - 1].main.humidity) + units().humidPercent); // humidity percentage
-        // console.log(fiveDay.eq(i))
     }
 }
 
@@ -249,7 +248,6 @@ function postGeneralWeather(data) {
     tempLow.text("Low temp: " + (Math.floor(data.list[0].main.temp_min) + units().temp)); // low temp
     // lower-right-side text with 5-day forecast icon, temperature
     var fiveDay = $(".five-day-general");
-    console.log("general weather", fiveDay)
     // i++ on h6 elements
     // ((i+1)*8)-1 on list location (+1 to begin at next day, i.e. tomorrow; -1 to stop at last index location 39 instead of going to 40)
     // .length is /8 to get 5 days since each day has 8 datasets (3hr-increment updates = 40 datasets per 5 days)
@@ -260,8 +258,6 @@ function postGeneralWeather(data) {
         fiveDay.eq(i).find(".temps-general").text(Math.floor(data.list[((i+1)*8) - 1].main.temp) + units().temp); // temperature
         fiveDay.eq(i).find(".winds-general").text(Math.floor(data.list[((i+1)*8) - 1].wind.speed) + units().speed); // wind speed
         fiveDay.eq(i).find(".humidities-general").text(Math.floor(data.list[((i+1)*8) - 1].main.humidity) + units().humidPercent); // humidity percentage
-        console.log("i is " + i + ". [((i+1)*8) - 1] is  " + [((i+1)*8) - 1] + ". icon code is " + icon + ". day is " + (new Date((data.list[((i+1)*8) - 1].dt) * 1000)).toDateString().split(" ")[0])
-        console.log(fiveDay.eq(i))
     }
 }
 
