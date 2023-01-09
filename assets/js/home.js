@@ -258,13 +258,7 @@ function postGeneralWeather(data) {
         fiveDay.eq(i).find(".temps-general").text(Math.floor(data.list[((i+1)*8) - 1].main.temp) + units().temp); // temperature
         fiveDay.eq(i).find(".winds-general").text(Math.floor(data.list[((i+1)*8) - 1].wind.speed) + units().speed); // wind speed
         fiveDay.eq(i).find(".humidities-general").text(Math.floor(data.list[((i+1)*8) - 1].main.humidity) + units().humidPercent); // humidity percentage
-        console.log("i is " + i)
-        console.log("[((i+1)*8) - 1] is " + [((i+1)*8) - 1])
-        console.log("icon code is " + icon)
-        console.log("day is " + (new Date((data.list[((i+1)*8) - 1].dt) * 1000)).toDateString().split(" ")[0])
-        console.log("temp is " + (Math.floor(data.list[((i+1)*8) - 1].main.temp) + units().temp))
-        console.log("wind is " + (Math.floor(data.list[((i+1)*8) - 1].wind.speed) + units().speed))
-        console.log("humidity is " + (Math.floor(data.list[((i+1)*8) - 1].main.humidity) + units().humidPercent))
+        console.log("i is " + i + ". [((i+1)*8) - 1] is " + [((i+1)*8) - 1] + ". icon code is " + icon + ". day is " + (new Date((data.list[((i+1)*8) - 1].dt) * 1000)).toDateString().split(" ")[0] + ". temp is " + (Math.floor(data.list[((i+1)*8) - 1].main.temp) + units().temp) + ". wind is " + (Math.floor(data.list[((i+1)*8) - 1].wind.speed) + units().speed) + ". humidity is " + (Math.floor(data.list[((i+1)*8) - 1].main.humidity) + units().humidPercent))
     }
 }
 
