@@ -1,8 +1,10 @@
 # 5-day-weather-forecast
-server-side API provided by OpenWeather
 
 ## Description
-This weather app fetches data from an OpenWeather API and presents it to the user
+
+The motivation behind building this app was to solve the problem of needing to know the weather in more than one place, perhaps because family and friends are scattered around the world or perhaps because of an upcoming long-distance trip or outdoor excursion. For whatever the reason, knowing the weather can be an invaluable everyday tool for all sorts of people. This project specifically aims to provide the weather of a special place, such as a home address, and give updates every ten minutes.
+
+I learned that a project of this size has many moving parts and pieces, and that proactively planning functionality as much as possible early on is an incredible asset. It is also clear with this project that many functions are used and reused in different ways. I learned that implementing a JavaScript file called "utils.js" would have been a great way to extract reusable functions that are shared by several different user interfaces.
 
 
 ## Installation
