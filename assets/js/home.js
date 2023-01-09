@@ -22,7 +22,7 @@ var cityHistory = [];
 
 // changes view to results page
 function changeToResultsHtml() {
-    window.location.pathname = ("./results.html")
+    window.location.pathname = ("./five-day-weather-forecast/results.html")
 }
 
 // changes view to home page
