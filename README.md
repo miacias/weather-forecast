@@ -4,6 +4,31 @@ server-side API provided by OpenWeather
 ## Description
 This weather app fetches data from an OpenWeather API and presents it to the user
 
+
+## Installation
+
+N/A. [Deployed site here!](https://miacias.github.io/five-day-weather-forecast/)
+
+
+## Usage
+
+1. Select the form inputs and type in a city by name and country abbreviation. To be retrieve the desired city's weather, it is recommended to also specify the state or province code in the event that there is more than one city of the same name within the given country.
+2. Set the toggle to Imperial or Metric to ensure desired system of measurement (Imperial is default)
+3. If searching for home city, select Set as Home checkbox, otherwise leave it unchecked (unchecked is default)
+4. Click or tap the Search button to display weather
+5. To revisit a past search, click the desired Search History button
+6. To return to home after viewing weather in other cities, click the Back button
+7. To empty and remove the search history, click Settings and select Clear History
+8. To empty and remove a saved home city, click Settings and select Clear Home
+
+Below is an image of the home page:
+
+![Welcome page with a dark background and light text. The lefthand sidebar displays Search History with city names around the world while the right has a search form and search-customzation buttons. Weather is shown below](./assets/images/screencapture-forecast-homepage.png)
+
+Below is an image of the results page:
+![Mirror of welcome page with search history sidebar, search form, and current weather conditions displayed](./assets/images/screencapture-forecast-general-search.png)
+
+
 ## Features 
 
 - landing page displays static text with easy to read instructions on how to get started
@@ -19,20 +44,21 @@ This weather app fetches data from an OpenWeather API and presents it to the use
 
 ## Roadmap
 Content will be added and adjusted as new coding projects are available! Some projects may phase out over time as my work becomes more specialized. Some desired features and functionality to be added in the future:
-- persisting most recent search on screen after refresh
+- persist most recent search on screen after refresh
     1. Create a third localStorage keyword that stores the last / most recent search item (excluding Home City)
     2. Adjust functions that collect and post weather to focus on this new localStorage key. Remove references to other localStorage keys from functions that post weather to the screen
     3. This new localStorage keyword collects data from form submit and search history button click
     4. A new form submit or button click overwrites the stored data, similar to how the Home City can be overwritten
-- adapting weather card background image depending on main weather event: 
+- adapt weather card background image depending on main weather event: 
     - thunderstorm (current image)
     - drizzle or rain
     - snow
     - clear
     - clouds
     - atmosphere
-- mobile-friendly responsive view using Bootstrap classes and breakpoints
-- live update of units of measure when switching toggle back and forth between imperial and metric systems instead of measurements set on search
+- ensure mobile-friendly responsive view using Bootstrap classes and breakpoints
+- update live view of units of measure when switching toggle back and forth between imperial and metric systems instead of measurements set on search
+- verify that air pressure measurements are accurate and/or create a conversion function as needed. Air pressure returned values appear suspiciously high
 
 
 ## Credits
