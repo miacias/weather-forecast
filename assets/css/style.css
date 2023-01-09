@@ -1,11 +1,14 @@
 body,
 #temp,
-#weekday {
+#temp-general,
+#weekday,
+#weekday-general {
     font-family: 'Bakbak One', cursive;
 }
 
 main, 
-.home-weather {
+.home-weather,
+#sidebar-home {
     font-family: 'Poppins', sans-serif;
 }
 

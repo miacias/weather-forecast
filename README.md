@@ -85,6 +85,7 @@ Tutor credit:
     - comparison functions work most consistently with all lowercase
     - [JS URL functions](https://javascript.info/url)
 - Mia Dilberovic [GitHub](https://github.com/Dilberovicka31) - how to organize HTML to pair with jQuery methods .append() versus .text()
+- Zack Campanelli - Bootstrap flexbox
 
 U Penn Bootcamp study groups: 
 - [Fredrick Chang](https://github.com/LearnedDr)
