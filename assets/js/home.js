@@ -27,7 +27,8 @@ function changeToResultsHtml() {
 
 // changes view to home page
 function changeToLandingHtml() {
-    window.location.pathname = ("./index.html")
+    // window.location.pathname = ("./index.html")
+    window.location.pathname = ("./five-day-weather-forecast/")
 }
 
 // get string from localStorage with proper noun capitalization
@@ -99,7 +100,7 @@ function populateSidebar() {
             // retrieves button text as lowercase and finds the matching localStorage object to be reused
             var newIndex = storageLocation($(this).text().toLowerCase()); // retrieves localStorage index location of city
             weatherAtGeneralCoordinates((citiesStorage[newIndex]).geolocation[0], (citiesStorage[newIndex]).geolocation[1]);
-            if (window.location.pathname === ("./index.html")) {
+            if (window.location.pathname === ("./five-day-weather-forecast/")) {
                 changeToResultsHtml();
             }
         })
