@@ -1,6 +1,8 @@
 body,
 #temp,
-#weekday {
+#temp-general,
+#weekday,
+#weekday-general {
     font-family: 'Bakbak One', cursive;
 }
 
