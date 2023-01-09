@@ -198,17 +198,18 @@ function postHomeWeather(data) {
     var airPressure = $("#air-pressure");
     var tempHigh = $("#high-temp");
     var tempLow = $("#low-temp");
-    humidity.text("Humidity: " + (Math.floor(data.list[0].main.humidity) + " " + units().humidPercent));
-    wind.text("Wind speed: " + (Math.floor(data.list[0].wind.speed) + units().speed));
-    airPressure.text("Air pressure: " + (Math.floor(data.list[0].main.pressure) + units().pressure)); // CONVERSION REQUIRED?!
-    tempHigh.text("High temp: " + (Math.floor(data.list[0].main.temp_max) + units().temp));
-    tempLow.text("Low temp: " + (Math.floor(data.list[0].main.temp_min) + units().temp));
+    humidity.text("Humidity: " + (Math.floor(data.list[0].main.humidity) + " " + units().humidPercent)); // humidity
+    wind.text("Wind speed: " + (Math.floor(data.list[0].wind.speed) + units().speed)); // wind speed
+    airPressure.text("Air pressure: " + (Math.floor(data.list[0].main.pressure) + units().pressure)); // barometric pressure
+    tempHigh.text("High temp: " + (Math.floor(data.list[0].main.temp_max) + units().temp)); // high temp
+    tempLow.text("Low temp: " + (Math.floor(data.list[0].main.temp_min) + units().temp)); // low temp
     // lower-right-side text with 5-day forecast icon, temperature
     var fiveDay = $(".five-day");
-    // i++ on h6 elements; *7 on list location (*8 would produce one day short)
+    // i++ on h6 elements
+    // ((i+1)*8)-1 on list location (+1 to begin at next day, i.e. tomorrow; -1 to stop at last index location 39 instead of going to 40)
     // .length is /8 to get 5 days since each day has 8 datasets (3hr-increment updates = 40 datasets per 5 days)
     for (var i = 0; i < (data.list.length)/8; i ++) { 
-        icon = data.list[(i+1) * 7].weather[0].icon;
+        icon = data.list[((i+1)*8) - 1].weather[0].icon; // icon code
         fiveDay.eq(i).find(".icons").attr("src", `https://openweathermap.org/img/wn/${icon}@2x.png`) // weather icon
         fiveDay.eq(i).find(".days").text((new Date((data.list[((i+1)*8) - 1].dt) * 1000)).toDateString().split(" ")[0]) // weekday
         fiveDay.eq(i).find(".temps").text(Math.floor(data.list[((i+1)*8) - 1].main.temp) + units().temp); // temperature
@@ -240,22 +241,30 @@ function postGeneralWeather(data) {
     var airPressure = $("#air-pressure-general");
     var tempHigh = $("#high-temp-general");
     var tempLow = $("#low-temp-general");
-    humidity.text("Humidity: " + (Math.floor(data.list[0].main.humidity) + " " + units().humidPercent));
-    wind.text("Wind speed: " + (Math.floor(data.list[0].wind.speed) + units().speed));
-    airPressure.text("Air pressure: " + (Math.floor(data.list[0].main.pressure) + units().pressure)); // CONVERSION REQUIRED?!
-    tempHigh.text("High temp: " + (Math.floor(data.list[0].main.temp_max) + units().temp));
-    tempLow.text("Low temp: " + (Math.floor(data.list[0].main.temp_min) + units().temp));
+    humidity.text("Humidity: " + (Math.floor(data.list[0].main.humidity) + " " + units().humidPercent)); // humidity
+    wind.text("Wind speed: " + (Math.floor(data.list[0].wind.speed) + units().speed)); // wind speed
+    airPressure.text("Air pressure: " + (Math.floor(data.list[0].main.pressure) + units().pressure)); // barometric pressure
+    tempHigh.text("High temp: " + (Math.floor(data.list[0].main.temp_max) + units().temp)); // high temp
+    tempLow.text("Low temp: " + (Math.floor(data.list[0].main.temp_min) + units().temp)); // low temp
     // lower-right-side text with 5-day forecast icon, temperature
     var fiveDay = $(".five-day-general");
-    // i++ on h6 elements; *7 on list location (*8 would produce one day short)
+    // i++ on h6 elements
+    // ((i+1)*8)-1 on list location (+1 to begin at next day, i.e. tomorrow; -1 to stop at last index location 39 instead of going to 40)
     // .length is /8 to get 5 days since each day has 8 datasets (3hr-increment updates = 40 datasets per 5 days)
     for (var i = 0; i < (data.list.length)/8; i ++) { 
-        icon = data.list[(i+1) * 7].weather[0].icon;
+        icon = data.list[((i+1)*8) - 1].weather[0].icon; // icon code
         fiveDay.eq(i).find(".icons-general").attr("src", `https://openweathermap.org/img/wn/${icon}@2x.png`) // weather icon
         fiveDay.eq(i).find(".days-general").text((new Date((data.list[((i+1)*8) - 1].dt) * 1000)).toDateString().split(" ")[0]) // weekday
         fiveDay.eq(i).find(".temps-general").text(Math.floor(data.list[((i+1)*8) - 1].main.temp) + units().temp); // temperature
         fiveDay.eq(i).find(".winds-general").text(Math.floor(data.list[((i+1)*8) - 1].wind.speed) + units().speed); // wind speed
         fiveDay.eq(i).find(".humidities-general").text(Math.floor(data.list[((i+1)*8) - 1].main.humidity) + units().humidPercent); // humidity percentage
+        console.log("i is " + i)
+        console.log("[((i+1)*8) - 1] is " + [((i+1)*8) - 1])
+        console.log("icon code is " + icon)
+        console.log("day is " + (new Date((data.list[((i+1)*8) - 1].dt) * 1000)).toDateString().split(" ")[0])
+        console.log("temp is " + (Math.floor(data.list[((i+1)*8) - 1].main.temp) + units().temp))
+        console.log("wind is " + (Math.floor(data.list[((i+1)*8) - 1].wind.speed) + units().speed))
+        console.log("humidity is " + (Math.floor(data.list[((i+1)*8) - 1].main.humidity) + units().humidPercent))
     }
 }
 
