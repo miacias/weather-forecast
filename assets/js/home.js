@@ -10,6 +10,7 @@ const searchBtn = $("#search-button")
 const clearHistoryEl = $(".clear-history");
 const clearHomeEl = $(".clear-home");
 var cityName = "";
+var buttonCity = "";
 var homeAddress = [];
 // var zip = "";
 var state = "";
@@ -19,14 +20,14 @@ var latitude = "";
 var longitude = "";
 var cityHistory = [];
 
-// changes view from landing page to results page
+// changes view to results page
 function changeToResultsHtml() {
-    window.location = ("./results.html")
+    window.location.pathname = ("./results.html")
 }
 
-// changes view from 
+// changes view to home page
 function changeToLandingHtml() {
-    window.location = ("./index.html")
+    window.location.pathname = ("./index.html")
 }
 
 // get string from localStorage with proper noun capitalization
@@ -37,46 +38,110 @@ function capitalizeFirstLetter(string) {
         prettyCity.push(upperCase[i].charAt(0).toUpperCase() + upperCase[i].slice(1));
     }
     return prettyCity.join(" ");
-  }
+}
 
-// hide-show search history and home weather updates on landing page
-function landingShowHide() {
-    // hide-show search history on landing page
-    var sidebar = $("#sidebar-home") // entire sidebar
+// checks if search is a duplicate and where in localStorage index location duplicate is found
+function duplicateCheck(cityName) {
+    var matchingCity = false; // placeholder true/false
+    var citiesStorage = JSON.parse(localStorage.getItem("history"));
+    if (citiesStorage === null) {
+        return false;
+    }
+    // scans array of objects to see if city name is repeated. set to true if found repeated/duplicate values
+    for (var m = 0; m < citiesStorage.length; m++) { 
+        if (cityName === (citiesStorage[m]).city) {
+            matchingCity = true;
+            break
+        }
+    }
+    return [matchingCity, m] // true means found a match, false means no match found
+}
+
+// returns true or false if a city is matched or not matched to localStorage
+function repeatCity(cityName) {
+    // tutorial https://www.javascripttutorial.net/javascript-return-multiple-values/
+    let matchCheck = duplicateCheck(cityName);
+    const matchedCity = matchCheck[0];
+    return matchedCity;
+}
+
+// returns index number from localStorage of desired previously-searched city
+function storageLocation(cityName) {
+    // tutorial https://www.javascripttutorial.net/javascript-return-multiple-values/
+    let matchCheck = duplicateCheck(cityName);
+    const matchedIndex = matchCheck[1];
+    return matchedIndex;
+}
+
+// adds text and event listeners to sidebar
+function populateSidebar() {
     var parentListEl = $(".past-cities-landing"); // parent container of landing page list
     var childListEl = $(".home-search-item") // class of items added to/removed from landing page list
     var citiesStorage = JSON.parse(localStorage.getItem("history"));
     if (citiesStorage) {
-        childListEl.remove(); // reset container to empty before changes
+        childListEl.remove(); // resets container to empty before changes
+    }
+    for (var i = 0; i < citiesStorage.length; i++) {
+        var cityItem = $("<li>", {
+            class: "home-search-item nav-item",
+        })
+        parentListEl.append(cityItem);
+        var anchor = $("<a>", {
+            href: "#",
+            class: "home-search-item bg-info text-dark text-center nav-link active px-4",
+            id: "city-button-"+ i,
+            ariaCurrent: "page",
+            text: capitalizeFirstLetter((citiesStorage[i]).city)
+        })
+        cityItem.append(anchor);
+        // creates event listener per search history item that retrieves city name text of button
+        var historyButtonEl = $("#city-button-" + i);
+        historyButtonEl.click(function(event) {
+            event.preventDefault();
+            // retrieves button text as lowercase and finds the matching localStorage object to be reused
+            var newIndex = storageLocation($(this).text().toLowerCase()); // retrieves localStorage index location of city
+            weatherAtGeneralCoordinates((citiesStorage[newIndex]).geolocation[0], (citiesStorage[newIndex]).geolocation[1]);
+            if (window.location.pathname === ("./index.html")) {
+                changeToResultsHtml();
+            }
+        })
+        // on page refresh, shows random weather in local storage based on this for loop, probably...
+        // this code will eventually be removed, see below
+        weatherAtGeneralCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1]));
+    }
+    /* 
+    This is where code needs to be added, inside the for loop. 
+    Make a new localStorage keyword called "here". 
+    Store buttonclick lat and lon in an object using the same format as "Home City," where adding a new value removes the old value.
+    Then use localStorage "here" to persist on the page after a refresh
+    */
+}
+
+// hide-show search history and home weather updates on landing page
+function showHide() {
+    var sidebar = $("#sidebar-home"); // entire sidebar
+    var citiesStorage = JSON.parse(localStorage.getItem("history"));
+    if (citiesStorage) {
+        populateSidebar();
         sidebar.show();
-        for (var i = 0; i < citiesStorage.length; i++) {
-            var cityItem = $("<li>", {
-                class: "home-search-item nav-item",
-            })
-            parentListEl.append(cityItem);
-            var anchor = $("<a>", {
-                href: "#",
-                class: "home-search-item bg-info text-dark text-center nav-link active px-4",
-                ariaCurrent: "page",
-                text: capitalizeFirstLetter((citiesStorage[i]).city)
-            })
-            cityItem.append(anchor);
-            // create event listener per search history item using stored latitude and longitude
-            cityItem.click(weatherAtGeneralCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1]))); // need to test
-        }
     } else {
         sidebar.hide();
     }
+}
+showHide(); // run on page load
+
+function showHideHome() {
     // hide-show home city on landing page
     var homeStorage = JSON.parse(localStorage.getItem("home"));
-    if (homeStorage) { // if it exists
+    if (homeStorage /*&& (window.location.pathname === "./index.html")*/) { // if home city exists in local storage (and viewing homepage. this part does not behave as intended)
         $(".home-weather").show();
-        weatherAtLandingCoordinates((homeStorage[0].geolocation[0]), (homeStorage[0].geolocation[1]));
+        weatherAtHomeCoordinates((homeStorage[0].geolocation[0]), (homeStorage[0].geolocation[1]));
     } else {
         $(".home-weather").hide();
     }
 }
-landingShowHide(); // on page load
+showHideHome();
+setInterval(showHideHome, 60001); // refreshes home city weather every 10min
 
 // sets units of measurement based on measurement system
 function units() {
@@ -196,7 +261,7 @@ function postGeneralWeather(data) {
 }
 
 // fetch longitude and latitude of home city
-function weatherAtLandingCoordinates(latitude, longitude) {
+function weatherAtHomeCoordinates(latitude, longitude) {
     const apiKey = "c6923045c685289a8524ccba359c3265";
     const coordinateQueryUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=${measurementSystem()}`;
     fetch(coordinateQueryUrl)
@@ -205,13 +270,12 @@ function weatherAtLandingCoordinates(latitude, longitude) {
         return response.json();
     })
     .catch(function(error) {
-        console.log("An error occurred.");
+        console.log("An error occurred here: weatherAtHomeCoordinates.");
         console.log(error);
     })
     // linking JSON to DOM
     .then(function (data) {
         postHomeWeather(data);
-        // postGeneralWeather(data);
     })
 }
 
@@ -225,7 +289,7 @@ function weatherAtGeneralCoordinates(latitude, longitude) {
         return response.json();
     })
     .catch(function(error) {
-        console.log("An error occurred.");
+        console.log("An error occurred here: weatherAtGeneralCoordinates.");
         console.log(error);
     })
     // linking JSON to DOM
@@ -249,7 +313,7 @@ function saveGeoCoordinates(cityName, state, country) {
         return response.json();
     })
     .catch(function(error) {
-        console.log("An error occurred.");
+        console.log("An error occurred here: saveGeoCoordinates.");
         console.log(error);
     })
     .then(function (data) {
@@ -270,9 +334,9 @@ function saveGeoCoordinates(cityName, state, country) {
                 homeAddress.splice(0, 1, homeLocation); // replaces previous home location
             }
             localStorage.setItem("home", (JSON.stringify(homeAddress)));
-            weatherAtLandingCoordinates(latitude, longitude);
+            weatherAtHomeCoordinates(latitude, longitude);
         } else { // home not selected, thus general search
-            // prevent home city from being added to other searches, and doesn't brake if home city hasn't been set yet
+            // prevent home city from being added to other searches, and doesn't break if home city hasn't been set yet
             if (((JSON.parse(localStorage.getItem("home"))) !== null) && (cityName === ((JSON.parse(localStorage.getItem("home")))[0]).homeCity)) {
                 return
             }
@@ -285,14 +349,9 @@ function saveGeoCoordinates(cityName, state, country) {
             if (cityHistory === null) {
                 cityHistory = []; // resets value to [] instead of localStorage.getItem
             }
-            var flag = false; // placeholder true/false
-            for (var i = 0; i< cityHistory.length; i++) { // scan array of objects to see if city name is repeated. set to true if found repeated/duplicate values
-                if (cityName === cityHistory[i].city) {
-                    flag = true;
-                    break
-                }
-            }
-            if (!flag) { // if false
+            // check if search is a duplicate before pushing to localStorage
+            if (!(repeatCity(cityName))) { // if false
+            // if (!(duplicateCheck(cityName))) { // if false
                 cityHistory.push(searchLocation);
                 localStorage.setItem("history", JSON.stringify(cityHistory));
             }
@@ -321,12 +380,13 @@ searchBtn.click(function(event) {
 
 clearHistoryEl.click(function() {
     localStorage.removeItem("history");
-    landingShowHide();
+    changeToLandingHtml();
+    showHide();
 })
 
 clearHomeEl.click(function() {
     localStorage.removeItem("home");
-    landingShowHide();
+    showHide();
 })
 
 $("#back").click(function(event) {
