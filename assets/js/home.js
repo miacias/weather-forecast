@@ -101,14 +101,20 @@ function populateSidebar() {
             // retrieves button text as lowercase and finds the matching localStorage object to be reused
             var newIndex = storageLocation($(this).text().toLowerCase()); // retrieves localStorage index location of city
             weatherAtGeneralCoordinates((citiesStorage[newIndex]).geolocation[0], (citiesStorage[newIndex]).geolocation[1]);
-            // changeToResultsHtml();
             if (window.location.pathname === ("./index.html")) {
                 changeToResultsHtml();
             }
         })
-        // on page refresh, shows random weather in local storage, probably...
-        cityItem.click(weatherAtGeneralCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1]))); // need to test
+        // on page refresh, shows random weather in local storage based on this for loop, probably...
+        // this code will eventually be removed, see below
+        weatherAtGeneralCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1]));
     }
+    /* 
+    This is where code needs to be added, inside the for loop. 
+    Make a new localStorage keyword called "here". 
+    Store buttonclick lat and lon in an object using the same format as "Home City," where adding a new value removes the old value.
+    Then use localStorage "here" to persist on the page after a refresh
+    */
 }
 
 // hide-show search history and home weather updates on landing page
