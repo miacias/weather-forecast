@@ -120,24 +120,14 @@ function populateSidebar() {
 
 // localStorage for HOME or GENERAL SEARCH
 function mostRecentSearch() {
-    // setup localStorage for most recent search address
-    var mostRecent = {
-        mostRecentCity: cityName,
-        geolocation: [latitude, longitude]
-    }
-    lastCity = JSON.parse(localStorage.getItem("most-recent"));
-    if (lastCity === null) {
-        lastCity = []; // resets value to [] instead of localStorage.getItem
-        lastCity.push(mostRecent);
-    } else {
-        lastCity.splice(0, 1, mostRecent); // replaces previous home location
-    }
-    localStorage.setItem("most-recent", (JSON.stringify(lastCity)));
-    // gets weather from most recent local storage
-    // weatherAtGeneralCoordinates(lastCity[0].geolocation[0], lastCity[0].geolocation[1]);
+    /*
+    - separate storing most recent localStorage and posting most recent localStorage into two functions
+        - weatherAtGeneralCoordinates(lastCity[0].geolocation[0], lastCity[0].geolocation[1]);
+    */
 
-    // if history localStorage has values, make the event listeners on the buttons
+    // retrieve weather from most-recent localStorage after Search History button click
     var citiesStorage = JSON.parse(localStorage.getItem("history"));
+    // if history localStorage has values, make the event listeners on the buttons
     if (citiesStorage) {
         for (var i = 0; i < citiesStorage.length; i++) {
             var historyButtonEl = $("#city-button-" + i);
@@ -148,7 +138,7 @@ function mostRecentSearch() {
                 }
                 // retrieves button text as lowercase and finds the matching localStorage object to be reused
                 var newIndex = storageLocation($(this).text().toLowerCase()); // retrieves localStorage index location of city
-                mostRecent = {
+                var mostRecent = {
                     mostRecentCity: citiesStorage[newIndex].city,
                     geolocation: [(citiesStorage[newIndex]).geolocation[0], (citiesStorage[newIndex]).geolocation[1]]
                 }
@@ -160,22 +150,15 @@ function mostRecentSearch() {
                     lastCity.splice(0, 1, mostRecent); // replaces previous home location
                 }
                 localStorage.setItem("most-recent", (JSON.stringify(lastCity)));
-                /*
-                - newIndex provides a number of where to find name and lat/long from localStorage "history"
-                - put localStorage "history" into localStorage "most-recent"
-                - call weatherAtGeneralCoordinates using localStorage "most-recent"
-                */
                 // gets weather from most recent local storage
-                // weatherAtGeneralCoordinates(lastCity[0].geolocation[0], lastCity[0].geolocation[1]);
-
-                // weatherAtGeneralCoordinates((citiesStorage[newIndex]).geolocation[0], (citiesStorage[newIndex]).geolocation[1]); // get weather from local storage!!!!
+                weatherAtGeneralCoordinates(lastCity[0].geolocation[0], lastCity[0].geolocation[1]); // make separate function
             })
         }
     }
-
+    // retrieve weather from most-recent localStorage after form input Search button click
     // collects city info from landing page to put into query
     searchBtn.click(function(event) {
-        event.preventDefault();    
+        event.preventDefault();
         cityName = $("#city-text").val();
         state = $("#state-text").val();
         // zip = $("#zip-text").val();
@@ -187,8 +170,16 @@ function mostRecentSearch() {
         } else {
             saveGeoCoordinates(cityName.toLowerCase(), state, country);
         }
+        // mostRecent = {
+        //     mostRecentCity: cityName,
+        //     geolocation: [(citiesStorage[newIndex]).geolocation[0], (citiesStorage[newIndex]).geolocation[1]]
+        // }
     })
-    // save value from mostRecentSearch to new localStorage keyword: most-recent
+    /*
+    - search form button collects city, state, country
+    - NEED city, lat, long
+    - saveGeoCoordinates gets lat, long based on city/state/country
+    */
 }
 
 // hide-show search history and home weather updates on landing page
@@ -417,7 +408,7 @@ function saveGeoCoordinates(cityName, state, country) {
             if (((JSON.parse(localStorage.getItem("home"))) !== null) && (cityName === ((JSON.parse(localStorage.getItem("home")))[0]).homeCity)) {
                 return
             }
-            // setup localStorage for city history
+            // setup localStorage for city history that is used to create buttons
             var searchLocation = {
                 city: cityName,
                 geolocation: [latitude, longitude]
@@ -428,11 +419,30 @@ function saveGeoCoordinates(cityName, state, country) {
             }
             // check if search is a duplicate before pushing to localStorage
             if (!(repeatCity(cityName))) { // if false
-            // if (!(duplicateCheck(cityName))) { // if false
                 cityHistory.push(searchLocation);
                 localStorage.setItem("history", JSON.stringify(cityHistory));
             }
-            weatherAtGeneralCoordinates(latitude, longitude);
+
+
+/*
+- when i do a search, buttons have to load!!
+*/
+
+            // setup localStorage for most-recent search
+            var mostRecent = {
+                mostRecentCity: (cityHistory[cityHistory.length-1]).city,
+                geolocation: [(cityHistory[cityHistory.length-1]).geolocation[0], (cityHistory[cityHistory.length-1]).geolocation[1]]
+            }
+            lastCity = JSON.parse(localStorage.getItem("most-recent"));
+            if (lastCity === null) {
+                lastCity = []; // resets value to [] instead of localStorage.getItem
+                lastCity.push(mostRecent);
+            } else {
+                lastCity.splice(0, 1, mostRecent); // replaces previous home location
+            }
+            localStorage.setItem("most-recent", JSON.stringify(lastCity));
+            weatherAtGeneralCoordinates(lastCity[0].geolocation[0], lastCity[0].geolocation[1])
+            // weatherAtGeneralCoordinates(latitude, longitude);
             changeToResultsHtml();
         }
     })
