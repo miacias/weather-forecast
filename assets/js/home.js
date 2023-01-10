@@ -19,6 +19,7 @@ var toggle;
 var latitude = "";
 var longitude = "";
 var cityHistory = [];
+var lastCity = [];
 
 // changes view to results page
 function changeToResultsHtml() {
@@ -95,16 +96,16 @@ function populateSidebar() {
         })
         cityItem.append(anchor);
         // creates event listener per search history item that retrieves city name text of button
-        var historyButtonEl = $("#city-button-" + i);
-        historyButtonEl.click(function(event) {
-            event.preventDefault();
-            if (window.location.pathname === ("./five-day-weather-forecast/")) {
-                changeToResultsHtml();
-            }
-            // retrieves button text as lowercase and finds the matching localStorage object to be reused
-            var newIndex = storageLocation($(this).text().toLowerCase()); // retrieves localStorage index location of city
-            weatherAtGeneralCoordinates((citiesStorage[newIndex]).geolocation[0], (citiesStorage[newIndex]).geolocation[1]);
-        })
+        // var historyButtonEl = $("#city-button-" + i);
+        // historyButtonEl.click(function(event) {
+        //     event.preventDefault();
+        //     if (window.location.pathname === ("./five-day-weather-forecast/")) {
+        //         changeToResultsHtml();
+        //     }
+        //     // retrieves button text as lowercase and finds the matching localStorage object to be reused
+        //     var newIndex = storageLocation($(this).text().toLowerCase()); // retrieves localStorage index location of city
+        //     weatherAtGeneralCoordinates((citiesStorage[newIndex]).geolocation[0], (citiesStorage[newIndex]).geolocation[1]);
+        // })
         // on page refresh, shows random weather in local storage based on this for loop, probably...
         // this code will eventually be removed, see below
         // weatherAtGeneralCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1]));
@@ -117,6 +118,58 @@ function populateSidebar() {
     */
 }
 
+function mostRecentSearch() {
+    // localStorage for HOME or GENERAL SEARCH
+    if ($(".form-check-input").prop("checked")) { // home selected
+        // setup localStorage for home address
+        var mostRecent = {
+            mostRecentCity: cityName,
+            geolocation: [latitude, longitude]
+        }
+        lastCity = JSON.parse(localStorage.getItem("most-recent"));
+        if (lastCity === null) {
+            lastCity = []; // resets value to [] instead of localStorage.getItem
+            lastCity.push(mostRecent);
+        } else {
+            lastCity.splice(0, 1, mostRecent); // replaces previous home location
+        }
+        localStorage.setItem("most-recent", (JSON.stringify(lastCity)));
+        weatherAtGeneralCoordinates(latitude, longitude); // get weather from local storage
+    }
+    // if history localStorage has values, make the event listeners on the buttons
+    var citiesStorage = JSON.parse(localStorage.getItem("history"));
+    if (citiesStorage) {
+        for (var i = 0; i < citiesStorage.length; i++) {
+            var historyButtonEl = $("#city-button-" + i);
+            historyButtonEl.click(function(event) {
+                event.preventDefault();
+                if (window.location.pathname === ("./five-day-weather-forecast/")) {
+                    changeToResultsHtml();
+                }
+                // retrieves button text as lowercase and finds the matching localStorage object to be reused
+                var newIndex = storageLocation($(this).text().toLowerCase()); // retrieves localStorage index location of city
+                weatherAtGeneralCoordinates((citiesStorage[newIndex]).geolocation[0], (citiesStorage[newIndex]).geolocation[1]); // get weather from local storage!!!!
+            })
+        }
+    }
+    // collects city info from landing page to put into query
+    searchBtn.click(function(event) {
+        event.preventDefault();    
+        cityName = $("#city-text").val();
+        state = $("#state-text").val();
+        // zip = $("#zip-text").val();
+        country = $("#country-text").val();
+        if (!cityName) {
+            return alert("Please specify a city to continue.");
+        } else if (!country) {
+            return alert("Please specify a country to continue.");
+        } else {
+            saveGeoCoordinates(cityName.toLowerCase(), state, country);
+        }
+    })
+    // save value from mostRecentSearch to new localStorage keyword: most-recent
+}
+
 // hide-show search history and home weather updates on landing page
 function showHide() {
     var sidebar = $("#sidebar-home"); // entire sidebar
@@ -127,6 +180,7 @@ function showHide() {
     } else {
         sidebar.hide();
     }
+    mostRecentSearch()
 }
 showHide(); // run on page load
 
@@ -364,21 +418,21 @@ function saveGeoCoordinates(cityName, state, country) {
 }
 
 
-// collects city info from landing page to put into query
-searchBtn.click(function(event) {
-    event.preventDefault();    
-    cityName = $("#city-text").val();
-    state = $("#state-text").val();
-    // zip = $("#zip-text").val();
-    country = $("#country-text").val();
-    if (!cityName) {
-        return alert("Please specify a city to continue.");
-    } else if (!country) {
-        return alert("Please specify a country to continue.");
-    } else {
-        saveGeoCoordinates(cityName.toLowerCase(), state, country);
-    }
-})
+// // collects city info from landing page to put into query
+// searchBtn.click(function(event) {
+//     event.preventDefault();    
+//     cityName = $("#city-text").val();
+//     state = $("#state-text").val();
+//     // zip = $("#zip-text").val();
+//     country = $("#country-text").val();
+//     if (!cityName) {
+//         return alert("Please specify a city to continue.");
+//     } else if (!country) {
+//         return alert("Please specify a country to continue.");
+//     } else {
+//         saveGeoCoordinates(cityName.toLowerCase(), state, country);
+//     }
+// })
 
 clearHistoryEl.click(function() {
     localStorage.removeItem("history");
