@@ -22,13 +22,14 @@ var cityHistory = [];
 
 // changes view to results page
 function changeToResultsHtml() {
-    window.location.pathname = ("./five-day-weather-forecast/results.html")
+    window.location.pathname = ("./results.html") // testing locally
+    // window.location.pathname = ("./five-day-weather-forecast/results.html") // format for live page
 }
 
 // changes view to home page
 function changeToLandingHtml() {
-    // window.location.pathname = ("./index.html")
-    window.location.pathname = ("./five-day-weather-forecast/")
+    window.location.pathname = ("./index.html") // testing locally
+    // window.location.pathname = ("./five-day-weather-forecast/") // format for live page
 }
 
 // get string from localStorage with proper noun capitalization
@@ -106,7 +107,7 @@ function populateSidebar() {
         })
         // on page refresh, shows random weather in local storage based on this for loop, probably...
         // this code will eventually be removed, see below
-        weatherAtGeneralCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1]));
+        // weatherAtGeneralCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1]));
     }
     /* 
     This is where code needs to be added, inside the for loop. 

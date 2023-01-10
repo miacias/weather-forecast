@@ -61,6 +61,8 @@ Content will be added and adjusted as new coding projects are available! Some pr
 - ensure mobile-friendly responsive view using Bootstrap classes and breakpoints
 - update live view of units of measure when switching toggle back and forth between imperial and metric systems instead of measurements set on search
 - verify that air pressure measurements are accurate and/or create a conversion function as needed. Air pressure returned values appear suspiciously high
+- modify duplicate check function to include comparisons with not only city name but also state and country codes to prevent only true duplicates
+    - add state and country codes to Search History sidebar buttons
 
 
 ## Credits
