@@ -355,6 +355,7 @@ function weatherAtGeneralCoordinates(latitude, longitude) {
     // linking JSON to DOM
     .then(function (data) {
         postGeneralWeather(data);
+        populateSidebar();
     })
 }
 
