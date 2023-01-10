@@ -118,24 +118,24 @@ function populateSidebar() {
     */
 }
 
+// localStorage for HOME or GENERAL SEARCH
 function mostRecentSearch() {
-    // localStorage for HOME or GENERAL SEARCH
-    if ($(".form-check-input").prop("checked")) { // home selected
-        // setup localStorage for home address
-        var mostRecent = {
-            mostRecentCity: cityName,
-            geolocation: [latitude, longitude]
-        }
-        lastCity = JSON.parse(localStorage.getItem("most-recent"));
-        if (lastCity === null) {
-            lastCity = []; // resets value to [] instead of localStorage.getItem
-            lastCity.push(mostRecent);
-        } else {
-            lastCity.splice(0, 1, mostRecent); // replaces previous home location
-        }
-        localStorage.setItem("most-recent", (JSON.stringify(lastCity)));
-        weatherAtGeneralCoordinates(latitude, longitude); // get weather from local storage
+    // setup localStorage for most recent search address
+    var mostRecent = {
+        mostRecentCity: cityName,
+        geolocation: [latitude, longitude]
     }
+    lastCity = JSON.parse(localStorage.getItem("most-recent"));
+    if (lastCity === null) {
+        lastCity = []; // resets value to [] instead of localStorage.getItem
+        lastCity.push(mostRecent);
+    } else {
+        lastCity.splice(0, 1, mostRecent); // replaces previous home location
+    }
+    localStorage.setItem("most-recent", (JSON.stringify(lastCity)));
+    // gets weather from most recent local storage
+    // weatherAtGeneralCoordinates(lastCity[0].geolocation[0], lastCity[0].geolocation[1]);
+
     // if history localStorage has values, make the event listeners on the buttons
     var citiesStorage = JSON.parse(localStorage.getItem("history"));
     if (citiesStorage) {
@@ -148,10 +148,31 @@ function mostRecentSearch() {
                 }
                 // retrieves button text as lowercase and finds the matching localStorage object to be reused
                 var newIndex = storageLocation($(this).text().toLowerCase()); // retrieves localStorage index location of city
-                weatherAtGeneralCoordinates((citiesStorage[newIndex]).geolocation[0], (citiesStorage[newIndex]).geolocation[1]); // get weather from local storage!!!!
+                mostRecent = {
+                    mostRecentCity: citiesStorage[newIndex].city,
+                    geolocation: [(citiesStorage[newIndex]).geolocation[0], (citiesStorage[newIndex]).geolocation[1]]
+                }
+                lastCity = JSON.parse(localStorage.getItem("most-recent"));
+                if (lastCity === null) {
+                    lastCity = []; // resets value to [] instead of localStorage.getItem
+                    lastCity.push(mostRecent);
+                } else {
+                    lastCity.splice(0, 1, mostRecent); // replaces previous home location
+                }
+                localStorage.setItem("most-recent", (JSON.stringify(lastCity)));
+                /*
+                - newIndex provides a number of where to find name and lat/long from localStorage "history"
+                - put localStorage "history" into localStorage "most-recent"
+                - call weatherAtGeneralCoordinates using localStorage "most-recent"
+                */
+                // gets weather from most recent local storage
+                // weatherAtGeneralCoordinates(lastCity[0].geolocation[0], lastCity[0].geolocation[1]);
+
+                // weatherAtGeneralCoordinates((citiesStorage[newIndex]).geolocation[0], (citiesStorage[newIndex]).geolocation[1]); // get weather from local storage!!!!
             })
         }
     }
+
     // collects city info from landing page to put into query
     searchBtn.click(function(event) {
         event.preventDefault();    
@@ -436,6 +457,7 @@ function saveGeoCoordinates(cityName, state, country) {
 
 clearHistoryEl.click(function() {
     localStorage.removeItem("history");
+    localStorage.removeItem("most-recent");
     changeToLandingHtml();
     showHide();
 })
