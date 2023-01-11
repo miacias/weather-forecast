@@ -95,27 +95,7 @@ function populateSidebar() {
             text: capitalizeFirstLetter((citiesStorage[i]).city)
         })
         cityItem.append(anchor);
-        // creates event listener per search history item that retrieves city name text of button
-        // var historyButtonEl = $("#city-button-" + i);
-        // historyButtonEl.click(function(event) {
-        //     event.preventDefault();
-        //     if (window.location.pathname === ("./five-day-weather-forecast/")) {
-        //         changeToResultsHtml();
-        //     }
-        //     // retrieves button text as lowercase and finds the matching localStorage object to be reused
-        //     var newIndex = storageLocation($(this).text().toLowerCase()); // retrieves localStorage index location of city
-        //     weatherAtGeneralCoordinates((citiesStorage[newIndex]).geolocation[0], (citiesStorage[newIndex]).geolocation[1]);
-        // })
-        // on page refresh, shows random weather in local storage based on this for loop, probably...
-        // this code will eventually be removed, see below
-        // weatherAtGeneralCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1]));
     }
-    /* 
-    This is where code needs to be added, inside the for loop. 
-    Make a new localStorage keyword called "here". 
-    Store buttonclick lat and lon in an object using the same format as "Home City," where adding a new value removes the old value.
-    Then use localStorage "here" to persist on the page after a refresh
-    */
 }
 
 // localStorage for HOME or GENERAL SEARCH
@@ -325,7 +305,8 @@ function postGeneralWeather(data) {
 // fetch longitude and latitude of home city
 function weatherAtHomeCoordinates(latitude, longitude) {
     const apiKey = "c6923045c685289a8524ccba359c3265";
-    const coordinateQueryUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=${measurementSystem()}`;
+    const apiKey2 = "ae9c0788311e647b00252dc52c880704";
+    const coordinateQueryUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey2}&units=${measurementSystem()}`;
     fetch(coordinateQueryUrl)
     .then(function (response) {
         // add 100-500 error codes? and 200s?
@@ -344,7 +325,8 @@ function weatherAtHomeCoordinates(latitude, longitude) {
 // fetch longitude and latitude of general city search
 function weatherAtGeneralCoordinates(latitude, longitude) {
     const apiKey = "c6923045c685289a8524ccba359c3265";
-    const coordinateQueryUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=${measurementSystem()}`;
+    const apiKey2 = "ae9c0788311e647b00252dc52c880704";
+    const coordinateQueryUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey2}&units=${measurementSystem()}`;
     fetch(coordinateQueryUrl)
     .then(function (response) {
         // add 100-500 error codes? and 200s?
@@ -364,10 +346,11 @@ function weatherAtGeneralCoordinates(latitude, longitude) {
 function saveGeoCoordinates(cityName, state, country) {
     var limit = 1; // max number of cities with shared names. possible values: 1-5
     const apiKey = "c6923045c685289a8524ccba359c3265";
-    var geoCodeUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName},${state},${country}&limit=${limit}&appid=${apiKey}&units=${measurementSystem()}`
+    const apiKey2 = "ae9c0788311e647b00252dc52c880704";
+    var geoCodeUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName},${state},${country}&limit=${limit}&appid=${apiKey2}&units=${measurementSystem()}`
     // prevents submitting empty value OR renames URL if state is missing
     if (!state) {
-        geoCodeUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName},${country}&limit=${limit}&appid=${apiKey}&units=${measurementSystem()}`
+        geoCodeUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName},${country}&limit=${limit}&appid=${apiKey2}&units=${measurementSystem()}`
     }
     fetch(geoCodeUrl)
     .then(function (response) {
@@ -434,23 +417,6 @@ function saveGeoCoordinates(cityName, state, country) {
         }
     })
 }
-
-
-// // collects city info from landing page to put into query
-// searchBtn.click(function(event) {
-//     event.preventDefault();    
-//     cityName = $("#city-text").val();
-//     state = $("#state-text").val();
-//     // zip = $("#zip-text").val();
-//     country = $("#country-text").val();
-//     if (!cityName) {
-//         return alert("Please specify a city to continue.");
-//     } else if (!country) {
-//         return alert("Please specify a country to continue.");
-//     } else {
-//         saveGeoCoordinates(cityName.toLowerCase(), state, country);
-//     }
-// })
 
 // clear Search History and hide sidebar
 clearHistoryEl.click(function() {
