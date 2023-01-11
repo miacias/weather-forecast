@@ -135,7 +135,8 @@ function mostRecentSearch() {
             var historyButtonEl = $("#city-button-" + i);
             historyButtonEl.click(function(event) {
                 event.preventDefault();
-                if (window.location.pathname === ("./five-day-weather-forecast/")) {
+                if (window.location.pathname === ("./index.html/")) {
+                // if (window.location.pathname === ("./five-day-weather-forecast/")) {
                     changeToResultsHtml();
                 }
                 // retrieves button text as lowercase and finds the matching localStorage object to be reused
@@ -173,6 +174,7 @@ function mostRecentSearch() {
         }
     })
 }
+mostRecentSearch()
 
 // hide-show search history and home weather updates on landing page
 function showHide() {
@@ -451,6 +453,7 @@ function saveGeoCoordinates(cityName, state, country) {
 //     }
 // })
 
+// clear Search History and hide sidebar
 clearHistoryEl.click(function() {
     localStorage.removeItem("history");
     localStorage.removeItem("most-recent");
@@ -458,11 +461,13 @@ clearHistoryEl.click(function() {
     showHide();
 })
 
+// clear home address
 clearHomeEl.click(function() {
     localStorage.removeItem("home");
-    showHide();
+    showHideHome();
 })
 
+// back button returns to landing page
 $("#back").click(function(event) {
     event.preventDefault();
     changeToLandingHtml();
