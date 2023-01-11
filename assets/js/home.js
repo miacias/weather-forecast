@@ -174,7 +174,7 @@ function mostRecentSearch() {
         }
     })
 }
-mostRecentSearch()
+mostRecentSearch();
 
 // hide-show search history and home weather updates on landing page
 function showHide() {
@@ -357,7 +357,6 @@ function weatherAtGeneralCoordinates(latitude, longitude) {
     // linking JSON to DOM
     .then(function (data) {
         postGeneralWeather(data);
-        populateSidebar();
     })
 }
 
