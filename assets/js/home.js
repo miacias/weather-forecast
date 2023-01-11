@@ -23,14 +23,14 @@ var lastCity = [];
 
 // changes view to results page
 function changeToResultsHtml() {
-    window.location.pathname = ("./results.html") // testing locally
-    // window.location.pathname = ("./five-day-weather-forecast/results.html") // format for live page
+    // window.location.pathname = ("./results.html") // testing locally
+    window.location.pathname = ("./five-day-weather-forecast/results.html") // format for live page
 }
 
 // changes view to home page
 function changeToLandingHtml() {
-    window.location.pathname = ("./index.html") // testing locally
-    // window.location.pathname = ("./five-day-weather-forecast/") // format for live page
+    // window.location.pathname = ("./index.html") // testing locally
+    window.location.pathname = ("./five-day-weather-forecast/") // format for live page
 }
 
 // get string from localStorage with proper noun capitalization
@@ -135,8 +135,8 @@ function mostRecentSearch() {
             var historyButtonEl = $("#city-button-" + i);
             historyButtonEl.click(function(event) {
                 event.preventDefault();
-                if (window.location.pathname === ("./index.html/")) {
-                // if (window.location.pathname === ("./five-day-weather-forecast/")) {
+                // if (window.location.pathname === '/index.html/') {
+                if (window.location.href === ("https://miacias.github.io/five-day-weather-forecast/")) {
                     changeToResultsHtml();
                 }
                 // retrieves button text as lowercase and finds the matching localStorage object to be reused
