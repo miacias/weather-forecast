@@ -19,16 +19,18 @@ var toggle;
 var latitude = "";
 var longitude = "";
 var cityHistory = [];
+var lastCity = [];
 
 // changes view to results page
 function changeToResultsHtml() {
-    window.location.pathname = ("./five-day-weather-forecast/results.html")
+    // window.location.pathname = ("./results.html") // testing locally
+    window.location.pathname = ("./five-day-weather-forecast/results.html") // format for live page
 }
 
 // changes view to home page
 function changeToLandingHtml() {
-    // window.location.pathname = ("./index.html")
-    window.location.pathname = ("./five-day-weather-forecast/")
+    // window.location.pathname = ("./index.html") // testing locally
+    window.location.pathname = ("./five-day-weather-forecast/") // format for live page
 }
 
 // get string from localStorage with proper noun capitalization
@@ -94,19 +96,19 @@ function populateSidebar() {
         })
         cityItem.append(anchor);
         // creates event listener per search history item that retrieves city name text of button
-        var historyButtonEl = $("#city-button-" + i);
-        historyButtonEl.click(function(event) {
-            event.preventDefault();
-            // retrieves button text as lowercase and finds the matching localStorage object to be reused
-            var newIndex = storageLocation($(this).text().toLowerCase()); // retrieves localStorage index location of city
-            weatherAtGeneralCoordinates((citiesStorage[newIndex]).geolocation[0], (citiesStorage[newIndex]).geolocation[1]);
-            if (window.location.pathname === ("./five-day-weather-forecast/")) {
-                changeToResultsHtml();
-            }
-        })
+        // var historyButtonEl = $("#city-button-" + i);
+        // historyButtonEl.click(function(event) {
+        //     event.preventDefault();
+        //     if (window.location.pathname === ("./five-day-weather-forecast/")) {
+        //         changeToResultsHtml();
+        //     }
+        //     // retrieves button text as lowercase and finds the matching localStorage object to be reused
+        //     var newIndex = storageLocation($(this).text().toLowerCase()); // retrieves localStorage index location of city
+        //     weatherAtGeneralCoordinates((citiesStorage[newIndex]).geolocation[0], (citiesStorage[newIndex]).geolocation[1]);
+        // })
         // on page refresh, shows random weather in local storage based on this for loop, probably...
         // this code will eventually be removed, see below
-        weatherAtGeneralCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1]));
+        // weatherAtGeneralCoordinates(((citiesStorage[i]).geolocation[0]), ((citiesStorage[i]).geolocation[1]));
     }
     /* 
     This is where code needs to be added, inside the for loop. 
@@ -115,6 +117,64 @@ function populateSidebar() {
     Then use localStorage "here" to persist on the page after a refresh
     */
 }
+
+// localStorage for HOME or GENERAL SEARCH
+function mostRecentSearch() {
+    // post most recent weather first then update with click
+    lastCity = JSON.parse(localStorage.getItem("most-recent"));
+    if (lastCity === null) {
+        lastCity = []; // resets value to [] instead of localStorage.getItem
+    } else {
+        weatherAtGeneralCoordinates(lastCity[0].geolocation[0], lastCity[0].geolocation[1]);
+    }
+    // retrieve weather from most-recent localStorage after Search History button click
+    var citiesStorage = JSON.parse(localStorage.getItem("history"));
+    // if history localStorage has values, make the event listeners on the buttons
+    if (citiesStorage) {
+        for (var i = 0; i < citiesStorage.length; i++) {
+            var historyButtonEl = $("#city-button-" + i);
+            historyButtonEl.click(function(event) {
+                event.preventDefault();
+                // if (window.location.pathname === '/index.html/') {
+                if (window.location.href === ("https://miacias.github.io/five-day-weather-forecast/")) {
+                    changeToResultsHtml();
+                }
+                // retrieves button text as lowercase and finds the matching localStorage object to be reused
+                var newIndex = storageLocation($(this).text().toLowerCase()); // retrieves localStorage index location of city
+                var mostRecent = {
+                    mostRecentCity: citiesStorage[newIndex].city,
+                    geolocation: [(citiesStorage[newIndex]).geolocation[0], (citiesStorage[newIndex]).geolocation[1]]
+                }
+                lastCity = JSON.parse(localStorage.getItem("most-recent"));
+                if (lastCity === null) {
+                    lastCity = []; // resets value to [] instead of localStorage.getItem
+                    lastCity.push(mostRecent);
+                } else {
+                    lastCity.splice(0, 1, mostRecent); // replaces previous home location
+                }
+                localStorage.setItem("most-recent", (JSON.stringify(lastCity)));
+                // gets weather from most recent local storage
+                weatherAtGeneralCoordinates(lastCity[0].geolocation[0], lastCity[0].geolocation[1]);
+            })
+        }
+    }
+    // collects city info from landing page to put into query
+    searchBtn.click(function(event) {
+        event.preventDefault();
+        cityName = $("#city-text").val();
+        state = $("#state-text").val();
+        // zip = $("#zip-text").val();
+        country = $("#country-text").val();
+        if (!cityName) {
+            return alert("Please specify a city to continue.");
+        } else if (!country) {
+            return alert("Please specify a country to continue.");
+        } else {
+            saveGeoCoordinates(cityName.toLowerCase(), state, country);
+        }
+    })
+}
+mostRecentSearch();
 
 // hide-show search history and home weather updates on landing page
 function showHide() {
@@ -126,6 +186,7 @@ function showHide() {
     } else {
         sidebar.hide();
     }
+    mostRecentSearch()
 }
 showHide(); // run on page load
 
@@ -198,22 +259,23 @@ function postHomeWeather(data) {
     var airPressure = $("#air-pressure");
     var tempHigh = $("#high-temp");
     var tempLow = $("#low-temp");
-    humidity.text("Humidity: " + (Math.floor(data.list[0].main.humidity) + " " + units().humidPercent));
-    wind.text("Wind speed: " + (Math.floor(data.list[0].wind.speed) + units().speed));
-    airPressure.text("Air pressure: " + (Math.floor(data.list[0].main.pressure) + units().pressure)); // CONVERSION REQUIRED?!
-    tempHigh.text("High temp: " + (Math.floor(data.list[0].main.temp_max) + units().temp));
-    tempLow.text("Low temp: " + (Math.floor(data.list[0].main.temp_min) + units().temp));
+    humidity.text("Humidity: " + (Math.floor(data.list[0].main.humidity) + " " + units().humidPercent)); // humidity
+    wind.text("Wind speed: " + (Math.floor(data.list[0].wind.speed) + units().speed)); // wind speed
+    airPressure.text("Air pressure: " + (Math.floor(data.list[0].main.pressure) + units().pressure)); // barometric pressure
+    tempHigh.text("High temp: " + (Math.floor(data.list[0].main.temp_max) + units().temp)); // high temp
+    tempLow.text("Low temp: " + (Math.floor(data.list[0].main.temp_min) + units().temp)); // low temp
     // lower-right-side text with 5-day forecast icon, temperature
     var fiveDay = $(".five-day");
-    // i++ on h6 elements; *7 on list location (*8 would produce one day short)
+    // i++ on h6 elements
+    // ((i+1)*8)-1 on list location (+1 to begin at next day, i.e. tomorrow; -1 to stop at last index location 39 instead of going to 40)
     // .length is /8 to get 5 days since each day has 8 datasets (3hr-increment updates = 40 datasets per 5 days)
     for (var i = 0; i < (data.list.length)/8; i ++) { 
-        icon = data.list[(i+1) * 7].weather[0].icon;
-        fiveDay.eq(i).find(".icons").attr("src", `https://openweathermap.org/img/wn/${icon}@2x.png`)
-        fiveDay.eq(i).find(".days").text((new Date((data.list[(i+1) * 7].dt) * 1000)).toDateString().split(" ")[0]) // day name (has TypeError: Cannot read properties of undefined (reading 'dt'))
-        fiveDay.eq(i).find(".temps").text(Math.floor(data.list[(i+1) * 7].main.temp) + units().temp); // temperature
-        fiveDay.eq(i).find(".winds").text(Math.floor(data.list[(i+1) * 7].wind.speed) + units().speed); // wind speed
-        fiveDay.eq(i).find(".humidities").text(Math.floor(data.list[(i+1) * 7].main.humidity) + units().humidPercent); // humidity percentage
+        icon = data.list[((i+1)*8) - 1].weather[0].icon; // icon code
+        fiveDay.eq(i).find(".icons").attr("src", `https://openweathermap.org/img/wn/${icon}@2x.png`) // weather icon
+        fiveDay.eq(i).find(".days").text((new Date((data.list[((i+1)*8) - 1].dt) * 1000)).toDateString().split(" ")[0]) // weekday
+        fiveDay.eq(i).find(".temps").text(Math.floor(data.list[((i+1)*8) - 1].main.temp) + units().temp); // temperature
+        fiveDay.eq(i).find(".winds").text(Math.floor(data.list[((i+1)*8) - 1].wind.speed) + units().speed); // wind speed
+        fiveDay.eq(i).find(".humidities").text(Math.floor(data.list[((i+1)*8) - 1].main.humidity) + units().humidPercent); // humidity percentage
     }
 }
 
@@ -240,22 +302,23 @@ function postGeneralWeather(data) {
     var airPressure = $("#air-pressure-general");
     var tempHigh = $("#high-temp-general");
     var tempLow = $("#low-temp-general");
-    humidity.text("Humidity: " + (Math.floor(data.list[0].main.humidity) + " " + units().humidPercent));
-    wind.text("Wind speed: " + (Math.floor(data.list[0].wind.speed) + units().speed));
-    airPressure.text("Air pressure: " + (Math.floor(data.list[0].main.pressure) + units().pressure)); // CONVERSION REQUIRED?!
-    tempHigh.text("High temp: " + (Math.floor(data.list[0].main.temp_max) + units().temp));
-    tempLow.text("Low temp: " + (Math.floor(data.list[0].main.temp_min) + units().temp));
+    humidity.text("Humidity: " + (Math.floor(data.list[0].main.humidity) + " " + units().humidPercent)); // humidity
+    wind.text("Wind speed: " + (Math.floor(data.list[0].wind.speed) + units().speed)); // wind speed
+    airPressure.text("Air pressure: " + (Math.floor(data.list[0].main.pressure) + units().pressure)); // barometric pressure
+    tempHigh.text("High temp: " + (Math.floor(data.list[0].main.temp_max) + units().temp)); // high temp
+    tempLow.text("Low temp: " + (Math.floor(data.list[0].main.temp_min) + units().temp)); // low temp
     // lower-right-side text with 5-day forecast icon, temperature
     var fiveDay = $(".five-day-general");
-    // i++ on h6 elements; *7 on list location (*8 would produce one day short)
+    // i++ on h6 elements
+    // ((i+1)*8)-1 on list location (+1 to begin at next day, i.e. tomorrow; -1 to stop at last index location 39 instead of going to 40)
     // .length is /8 to get 5 days since each day has 8 datasets (3hr-increment updates = 40 datasets per 5 days)
     for (var i = 0; i < (data.list.length)/8; i ++) { 
-        icon = data.list[(i+1) * 7].weather[0].icon;
-        fiveDay.eq(i).find(".icons-general").attr("src", `https://openweathermap.org/img/wn/${icon}@2x.png`)
-        fiveDay.eq(i).find(".days-general").text((new Date((data.list[(i+1) * 7].dt) * 1000)).toDateString().split(" ")[0]) // day name (has TypeError: Cannot read properties of undefined (reading 'dt'))
-        fiveDay.eq(i).find(".temps-general").text(Math.floor(data.list[(i+1) * 7].main.temp) + units().temp); // temperature
-        fiveDay.eq(i).find(".winds-general").text(Math.floor(data.list[(i+1) * 7].wind.speed) + units().speed); // wind speed
-        fiveDay.eq(i).find(".humidities-general").text(Math.floor(data.list[(i+1) * 7].main.humidity) + units().humidPercent); // humidity percentage
+        icon = data.list[((i+1)*8) - 1].weather[0].icon; // icon code
+        fiveDay.eq(i).find(".icons-general").attr("src", `https://openweathermap.org/img/wn/${icon}@2x.png`) // weather icon
+        fiveDay.eq(i).find(".days-general").text((new Date((data.list[((i+1)*8) - 1].dt) * 1000)).toDateString().split(" ")[0]) // weekday
+        fiveDay.eq(i).find(".temps-general").text(Math.floor(data.list[((i+1)*8) - 1].main.temp) + units().temp); // temperature
+        fiveDay.eq(i).find(".winds-general").text(Math.floor(data.list[((i+1)*8) - 1].wind.speed) + units().speed); // wind speed
+        fiveDay.eq(i).find(".humidities-general").text(Math.floor(data.list[((i+1)*8) - 1].main.humidity) + units().humidPercent); // humidity percentage
     }
 }
 
@@ -339,7 +402,7 @@ function saveGeoCoordinates(cityName, state, country) {
             if (((JSON.parse(localStorage.getItem("home"))) !== null) && (cityName === ((JSON.parse(localStorage.getItem("home")))[0]).homeCity)) {
                 return
             }
-            // setup localStorage for city history
+            // setup localStorage for city history that is used to create buttons
             var searchLocation = {
                 city: cityName,
                 geolocation: [latitude, longitude]
@@ -350,44 +413,60 @@ function saveGeoCoordinates(cityName, state, country) {
             }
             // check if search is a duplicate before pushing to localStorage
             if (!(repeatCity(cityName))) { // if false
-            // if (!(duplicateCheck(cityName))) { // if false
                 cityHistory.push(searchLocation);
                 localStorage.setItem("history", JSON.stringify(cityHistory));
             }
-            weatherAtGeneralCoordinates(latitude, longitude);
+            // setup localStorage for most-recent search
+            var mostRecent = {
+                mostRecentCity: (cityHistory[cityHistory.length-1]).city,
+                geolocation: [(cityHistory[cityHistory.length-1]).geolocation[0], (cityHistory[cityHistory.length-1]).geolocation[1]]
+            }
+            lastCity = JSON.parse(localStorage.getItem("most-recent"));
+            if (lastCity === null) {
+                lastCity = []; // resets value to [] instead of localStorage.getItem
+                lastCity.push(mostRecent);
+            } else {
+                lastCity.splice(0, 1, mostRecent); // replaces previous last-searched location
+            }
+            localStorage.setItem("most-recent", JSON.stringify(lastCity));
+            weatherAtGeneralCoordinates(lastCity[0].geolocation[0], lastCity[0].geolocation[1])
             changeToResultsHtml();
         }
     })
 }
 
 
-// collects city info from landing page to put into query
-searchBtn.click(function(event) {
-    event.preventDefault();    
-    cityName = $("#city-text").val();
-    state = $("#state-text").val();
-    // zip = $("#zip-text").val();
-    country = $("#country-text").val();
-    if (!cityName) {
-        return alert("Please specify a city to continue.");
-    } else if (!country) {
-        return alert("Please specify a country to continue.");
-    } else {
-        saveGeoCoordinates(cityName.toLowerCase(), state, country);
-    }
-})
+// // collects city info from landing page to put into query
+// searchBtn.click(function(event) {
+//     event.preventDefault();    
+//     cityName = $("#city-text").val();
+//     state = $("#state-text").val();
+//     // zip = $("#zip-text").val();
+//     country = $("#country-text").val();
+//     if (!cityName) {
+//         return alert("Please specify a city to continue.");
+//     } else if (!country) {
+//         return alert("Please specify a country to continue.");
+//     } else {
+//         saveGeoCoordinates(cityName.toLowerCase(), state, country);
+//     }
+// })
 
+// clear Search History and hide sidebar
 clearHistoryEl.click(function() {
     localStorage.removeItem("history");
+    localStorage.removeItem("most-recent");
     changeToLandingHtml();
     showHide();
 })
 
+// clear home address
 clearHomeEl.click(function() {
     localStorage.removeItem("home");
-    showHide();
+    showHideHome();
 })
 
+// back button returns to landing page
 $("#back").click(function(event) {
     event.preventDefault();
     changeToLandingHtml();
